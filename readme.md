@@ -1,3 +1,4 @@
-# 一. 剑指Offer
-[剑指 Offer](./offer.md)  
-update for 600 plan
+# Basic Knowledge
+[Basic Math Knowledge](./week1/basicMath.md)   
+[Time Complexity](./week1/timeComplexity.md) 
+
