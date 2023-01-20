@@ -162,3 +162,14 @@ O(1)O(1)O(1)O(1)O(1)O(1)O(1)O(1)    n^2/2^k
 1 1/2 1/4 1/8....
 O(n^2)
 ```
+
+### 主定理  
+子问题规模不一样的时不能用
+![只定理](./images/mainPrincipal.png)
+![Example](./images/mainPrincipalExample.png)
+
+
+### 野路子： 经验性结论  
+递归问题的时间复杂度通常（并不总是）看起来形如O(branches^depth)
+其中branches指递归分支的总数，depth指递归调用深度。
+
