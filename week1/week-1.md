@@ -243,3 +243,38 @@ class Solution {
     }
 }
 ```
+
+
+## 2.2 奇偶排序
+
+[905. 按奇偶排序数组](https://leetcode.cn/problems/sort-array-by-parity/)
+### 双指针
+Time: O(n)
+
+```java
+class Solution {
+    public int[] sortArrayByParity(int[] nums) {
+        if (nums == null || nums.length <= 1) {
+            return nums;
+        }
+
+        int left = 0;
+        int right = nums.length - 1;
+
+        while (left < right) {
+            while (left < right && nums[left] % 2 == 0) {
+                left++;
+            }
+
+            while (left < right && nums[right] % 2 != 0) {
+                right--;
+            }
+
+            int temp = nums[left];
+            nums[left] = nums[right];
+            nums[right] = temp;
+        }
+        return nums;
+    }
+}
+```
