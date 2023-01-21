@@ -12,6 +12,7 @@
 
 
 # 两数之和
+[1. 两数之和](https://leetcode.cn/problems/two-sum/)
 ## brute force  
 
 因为使用了双重循环，时间复杂度是O(n^2)
@@ -68,6 +69,8 @@ class Solution {
 
 
 # 三数之和
+
+[15. 三数之和](https://leetcode.cn/problems/3sum/)
 ## brute force  
 
 三重循环，复杂度是O(n^3)
@@ -140,6 +143,9 @@ public class Solution {
 
 
 # 四数之和  
+
+[18. 四数之和](https://leetcode.cn/problems/4sum/)
+## 排序+双指针
 排序算法复杂度是O(nlogn), 因为进行了3次循环，所以复杂度是O(n^3),最后的复杂度就是O(n^3)
 
 ```java
