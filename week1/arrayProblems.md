@@ -199,3 +199,12 @@ class Solution {
     }
 }
 ```
+
+# K-sum解法总结  
+- 排序
+- 尝试遍历第一个数，将问题转化为k-1Sum
+- 时间复杂度  
+> 2-Sum: O(nlogn) + O(n) = O(nlogn)
+> 3-Sum: O(nlogn) + O(n^2) = O(n^2)
+> 4-Sum: O(nlogn) + O(n^3) = O(n^3)
+> k-Sum: O(nlogn) + O(n^(k-1)) = O(n^(k-1))
