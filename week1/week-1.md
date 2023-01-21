@@ -215,3 +215,30 @@ class Solution {
 > 3-Sum: O(nlogn) + O(n^2) = O(n^2)  
 > 4-Sum: O(nlogn) + O(n^3) = O(n^3)  
 > k-Sum: O(nlogn) + O(n^(k-1)) = O(n^(k-1))  
+
+# 2 实战题目  
+
+## 2.1 反转字符数组
+[344. 反转字符串](https://leetcode.cn/problems/reverse-string/)
+
+Time: O(n)
+```java
+class Solution {
+    public void reverseString(char[] s) {
+        if (s == null || s.length == 1) {
+            return;
+        }
+
+        int left = 0;
+        int right = s.length - 1;
+
+        while (left < right) {
+            char c = s[left];
+            s[left] = s[right];
+            s[right] = c;
+            left++;
+            right--;
+        }
+    }
+}
+```
