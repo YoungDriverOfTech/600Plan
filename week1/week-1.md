@@ -1,5 +1,6 @@
 
-# 拿到数组题目时候应该问的问题
+# 1 数组问题
+## 1.1 拿到数组题目应确认的点
 1. 什么类型数组 int char？ 正整数，整数？
 2. 有无重复元素
 3. 是否有序
@@ -11,9 +12,9 @@
 6. 检查input（null）
 
 
-# 两数之和
+## 1.2 两数之和
 [1. 两数之和](https://leetcode.cn/problems/two-sum/)
-## brute force  
+### brute force  
 
 因为使用了双重循环，时间复杂度是O(n^2)
 ```java
@@ -36,7 +37,7 @@ class Solution {
     }
 }
 ```
-## 排序+双指针  
+### 排序+双指针  
 
 类库的排序算法复杂度是O(nlogn),双指针是O(n)。所以总体复杂度是O(nlogn)
 ```java
@@ -68,7 +69,7 @@ class Solution {
 
 
 
-# 三数之和
+## 1.3 三数之和
 
 [15. 三数之和](https://leetcode.cn/problems/3sum/)
 ## brute force  
@@ -101,7 +102,7 @@ public class Solution {
 }
 ```
 
-## 排序+遍历+双指针
+### 排序+遍历+双指针
 
 排序算法复杂度是O(nlogn), 因为进行了两次循环，所以复杂度是O(n^2),最后的复杂度就是O(n^2)
 ```java
@@ -142,7 +143,7 @@ public class Solution {
 ```
 
 
-# 四数之和  
+## 1.4 四数之和  
 
 [18. 四数之和](https://leetcode.cn/problems/4sum/)
 ## 排序+双指针
@@ -206,7 +207,7 @@ class Solution {
 }
 ```
 
-# K-sum解法总结  
+## 1.5 K-sum解法总结  
 - 排序
 - 尝试遍历第一个数，将问题转化为k-1Sum
 - 时间复杂度  
