@@ -278,3 +278,43 @@ class Solution {
     }
 }
 ```
+
+## 2.3 合并两个有序数组
+[88. 合并两个有序数组](https://leetcode.cn/problems/merge-sorted-array/)
+
+### 双指针
+Time: O(n)
+
+```java
+class Solution {
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int[] result = new int[m + n];
+
+        int index = 0;
+        int index1 = 0;
+        int index2 = 0;
+
+        // 把两个数组中的数据先保存到一个临时数组
+        while (index1 < m && index2 < n) {
+            if (nums1[index1] <= nums2[index2]) {
+                result[index++] = nums1[index1++];
+            } else {
+                result[index++] = nums2[index2++];
+            }
+        }
+        
+        // 没有被遍历的元素也放到临时数组里面
+        while (index1 < m) {
+            result[index++] = nums1[index1++];
+        }
+        while (index2 < n) {
+            result[index++] = nums2[index2++];
+        }
+
+        // 用临时数组填充nums1
+        for (int i = 0; i < nums1.length; i++) {
+            nums1[i] = result[i];
+        }
+    }
+}
+```
