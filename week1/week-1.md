@@ -345,7 +345,7 @@ interval[2, 3] 指的是原数组的索引
 ```
 
 ### 前缀和练习  
-[88. 合并两个有序数组](https://leetcode.cn/problems/merge-sorted-array/)
+[303. 区域和检索 - 数组不可变](https://leetcode.cn/problems/range-sum-query-immutable/)
 
 ```java
  class NumArray {
@@ -362,6 +362,31 @@ interval[2, 3] 指的是原数组的索引
     // 这里返回的时候是O(1)复杂度
     public int sumRange(int left, int right) {
         return prefixSum[right + 1] - prefixSum[left];
+    }
+}
+```
+
+### 数组动态和
+[1480. 一维数组的动态和](https://leetcode.cn/problems/running-sum-of-1d-array/)
+
+Time/Space: O(n)
+```java
+class Solution {
+    public int[] runningSum(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return null;
+        }
+
+        int[] prefixSum = new int[nums.length];
+        for (int i = 0; i < nums.length; i++) {
+            if (i == 0) {
+                prefixSum[i] = nums[i];
+            } else {
+                prefixSum[i] = prefixSum[i - 1] + nums[i];
+            }
+        }
+
+        return prefixSum;
     }
 }
 ```
