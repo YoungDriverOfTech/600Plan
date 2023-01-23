@@ -390,3 +390,31 @@ class Solution {
     }
 }
 ```
+
+### 奇数长度子数组之和
+[1588. 所有奇数长度子数组的和](https://leetcode.cn/problems/sum-of-all-odd-length-subarrays/)
+
+Brute force Time: O(n^3)
+```java
+class Solution {
+    public int sumOddLengthSubarrays(int[] arr) {
+        if (arr == null || arr.length == 0) {
+            return - 0;
+        }
+
+        int result = 0;
+
+        // 遍历下标
+        for (int i = 0; i < arr.length; i++) {
+            // 遍历长度1，3，5，7，9. 但是最终长度不能超过参数数组的长度，即最大是等于
+            for (int len = 1; i + len <= arr.length; len = len + 2) {
+                // 现在就可以求奇数连续数组的和了，开始位置是i，结束位置是i+len-1
+                for (int j = i; j < i + len; j++) {
+                    result = result + arr[j];
+                }
+            }
+        }
+        return result;
+    }
+}
+```
