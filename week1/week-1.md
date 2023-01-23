@@ -394,7 +394,8 @@ class Solution {
 ### 奇数长度子数组之和
 [1588. 所有奇数长度子数组的和](https://leetcode.cn/problems/sum-of-all-odd-length-subarrays/)
 
-Brute force Time: O(n^3)
+Brute force  
+Time: O(n^3)
 ```java
 class Solution {
     public int sumOddLengthSubarrays(int[] arr) {
@@ -412,6 +413,34 @@ class Solution {
                 for (int j = i; j < i + len; j++) {
                     result = result + arr[j];
                 }
+            }
+        }
+        return result;
+    }
+}
+```
+
+前缀和  
+Time: O(n^2)
+```java
+class Solution {
+    public int sumOddLengthSubarrays(int[] arr) {
+        if (arr == null || arr.length == 0) {
+            return - 0;
+        }
+
+        int[] prefixSum = new int[arr.length + 1];
+        for (int i = 0; i < arr.length; i++) {
+            prefixSum[i + 1] = prefixSum[i] + arr[i];
+        }
+        int result = 0;
+
+        // 遍历下标
+        for (int i = 0; i < arr.length; i++) {
+            // 遍历长度1，3，5，7，9. 但是最终长度不能超过参数数组的长度，即最大是等于
+            for (int len = 1; i + len <= arr.length; len = len + 2) {
+                // 这块可以使用前缀和了，开始的位置是i没问题。结束的位置是i+len-1，但是因为前缀和公式prefixSum[j + 1], 所以最后的1会被消除掉
+                result = result + (prefixSum[i + len] - prefixSum[i]);
             }
         }
         return result;
