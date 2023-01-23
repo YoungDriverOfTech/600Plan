@@ -318,3 +318,50 @@ class Solution {
     }
 }
 ```
+
+## 2.4 前缀和  
+
+### 途中的i，j指的都是下标
+![prefix](./images/prefixSum.png)
+
+### 前缀和模版代码  
+```java
+// 1. 前缀和数组的长度为原来数组的长度+1
+// 2. 注意构造时index的取值范围
+int[] prefixSum = new int[num.length + 1];
+for (int i = 0; i < num.length; i++) {
+    prefixSum[i + 1] = prefixSum[i] + num[i];
+}
+
+/*
+nums:   1  2  3  4  
+prefix: 0  1  3  6  10
+
+nums[2] = prefix[3] - prefix[2] = 3
+interval[2, 3] = prefix[4] - prefix[2] = 7
+
+interval[2, 3] 指的是原数组的索引
+*/
+```
+
+### 前缀和练习  
+[88. 合并两个有序数组](https://leetcode.cn/problems/merge-sorted-array/)
+
+```java
+ class NumArray {
+
+    private int[] prefixSum;
+
+    public NumArray(int[] nums) {
+        prefixSum = new int[nums.length + 1];
+        for (int i = 0; i < nums.length; i++) {
+            prefixSum[i + 1] = prefixSum[i] + nums[i];
+        }
+    }
+    
+    // 这里返回的时候是O(1)复杂度
+    public int sumRange(int left, int right) {
+        return prefixSum[right + 1] - prefixSum[left];
+    }
+}
+```
