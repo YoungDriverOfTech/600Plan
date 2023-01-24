@@ -547,6 +547,45 @@ class NumMatrix {
 
 ### 一维前缀和  
 
-```java
+对数组的每一行都取前缀和，然后for循环遍历每行，相加就OK
 
+Time: O(m)  m是行数
+
+```java
+class NumMatrix {
+
+    private int[][] prefixSum;
+
+    public NumMatrix(int[][] matrix) {
+        int m = matrix.length;
+        int n= matrix[0].length;
+
+        this.prefixSum = new int[m][n + 1];
+
+        // 构造每行的前缀和，因为开辟了prefixSum数组，space: O(m * n)
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                prefixSum[i][j + 1] = prefixSum[i][j] + matrix[i][j];
+            }
+        }
+    }
+    
+    public int sumRegion(int row1, int col1, int row2, int col2) {
+        int result = 0;
+
+        // Time: O(m)
+        for (int i = row1; i <= row2; i++) {
+            result += prefixSum[i][col2 + 1] - prefixSum[i][col1];
+        }
+        return result;
+    }
+}
 ```
+
+### 二维数组前缀和
+
+
+
+```java
+```
+
