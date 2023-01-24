@@ -447,3 +447,106 @@ class Solution {
     }
 }
 ```
+
+## 2.5 和为k的自数组
+
+[560. 和为 K 的子数组](https://leetcode.cn/problems/subarray-sum-equals-k/)  
+
+### brute force  
+
+Time: O(n^2)
+
+```java
+class Solution {
+    public int subarraySum(int[] nums, int k) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+
+        int result = 0;
+        int sum = 0;
+
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = i; j < nums.length; j++) {
+                sum += nums[j];
+                if (sum == k) {
+                    result += 1;
+                }
+            }
+            sum = 0;
+        }
+        return result;
+    }
+}
+```
+
+### 前缀和  
+
+Time: O(n^2)  
+Space: O(n)
+
+```java
+class Solution {
+    public int subarraySum(int[] nums, int k) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+
+        int[] prefixSum = new int[nums.length + 1];
+        for (int i = 0; i < nums.length; i++) {
+            prefixSum[i + 1] = prefixSum[i] + nums[i];
+        }
+
+        int result = 0;
+        int sum = 0;
+
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = i; j < nums.length; j++) {
+                if (prefixSum[j + 1] - prefixSum[i] == k) {
+                    result += 1;
+                }
+            }
+        }
+        return result;
+    }
+}
+```
+
+## 2.6 二维区域和检索  
+
+[304. 二维区域和检索 - 矩阵不可变](https://leetcode.cn/problems/range-sum-query-2d-immutable/)  
+
+### brute force  
+
+Time: O(n^2)
+
+```java
+class NumMatrix {
+
+    private int[][] matrix;
+
+    public NumMatrix(int[][] matrix) {
+        this.matrix = matrix;
+    }
+    
+    public int sumRegion(int row1, int col1, int row2, int col2) {
+        if (row1 > row2 || col1 > col2) {
+            return -1;
+        }
+
+        int sum = 0;
+        for (int i = row1; i <= row2; i++) {
+            for (int j = col1; j <= col2; j++) {
+                sum += matrix[i][j];
+            }
+        }
+        return sum;
+    }
+}
+```
+
+### 一维前缀和  
+
+```java
+
+```
