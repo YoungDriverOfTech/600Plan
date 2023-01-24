@@ -582,10 +582,53 @@ class NumMatrix {
 }
 ```
 
-### 二维数组前缀和
+### 二维数组前缀和(背下来)
+
+prefixSum[i][j] = (0, 0), (i, 0), (o, j), (i, j) 所构成的矩形的元素之和。 那么求某一部分的话
+
+假如要求【5，6】的元素和。那么先求出【6】- 【3】- 【4】+【1】。因为3 和 4 被减去的时候，【1】被多减去了一次，所以最后要加上【1】。
+
+| 1    | 2    | 3    |
+| ---- | ---- | ---- |
+| 4    | 5    | 6    |
+| 7    | 8    | 9    |
 
 
+
+那么怎么初始化二维前缀和数组呢？看下面的表格
+
+prefixSum(i+1, j+1) = prefixSum(i, j+1)  + prefixSum(i + 1, j)  - prefixSum(i, j)  + matrix(i+1, j+1)
+
+前两行和 + 前两列和 - (i, j)和 + (i + 1, j + 1)的值
+
+|      |        |          |
+| ---- | ------ | -------- |
+|      | i, j   | i, j+1   |
+|      | i+1, j | i+1, j+1 |
 
 ```java
+class NumMatrix {
+    private int[][] prefixSum;
+
+    public NumMatrix(int[][] matrix) {
+        int m = matrix.length;
+        int n= matrix[0].length;
+
+        this.prefixSum = new int[m + 1][n + 1];
+
+        // 构造二维数组前缀和
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                prefixSum[i + 1][j + 1] = prefixSum[i][j + 1] + prefixSum[i + 1][j] - prefixSum[i][j] + matrix[i][j]; // 因为matrix的矩阵比prefixSum的要小一个，所以最后就不用加1了
+            }
+        }
+    }
+    
+    public int sumRegion(int row1, int col1, int row2, int col2) {
+        // Time: O(1)
+        // 因为prefixSum的矩阵会从（1，1）开始，所以求坐标的时候应该都要+1
+        return prefixSum[row2 + 1][col2 + 1] - prefixSum[row1][col2 + 1] - prefixSum[row2 + 1][col1] + prefixSum[row1][col1];
+    }
+}
 ```
 
