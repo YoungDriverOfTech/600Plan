@@ -741,3 +741,19 @@ class Solution {
 }
 ```
 
+
+
+## 2.8 数组列表（ArrayList）
+
+- 基于数组实现的容量大小可动态变化的数据结构
+- 可以将很多数组操作的细节封装起来
+
+### 实现一个ArrayList
+
+1. 定义属性字段
+   - 在数组的基础上实现，存储数据信息：int data[]
+   - 属性：data, size, capacity
+2. 定义构造器
+3. 定义方法
+   - add, get, set, remove, size
+
