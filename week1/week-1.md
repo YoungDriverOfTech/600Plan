@@ -632,3 +632,112 @@ class NumMatrix {
 }
 ```
 
+
+
+## 2.7 除自身以外数组的乘积
+
+[238. 除自身以外数组的乘积](https://leetcode.cn/problems/product-of-array-except-self/)
+
+### 前缀/后缀积
+
+前缀积: left[i] = left[i - 1] * nums[i - 1]  
+
+后缀积: right[i] = right[i + 1] * nums[i + 1]
+
+Time: O(n)
+
+Space: O(n) 输出数组不过为空间复杂度计算部分
+
+```java
+class Solution {
+    public int[] productExceptSelf(int[] nums) {
+
+        int[] result = new int[nums.length];
+        int[] left = new int[nums.length];
+        int[] right = new int[nums.length];
+
+        // 前缀积: left[i] = left[i - 1] * nums[i - 1]  
+        left[0] = 1;
+        for (int i = 1; i < nums.length; i++) {
+            left[i] = left[i - 1] * nums[i - 1];
+        }
+
+        // 后缀积: right[i] = right[i + 1] * nums[i + 1]
+        right[nums.length - 1] = 1;
+        for (int i = nums.length - 2; i >= 0; i--) {
+            right[i] = right[i + 1] * nums[i + 1];
+        }
+
+        // 最终答案
+        for (int i = 0; i < nums.length; i++) {
+            result[i] = left[i] * right[i];
+        }
+
+        return result;
+    }
+}
+```
+
+### 前缀/后缀积 优化
+
+Time: O(n)
+
+Space: O(n) 输出数组不过为空间复杂度计算部分
+
+```java
+class Solution {
+    public int[] productExceptSelf(int[] nums) {
+
+        int[] result = new int[nums.length];
+
+        // 前缀积: left[i] = left[i - 1] * nums[i - 1]  
+        result[0] = 1;
+        for (int i = 1; i < nums.length; i++) {
+            result[i] = result[i - 1] * nums[i - 1];
+        }
+
+        // 用factor来几录后缀积
+        int factor = 1;
+        for (int i = nums.length - 1; i >= 0; i--) {
+            result[i] = result[i] * factor;
+            factor = factor * nums[i];
+        }
+
+        return result;
+    }
+}
+```
+
+
+
+### 头尾遍历
+
+Time: O(n)
+
+Space: O(1) 输出数组不过为空间复杂度计算部分
+
+```java
+class Solution {
+    public int[] productExceptSelf(int[] nums) {
+				// 不初始化为1的话，会出现0的乘积
+        int[] result = new int[nums.length];
+        for (int i = 0; i < result.length; i++) {
+            result[i] = 1;
+        }
+
+        int temp1 = 1;
+        for (int i = 1; i < nums.length; i++) {
+            temp1 = temp1 * nums[i - 1];
+            result[i] = temp1;
+        }
+
+        int temp2 = 1;
+        for (int i = nums.length - 2; i >= 0; i--) {
+            temp2 = temp2 * nums[i + 1];
+            result[i] = result[i] * temp2;
+        }
+        return result;
+    }
+}
+```
+
