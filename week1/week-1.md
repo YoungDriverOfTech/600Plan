@@ -632,6 +632,52 @@ class NumMatrix {
 }
 ```
 
+```java
+class NumMatrix {
+    // 二维前缀和
+    private int[][] prefixSum;
+
+    // 首先构造二维前缀数组
+    public NumMatrix(int[][] matrix) {
+        // 先求出第一行，第一列的前缀和
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+        prefixSum = new int[rows][cols];
+        prefixSum[0][0] = matrix[0][0];
+
+        for (int i = 1; i < rows; i++) {
+            prefixSum[i][0] = prefixSum[i - 1][0] + matrix[i][0];
+        }
+        for (int i = 1; i < cols; i++) {
+            prefixSum[0][i] = prefixSum[0][i - 1] + matrix[0][i];
+        }
+
+        // 构建剩余格子的前缀和
+        for (int i = 1; i < rows; i++) {
+            for (int j = 1; j < cols; j++) {
+                prefixSum[i][j] = prefixSum[i - 1][j] + prefixSum[i][j - 1] - prefixSum[i - 1][j - 1] + matrix[i][j];
+            }
+        }
+    }
+    
+    public int sumRegion(int row1, int col1, int row2, int col2) {
+        if (row1 == 0 && col1 == 0) {
+            return prefixSum[row2][col2];
+        }
+
+        if (row1 == 0) {
+            return prefixSum[row2][col2] - prefixSum[row2][col1 - 1];
+        }
+
+        if (col1 == 0) {
+            return prefixSum[row2][col2] - prefixSum[row1 - 1][col2];
+        }
+
+        return prefixSum[row2][col2] - prefixSum[row2][col1 - 1] - prefixSum[row1 - 1][col2] + prefixSum[row1 - 1][col1 - 1];
+    }
+}
+```
+
 
 
 ## 2.7 除自身以外数组的乘积
