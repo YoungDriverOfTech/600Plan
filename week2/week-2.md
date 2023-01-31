@@ -236,3 +236,133 @@ class Solution {
 
 ## 3.5 单调栈
 
+在栈的FIFO基础上增加一个额外的特性：从栈顶（栈低）到栈低（栈顶）的元素是严格递增或者严格递减。
+### 单调递减栈-从栈低到栈顶单调递减
+- 只要比栈顶元素小的元素才能直接进栈，否则需要先将栈中比当前元素小的元素都出栈，再将当前元素入栈
+- 保证栈中保留的都是比当前入栈元素大的值
+- 从栈低到栈顶的元素值是单调递减的
+- 模板
+```java
+// 单调递减栈 bottom -> top
+Deque<Integer> stack = new ArrayDeque<>();
+for (int i = 0; i < nums.length; i++) {
+    while (!stack.isEmpty() && stack.peek() < nums[i]) {
+        stack.pop();
+    }
+    stack.push(nums[i]);
+}
+```
+
+### 单调递减栈-从栈低到栈顶单调递增
+- 只要比栈顶元素大的元素才能直接进栈，否则需要先将栈中比当前元素大的元素都出栈，再将当前元素入栈
+- 保证栈中保留的都是比当前入栈元素小的值
+- 从栈低到栈顶的元素值是单调递减的
+- 模板
+```java
+// 单调递增栈 bottom -> top
+Deque<Integer> stack = new ArrayDeque<>();
+for (int i = 0; i < nums.length; i++) {
+    while (!stack.isEmpty() && stack.peek() > nums[i]) {
+        stack.pop();
+    }
+    stack.push(nums[i]);
+}
+```
+
+## 3.6 重要：Next Greater Number问题  
+
+给定一个整型数组nums,要求打印出所有元素右边第一个大于该元素的值。  
+case1: 数组nums[1,5,3,6,4,8,9,10] -> [5,6,6,8,8,9,10,-1]  
+case2: 数组nums[8.2.5.4.3.9.7.2.5] -> [5,9,9,9,-1,-1,5,-1]    
+
+> 大单减小单增，遍历方向题目中
+
+```java
+public int[] findRightNextGreater(int[] nums) {
+    // 找大的，单减栈。遍历方向题目中是右
+    int[] result = new int[nums.length];
+    Arrays.fill(result, -1);
+
+    // 这个栈不装value了，装索引。因为要给result的赋值的时候需要用到索引
+    Deque<Integer> stack = new ArrayDeque<>();
+    for (int i = 0; i < nums.length; i++) {
+        
+        // 因为是递减栈，所以新元素 > 顶元素的时候不满足单减，要把栈里面的元素pop掉
+        for (!stack.isEmpty() && nums[stack.peek()] < nums[i]) {
+            int index = stack.pop();
+            result[index] = nums[i];
+        }
+
+        stack.push(i);
+    }
+
+    return result;
+}
+
+public int[] findRightNextSmaill(int[] nums) {
+    // 找小的，单增栈。遍历方向题目中是右
+    int[] result = new int[nums.length];
+    Arrays.fill(result, -1);
+
+    // 这个栈不装value了，装索引。因为要给result的赋值的时候需要用到索引
+    Deque<Integer> stack = new ArrayDeque<>();
+    for (int i = 0; i < nums.length; i++) {
+        
+        // 因为是递增栈，所以新元素 < 顶元素的时候不满足单增，要把栈里面的元素pop掉
+        for (!stack.isEmpty() && nums[stack.peek()] > nums[i]) {
+            int index = stack.pop();
+            result[index] = nums[i];
+        }
+
+        stack.push(i);
+    }
+
+    return result;
+}
+
+public int[] findLeftNextGreater(int[] nums) {
+    // 找大的，单减栈。遍历方向题目中是左
+    int[] result = new int[nums.length];
+    Arrays.fill(result, -1);
+
+    // 这个栈不装value了，装索引。因为要给result的赋值的时候需要用到索引
+    Deque<Integer> stack = new ArrayDeque<>();
+    for (int i = nums.length - 1; i >= 0; i--) {
+        
+        // 因为是递减栈，所以新元素 > 顶元素的时候不满足单减，要把栈里面的元素pop掉
+        for (!stack.isEmpty() && nums[stack.peek()] < nums[i]) {
+            int index = stack.pop();
+            result[index] = nums[i];
+        }
+
+        stack.push(i);
+    }
+
+    return result;
+}
+
+public int[] findLeftNextSmaill(int[] nums) {
+    // 找小的，单增栈。遍历方向题目中是左
+    int[] result = new int[nums.length];
+    Arrays.fill(result, -1);
+
+    // 这个栈不装value了，装索引。因为要给result的赋值的时候需要用到索引
+    Deque<Integer> stack = new ArrayDeque<>();
+    for (int i = nums.length - 1; i >= 0; i--) {
+        
+        // 因为是递增栈，所以新元素 < 顶元素的时候不满足单增，要把栈里面的元素pop掉
+        for (!stack.isEmpty() && nums[stack.peek()] > nums[i]) {
+            int index = stack.pop();
+            result[index] = nums[i];
+        }
+
+        stack.push(i);
+    }
+
+    return result;
+}
+```
+
+
+## 3.7 
+739
