@@ -364,5 +364,152 @@ public int[] findLeftNextSmaill(int[] nums) {
 ```
 
 
-## 3.7 
-739
+
+## 3.7 每日温度
+
+[739. 每日温度](https://leetcode.cn/problems/daily-temperatures/)
+
+```java
+class Solution {
+  	// Time: O(n)  Space: O(n)
+    public int[] dailyTemperatures(int[] temperatures) {
+        if (temperatures == null || temperatures.length == 0) {
+            return null;
+        }
+
+        int[] result = new int[temperatures.length];
+        Deque<Integer> stack = new ArrayDeque<>();
+        for (int i = 0; i < temperatures.length; i++) {
+            while (!stack.isEmpty() && temperatures[stack.peek()] < temperatures[i]) {
+                int index = stack.pop();
+                result[index] = i - index;
+            }
+
+            stack.push(i);
+        }
+
+        return result;
+    }
+}
+```
+
+
+
+## 3.8 下一个更大元素1
+
+[496. 下一个更大元素 I](https://leetcode.cn/problems/next-greater-element-i/)
+
+```java
+class Solution {
+    // 因为nums2是超集，只要把nums2的下一个最大元素找出来，那么就能找到nums1
+  	// Time: O(n)  Space: O(n)
+    public int[] nextGreaterElement(int[] nums1, int[] nums2) {
+
+        // 用Map来记录nums2中每个元素的下一个最大元素
+        Map<Integer, Integer> map = new HashMap<>();
+        Deque<Integer> stack = new ArrayDeque<>();
+
+        for (int i = 0; i < nums2.length; i++) {
+            while (!stack.isEmpty() && stack.peek() < nums2[i]) {	// 主要不要写成 || 脑子要清醒
+                int smallNum = stack.pop();
+                map.put(smallNum, nums2[i]);
+            }
+
+            stack.push(nums2[i]);
+        }
+
+        // 遍历num1找到下一个最大元素
+        int[] result = new int[nums1.length];
+        for (int i = 0; i < nums1.length; i++) {
+            result[i] = map.getOrDefault(nums1[i], -1);
+        }
+        return result;
+    }
+}
+```
+
+
+
+## 3.9 下一个更大元素2
+
+[503. 下一个更大元素 II](https://leetcode.cn/problems/next-greater-element-ii/)
+
+```java
+class Solution {
+    // 因为是循环的数组，所以遍历的时候把长度编程两倍，这样最后一个元素就可以在下一遍遍历里面找比他大的元素了
+    // 索引怎么办呢？ 用当前索引对长度取模，就能找到第二圈的元素的值
+  	// Time: O(n)  Space: O(n)
+    public int[] nextGreaterElements(int[] nums) {
+        int[] result = new int[nums.length];
+        Arrays.fill(result, -1);
+
+        Deque<Integer> stack = new ArrayDeque<>();
+        int len = nums.length;
+        for (int i = 0; i < len * 2; i++) {	// 这里是len * 2
+            while (!stack.isEmpty() && nums[stack.peek()] < nums[i % len]) { // 取余数的时候要对原来的length取
+                int index = stack.pop();
+                result[index] = nums[i % len];	// 下一个更大的值，就是还未入栈的新值
+            }
+
+            stack.push(i % len);
+        }
+        return result;
+    }
+}
+```
+
+
+
+## 4.0 柱状图中最大矩形
+
+[84. 柱状图中最大的矩形](https://leetcode.cn/problems/largest-rectangle-in-histogram/)
+
+```java
+class Solution {
+    // 思路： 求最大矩形的面积，就看每根柱子两侧首次小于此柱子高度的位置。记录下这两个位置right和left
+    // 那么right - left - 1就是宽度（为什么要减去1呢？ 带入特殊值计算一下即可得到right - left是多着一个1的）
+    // 高度就是当前柱子的高度
+    // 那么问题就转化成为了求每个元素右边下个小值 -> 递增栈，左到右
+    //                  求每个元素左边下个小值 -> 递增栈，右到左
+    // 然后遍历height数组，求醉最大面积即可
+    // PS：需要注意的是特殊的边界情况。对于第一个元素，他左边的高度设置为0，且索引为-1. 最后一个元素高度为0，索引为length
+    //     更加极端的一些情况是如果每个元素都相等，那么每个元素左边的第一个较小值都是-1，右边的较大值都是length，所以初始化left和right数组的时候都填充上-1， length即可
+  	// Time: O(n)  Space: O(n)
+    public int largestRectangleArea(int[] heights) {
+        
+        int[] left = new int[heights.length];
+        int[] right = new int[heights.length];
+        // 处理特殊边界
+        Arrays.fill(left, -1);
+        Arrays.fill(right, heights.length);
+
+        // 每个元素右边下个小元素边界
+        Deque<Integer> stack = new ArrayDeque<>();
+        for (int i = 0; i < heights.length; i++) {
+            while (!stack.isEmpty() && heights[stack.peek()] > heights[i]) {
+                int index = stack.pop();
+                right[index] = i;
+            }
+            stack.push(i);
+        }
+
+        // 每个元素左边下个小元素边界
+        stack.clear();
+        for (int i = heights.length - 1; i >= 0; i--) {
+            while (!stack.isEmpty() && heights[stack.peek()] > heights[i]) {
+                int index = stack.pop();
+                left[index] = i;
+            }
+            stack.push(i);
+        }
+
+        // 计算每个柱子能构成的最大面积，注意宽度是right - left - 1，别忘了-1
+        int result = 0;
+        for (int i = 0; i < heights.length; i++) {
+            result = Math.max(result, (right[i] - left[i] - 1) * heights[i]);
+        }
+        return result;
+    }
+}
+```
+
