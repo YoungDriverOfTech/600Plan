@@ -513,3 +513,36 @@ class Solution {
 }
 ```
 
+```java
+class Solution {
+
+    // 一次栈遍历
+    public int largestRectangleArea(int[] heights) {
+
+        int len = heights.length;
+        int[] left = new int[len];
+        int[] right = new int[len];
+        Arrays.fill(right, len);
+        Deque<Integer> stack = new ArrayDeque<>();
+
+        for (int i = 0; i < len; i++) {
+            while (!stack.isEmpty() && heights[stack.peek()] >= heights[i]) {   // 绝对单调递增栈
+                int index = stack.pop();
+                right[index] = i;
+            }
+            // 每次入栈就得要计算左边界, 如果栈是空的，那么-1就是边界，如果栈不是空的，因为站内是递增的，所以栈顶的元素一定是弹出元素的左边界
+            left[i] = stack.isEmpty() ? -1 : stack.peek();
+            stack.push(i);
+        }
+
+        // 计算面积
+        int result = 0;
+        for (int i = 0; i < len; i++) {
+            result = Math.max(result, (right[i] - left[i] - 1) * heights[i]);   // 记得写result = ，低级错误
+        }
+        return result;
+    }
+}
+```
+
+## 4.1 
