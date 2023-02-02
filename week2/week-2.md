@@ -796,3 +796,62 @@ class Solution {
 }
 ```
 
+
+
+## 5.5 搜索二维矩阵
+
+矩阵中行列计算，坐标转换计算技巧：
+
+行数：m
+
+列数：n
+
+二维坐标转换到一维：**row * n + col**    (row, col是这个元素的第row行，第col列)
+
+一维坐标转换到二维：**x = index / n,  y = index % n** 
+
+[74. 搜索二维矩阵](https://leetcode.cn/problems/search-a-2d-matrix/)
+
+```java
+class Solution {
+    // 把二维坐标当成一维来计算。 Time: O(log(m * n))
+    // 二维坐标转换到一维：row * n + col    (row, col是这个元素的第row行，第col列)
+    // 一维坐标转换到二维：x = index / n,  y = index % n 
+    public boolean searchMatrix(int[][] matrix, int target) {
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) {
+            return false;
+        }
+
+        int m = matrix.length;
+        int n = matrix[0].length;
+        int start = 0;
+        int end = m * n - 1;
+
+        while (start + 1 < end) {
+            int mid = start + (end - start) / 2;
+            int x = mid / n;
+            int y = mid % n;
+
+            if (target == matrix[x][y]) {
+                end = mid;
+            } else if (target < matrix[x][y]) {
+                end = mid;
+            } else {
+                start = mid;
+            }
+        }
+
+        if (target == matrix[start / n][start % n] || target == matrix[end / n][end % n]) {
+            return true;
+        }
+
+        return false;
+    }
+}
+```
+
+
+
+
+
+## 5.6 
