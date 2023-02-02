@@ -663,7 +663,136 @@ class Solution {
 }
 ```
 
+## 5.3 第一个错误的版本
+
+[278. 第一个错误的版本](https://leetcode.cn/problems/first-bad-version/)
+
+```java
+public class Solution extends VersionControl {
+    public int firstBadVersion(int n) {
+        if (n <= 0) {
+            return -1;
+        }
+
+        int start = 1;
+        int end = n;
+
+        while (start + 1 < end) {
+            int mid = start + (end - start) / 2;
+            if (!isBadVersion(mid)) {
+                start = mid;
+            } else {
+                end = mid;
+            }
+        }
+
+        if (isBadVersion(start)) {
+            return start;
+        } else {
+            return end;
+        }
+    }
+}
+```
 
 
 
+## 5.4 在排序数组中查找元素的第一个和最后一个位置
+
+[34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/)
+
+```java
+class Solution {
+    public int[] searchRange(int[] nums, int target) {
+        int[] result = new int[2];
+        result[0] = -1;
+        result[1] = -1;
+
+        if (nums == null || nums.length == 0) {
+            return result;
+        }
+
+        int start = 0;
+        int end = nums.length - 1;
+
+        // 因为有重复的元素，所以找的时候分两次来找，第一次找开头的位置，让mid和target相等时，让end=mid，这样找完的时候end就会在第一个出现目标值的索引上面
+        while (start + 1 < end) {
+            int mid = start + (end - start) / 2;
+            if (target <= nums[mid]) {
+                end = mid;
+            } else {
+                start = mid;
+            }
+        }
+        if (nums[start] == target) {
+            result[0] = start;
+        } else if (nums[end] == target) {
+            result[0] = end;
+        } else {
+            return result;
+        }
+
+        // 这次找结尾的元素
+        start = 0;
+        end = nums.length - 1;
+
+        while (start + 1 < end) {
+            int mid = start + (end - start) / 2;
+            if (target >= nums[mid]) {
+                start = mid;
+            } else {
+                end = mid;
+            }
+        }
+
+        if (nums[end] == target) {
+            result[1] = end;
+        } else if (nums[start] == target) {
+            result[1] = start;
+        }
+
+        return result;
+    }
+}
+```
+
+
+
+## 5.5 搜索插入位置
+
+[35. 搜索插入位置](https://leetcode.cn/problems/search-insert-position/)
+
+```java
+class Solution {
+    // 二分查找：根据题目描述，找的是第一个大于等于target的索引，那么使用二分查找，先判断start，在判断end
+    // 有个特殊情况就是，当target比数组中的所有元素都打的时候，那么应该插入的地方是end+1
+    public int searchInsert(int[] nums, int target) {
+        if (nums == null || nums.length == 0) {
+            return -1;
+        }
+
+        int start = 0;
+        int end = nums.length - 1;
+
+        while (start + 1 < end) {
+            int mid = start + (end - start) / 2;
+            if (target == nums[mid]) {
+                end = mid;
+            } else if (target > nums[mid]) {
+                start = mid;
+            } else {
+                end = mid;
+            }
+        }
+
+        if (nums[start] >= target) {
+            return start;
+        } else if (nums[end] >= target) {
+            return end;
+        } else {
+            return end + 1;
+        }
+    }
+}
+```
 
