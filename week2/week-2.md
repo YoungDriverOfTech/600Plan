@@ -887,3 +887,42 @@ class Solution {
 }
 ```
 
+
+
+## 5.7 数组区间有序
+
+[153. 寻找旋转排序数组中的最小值](https://leetcode.cn/problems/find-minimum-in-rotated-sorted-array/)
+
+![时间复杂度](./images/153-image.jpg) 
+
+```java
+class Solution {
+    // O(logn)
+    public int findMin(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return -1;
+        }
+
+        int start = 0;
+        int end = nums.length - 1;
+
+        while (start + 1 < end) {
+            // 先判断是不是旋转过，没旋转过直接返回start
+            if (nums[start] < nums[end]) {
+                return nums[start];
+            }
+
+            // 旋转过的话，要向s2的开头靠过去
+            int mid = start + (end - start) / 2;
+            if (nums[mid] > nums[start]) {
+                start = mid;
+            } else {
+                end = mid;
+            }
+        }
+
+        return Math.min(nums[start], nums[end]);
+    }
+}
+```
+
