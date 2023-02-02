@@ -854,4 +854,36 @@ class Solution {
 
 
 
-## 5.6 
+## 5.6 搜索二维矩阵 II
+
+[240. 搜索二维矩阵 II](https://leetcode.cn/problems/search-a-2d-matrix-ii/)
+
+解题方法是右上到左下
+
+```java
+class Solution {
+    // 右上到左下查询，Time: O(m + n)
+    public boolean searchMatrix(int[][] matrix, int target) {
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) {
+            return false;
+        }
+
+        int m = matrix.length;
+        int n = matrix[0].length;
+        int x = 0;
+        int y = n - 1;
+
+        while (x < m && y >= 0) {
+            if (matrix[x][y] == target) {
+                return true;
+            } else if (matrix[x][y] < target) {
+                x++;
+            } else {
+                y--;
+            }
+        }
+        return false;
+    }
+}
+```
+
