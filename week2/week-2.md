@@ -545,4 +545,125 @@ class Solution {
 }
 ```
 
-## 4.1 
+## 4.1 接雨水
+
+#### [42. 接雨水](https://leetcode.cn/problems/trapping-rain-water/)
+
+
+ ```java
+ class Solution {
+     // 算存储雨水需要有3个数字，left边界，弹栈元素，有边界。想要存储雨水那必须左右边界的高度比弹栈元素高度高，只有递减栈可以满足这个需求
+     // 依次放入元素到递减栈，不满足递减的时候弹出一个元素，那这时候 left: stack.peek() 弹出元素 right: nums[i]
+     // 计算能存储多少雨水就是 (Math.min(height[right], hright[left]) - height[弹出元素]) * (right -left -1)
+     // 每次弹出栈的时候计算面积。 但是有个前提是计算的时候栈内必须要有元素，不然left边界没有的话就不能存储雨水
+ 		// Time: O(n)  Space: O(n)
+     public int trap(int[] height) {
+ 
+         int len = height.length;
+         Deque<Integer> stack = new ArrayDeque<>();
+         int result = 0;
+ 
+         for (int i = 0; i < len; i++) {
+             while (!stack.isEmpty() && height[stack.peek()] < height[i]) {
+                 int index = stack.pop();
+                 // 只有有做边界的时候才能存雨水，所以要看一下stack是不是空
+                 if (!stack.isEmpty()) {
+                     result += (Math.min(height[i], height[stack.peek()]) - height[index]) * (i - stack.peek() - 1);
+                 }
+             }
+             stack.push(i);
+         }
+ 
+         return result;
+     }
+ }
+ ```
+
+
+
+# 5 二分查找 O(logn)
+
+## 5.1 模板
+
+- 对输入做异常处理：数组为空或者数组长度为0
+- Recusion or While-Loop：使用迭代而不是递归进行二分查找，因为工程中递归写法存在溢出的可能
+- while循环终止条件：while终止条件应该为start+1<end而不是start<=end，start==end时可能出现死循环，积循环终止条件是相邻或者相交元素时退出。配合while终止条件start+1<end（相邻即退出）的赋值语句mid永远没有+1或者-1，这样不会出现死循环。
+- int mid = start + (end - start) / 2这种表示方法可以防止两个整形值相加时溢出
+- 迭代终止时target应为start或者end中的一个。循环终止条件有两个，具体应看是找第一个还是最后一个而定
+
+```java
+class Solution {
+		public int binarySearch(int[] nums, int target) {
+        if (nums == null || nums.length == 0) {
+            return -1;
+        }
+
+        int start = 0;
+        int end = nums.length - 1;
+
+        while (start + 1 < end) {
+            int mid = start + (end - start) / 2;
+            if (target < nums[mid]) {
+                end = mid;
+            } else if (target > nums[mid]) {
+                start = mid;
+            } else {
+                end = mid;
+            }
+        }
+
+        if (nums[start] == target) {
+            return start;
+        }
+        if (nums[end] == target) {
+            return end;
+        }
+
+        return -1;
+    }
+}
+```
+
+
+
+## 5.2 二分查找
+
+[704. 二分查找](https://leetcode.cn/problems/binary-search/)
+
+```java
+
+class Solution {
+    public int search(int[] nums, int target) {
+        if (nums == null || nums.length == 0) {
+            return -1;
+        }
+
+        int start = 0;
+        int end = nums.length - 1;
+
+        while (start + 1 < end) {
+            int mid = start + (end - start) / 2;
+            if (nums[mid] < target) {
+                start = mid;
+            } else if (nums[mid] > target) {
+                end = mid;
+            } else {
+                end = mid;
+            }
+        }
+
+        if (nums[start] == target) {
+            return start;
+        }
+        if (nums[end] == target) {
+            return end;
+        }
+        return -1;
+    }
+}
+```
+
+
+
+
+
