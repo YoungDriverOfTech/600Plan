@@ -1060,3 +1060,49 @@ class Solution {
 }
 ```
 
+
+
+## 6.0 69. x 的平方根
+
+[69. x 的平方根 ](https://leetcode.cn/problems/sqrtx/)
+
+```java
+class Solution {
+    // 假如传进来时100. 那就用【0， 100】的二分来找
+    // 50 * 50 > 100  => 太大了，范围缩减一半【1， 50】
+    // 25 * 25 > 100  => 太大了，范围缩减一半【1， 25】
+    // 12 * 12 > 100  => 太大了，范围缩减一半【1， 12】
+    // 12 * 12 > 100  => 太大了，范围缩减一半【1， 12】
+    // 6 * 6 < 100   => 太小了，范围增加一半【6， 12】
+    // 9 * 9 < 100   => 太小了，范围增加一半【9， 12】
+    // 10 * 10 ==100 OK
+    public int mySqrt(int x) {
+        if (x == 0) {
+            return 0;
+        }
+
+        int start = 1;
+        int end = x;
+
+        while (start + 1 < end) {
+            int mid = start + (end - start) / 2;
+            if (x / mid == mid) {
+                return mid;
+            } else if (mid < x / mid) {
+                start = mid;
+            } else {
+                end = mid;
+            }
+        }
+
+        if (start <= x / start) {
+            return start;
+        }
+        if (end <= x / end) {
+            return end;
+        }
+        return -1;
+    }
+}
+```
+
