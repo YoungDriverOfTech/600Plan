@@ -893,6 +893,8 @@ class Solution {
 
 [153. 寻找旋转排序数组中的最小值](https://leetcode.cn/problems/find-minimum-in-rotated-sorted-array/)
 
+无重复元素
+
 ![时间复杂度](./images/153-image.jpg) 
 
 ```java
@@ -926,3 +928,51 @@ class Solution {
 }
 ```
 
+
+
+[154. 寻找旋转排序数组中的最小值 II](https://leetcode.cn/problems/find-minimum-in-rotated-sorted-array-ii/)
+
+有重复元素
+
+![时间复杂度](./images/154.jpg) 
+```java
+class Solution {
+    public int findMin(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return -1;
+        }
+
+        int start = 0;
+        int end = nums.length - 1;
+
+        while (start + 1 < end) {
+            // 先判断是不是旋转过，没旋转过直接返回start
+            if (nums[start] < nums[end]) {
+                return nums[start];
+            }
+
+            // 旋转过的话，要向s2的开头靠过去
+            int mid = start + (end - start) / 2;
+            if (nums[mid] > nums[start]) {
+                start = mid;
+            } else if (nums[mid] < nums[start]){
+                end = mid;
+            } else {
+                start = start + 1;
+            }
+        }
+
+        return Math.min(nums[start], nums[end]);
+    }
+}
+```
+
+
+
+## 5.8 山脉数组
+
+先增后减然后求最大值
+
+
+
+852
