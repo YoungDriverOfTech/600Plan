@@ -973,6 +973,90 @@ class Solution {
 
 先增后减然后求最大值
 
+[852. 山脉数组的峰顶索引](https://leetcode.cn/problems/peak-index-in-a-mountain-array/)
+
+![时间复杂度](./images/852.jpg)
+
+```java
+class Solution {
+    // 先增后减数组求最大值 Time: O(logn)
+    public int peakIndexInMountainArray(int[] arr) {
+        if (arr == null || arr.length == 0) {
+            return -1;
+        }
+
+        int start = 0;
+        int end = arr.length - 1;
+        int result = -1;
+
+        while (start + 1 < end) {
+            int mid = start + (end - start) / 2;
+
+            if (arr[mid] > arr[mid + 1]) {
+                end = mid;
+                result = end;
+            } else {
+                start = mid;
+            }
+        }
+
+        return result;
+    }
+}
+```
 
 
-852
+
+## 5.9 搜索旋转排序数组
+
+[33. 搜索旋转排序数组](https://leetcode.cn/problems/search-in-rotated-sorted-array/)
+
+![时间复杂度](./images/33.jpg) 
+
+```java
+class Solution {
+    // Time: O(logn)
+    public int search(int[] nums, int target) {
+        if (nums == null || nums.length == 0) {
+            return -1;
+        }
+
+        int start = 0;
+        int end = nums.length - 1;
+
+        while (start + 1 < end) {
+            int mid = start + (end - start) / 2;
+
+            if (nums[mid] == target) {
+                return mid;
+            }
+
+            // 发生了旋转
+            if (nums[start] > nums[mid]) {
+                if (nums[mid] <= target && target <= nums[end]) {
+                    start = mid;
+                } else {
+                    end = mid;
+                }
+            } else {
+                if (nums[start] <= target && target <= nums[mid]) {
+                    end = mid;
+                } else {
+                    start = mid;
+                }
+            }
+        }
+
+        if (nums[start] == target) {
+            return start;
+        }
+
+        if (nums[end] == target) {
+            return end;
+        }
+
+        return -1;
+    }
+}
+```
+
