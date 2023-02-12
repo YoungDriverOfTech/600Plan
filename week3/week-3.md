@@ -95,3 +95,138 @@ class Solution {
 }
 ```
 
+
+
+## 2.2 链表中倒数第k个节点
+
+[剑指 Offer 22. 链表中倒数第k个节点](https://leetcode.cn/problems/lian-biao-zhong-dao-shu-di-kge-jie-dian-lcof/)
+
+### brute force
+
+遍历两次
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    // 假如长度是5，那倒数第2个就是整数第5-2=3个（这个3是索引）
+    public ListNode getKthFromEnd(ListNode head, int k) {
+        int index = getLength(head) - k;
+
+        ListNode cur = head;
+        while (index-- != 0) {
+            cur = cur.next;
+        }
+        return cur;
+    }
+
+    private int getLength(ListNode head) {
+        int length = 0;
+        ListNode cur = head;
+
+        while (cur != null) {
+            length++;
+            cur = cur.next;
+        }
+        return length;
+    }
+}
+```
+
+
+
+### 快慢指针
+
+遍历一次
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    // 快指针先走k步以后，慢指针在跟上走
+    public ListNode getKthFromEnd(ListNode head, int k) {
+        ListNode fast = head;
+        ListNode slow = head;
+
+        while (k-- != 0) {
+            fast = fast.next;
+        }
+
+        while (fast != null) {
+            fast = fast.next;
+            slow = slow.next;
+        }
+
+        return slow;
+    }
+
+}
+```
+
+
+
+## 2.3 环形链表
+
+[141. 环形链表](https://leetcode.cn/problems/linked-list-cycle/)
+
+模板题，快慢指针
+
+```java
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    // 快慢指针，快的会追上慢的
+    public boolean hasCycle(ListNode head) {
+        if (head == null || head.next == null) {
+            return false;
+        }
+
+        ListNode fast = head;
+        ListNode slow = head;
+
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+
+            // 判断放在移动指针后面，因为首次进入while的时候，快慢都指向了head，会直接判断成功
+            if (fast == slow) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+```
+
+
+
+## 2.4 环形链表2
+
+[142. 环形链表 II](https://leetcode.cn/problems/linked-list-cycle-ii/)
+
+
+
+```java
+```
+
