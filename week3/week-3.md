@@ -225,8 +225,49 @@ public class Solution {
 
 [142. 环形链表 II](https://leetcode.cn/problems/linked-list-cycle-ii/)
 
+1. 判相遇
+2. cur=slow相遇点就是如环点
 
+![时间复杂度](./images/142.jpeg) 
 
 ```java
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    public ListNode detectCycle(ListNode head) {
+        if (head == null || head.next == null) {
+            return null;    // 应该返回空，而不是head。如果head只有一个节点，应该返回null
+        }
+
+        ListNode fast = head;
+        ListNode slow = head;
+
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+
+            if (fast == slow) {
+                ListNode cur = head;
+
+                while (slow != cur) {
+                    slow = slow.next;
+                    cur = cur.next;
+                }
+
+                return cur;
+            }
+        }
+        return null;
+    }
+}
 ```
 
