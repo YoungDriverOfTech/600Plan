@@ -302,7 +302,7 @@ public class Solution {
 
 # 4 实战继续  
 
-## 2.1 合并有序链表
+## 4.1 合并有序链表
 
 [21. 合并两个有序链表](https://leetcode.cn/problems/merge-two-sorted-lists/)
 
@@ -348,4 +348,46 @@ class Solution {
     }
 }
 ```
+
+
+
+## 4.2 两数相加
+
+[2. 两数相加](https://leetcode.cn/problems/add-two-numbers/)
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode dummyNode = new ListNode(-1);
+        ListNode head = dummyNode;
+
+        int carry = 0;
+        while (l1 != null || l2 != null || carry != 0) {
+            int num1 = l1 == null ? 0 : l1.val;
+            int num2 = l2 == null ? 0 : l2.val;
+            int sum = num1 + num2 + carry;
+
+            head.next = new ListNode(sum % 10);
+            head = head.next;
+
+            carry = sum / 10;
+            l1 = l1 == null ? null : l1.next;
+            l2 = l2 == null ? null : l2.next;
+        }
+        return dummyNode.next;
+    }
+}
+```
+
+
 
