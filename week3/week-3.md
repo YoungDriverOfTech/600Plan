@@ -271,3 +271,81 @@ public class Solution {
 }
 ```
 
+
+
+# 3 链表结构变化相关问题
+
+## 3.1 题目总览
+
+- 合并链表
+  - 合并两个有序链表
+  - 两数相加
+- 删除节点
+  - 删除链表的倒数第n个节点
+  - 删除链表中的重复元素
+- 反转链表
+  - 反转链表
+  - k个一组反转链表
+  - 交换相邻节点
+- 综合类
+  - 两数相加
+  - 重排链表
+  - 回文链表
+
+## 3.2 务必记住的三句话
+
+1. 链表结构会不会变化 => 头节点会不会变化 => dummy node
+2. 翻转链表用头插法
+3. 画图关注节点的链接与断开
+
+
+
+# 4 实战继续  
+
+## 2.1 合并有序链表
+
+[21. 合并两个有序链表](https://leetcode.cn/problems/merge-two-sorted-lists/)
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+
+    // 链表结构会不会变化 => 头节点会不会变化 => dummy node
+    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+        if (list1 == null && list2 == null) {
+            return null;
+        }
+
+        ListNode dummyNode = new ListNode(-1);
+        ListNode head = dummyNode;
+
+        while (list1 != null && list2 != null) {
+            if (list1.val <= list2.val) {
+                head.next = list1;
+                list1 = list1.next;
+            } else {
+                head.next = list2;
+                list2 = list2.next;
+            }
+            head = head.next;
+        }
+
+        if (list1 == null) {
+            head.next = list2;
+        } else {
+            head.next = list1;
+        }
+        return dummyNode.next;
+    }
+}
+```
+
