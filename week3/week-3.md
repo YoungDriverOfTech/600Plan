@@ -470,3 +470,53 @@ class Solution {
 }
 ```
 
+
+
+## 4.4 删除链表重复元素2
+
+[82. 删除排序链表中的重复元素 II](https://leetcode.cn/problems/remove-duplicates-from-sorted-list-ii/)
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    // 链表结构会不会变化 => 头节点会不会变化 => dummy node
+    public ListNode deleteDuplicates(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+
+        // 因为要去除所有的重复元素，比如 1 2 2 3 3 4 5 6. 那么2 2 3 3 会被去除。那么去除2 2 的时候，取到第一个2的
+        // 节点是没有意义的。必须渠道前面一个2前面的一个节点才行。那么就是渠道前面的节点，然后判断node.next.val == node.next.next.val才行
+        ListNode dummyNode = new ListNode(-1);
+        dummyNode.next = head;
+        ListNode node = dummyNode;
+
+        while (node != null && node.next != null && node.next.next != null) {
+            if (node.next.val == node.next.next.val) {
+                // node后面两个节点相等的时候，记录node后第一个节点的值，然后后面如果出现和这个值相等的节点，就把node的next指针的节点指向在后面一个，一直到值不相同的时候
+                int value = node.next.val; 
+
+                // 继续往后面查看有没有相等元素
+                while (node.next != null && node.next.val == value) {
+                    node.next = node.next.next;
+                }
+            } else {
+                // node 后面两个节点不相等的时候，把node往后面一栋
+                node = node.next;
+            }
+        }
+
+        return dummyNode.next;
+    }
+}
+```
+
