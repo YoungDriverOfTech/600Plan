@@ -542,7 +542,10 @@ class Solution {
         if (head == null || head.next == null) {
             return head;
         }
-
+				
+      	// 1. 先拿到当前节点的next个节点，记做temp
+      	// 2. 修改当前节点的next指针到pre节点
+      	// 3. pre指针移动到cur的位置，cur指针移动到temp的位置（即原来cur的next指针的位置）
         ListNode cur = head;
         ListNode pre = null;
         while (cur != null) {
