@@ -561,3 +561,106 @@ class Solution {
 }
 ```
 
+
+
+## 4.6 反转链表2
+
+[92. 反转链表 II](https://leetcode.cn/problems/reverse-linked-list-ii/)
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    // 因为反转链表，所以链表结构改变，头节点有可能被反转->dummyNode
+    public ListNode reverseBetween(ListNode head, int left, int right) {
+        ListNode dummyNode = new ListNode(-1, head);
+
+        // 先找到pre节点的位置，因为left从1开始，但是索引是从0开始，所以遍历的时候需要left-1
+        ListNode pre = dummyNode;
+        for (int i = 0; i < left - 1; i++) {
+            pre = pre.next;
+        }
+
+        ListNode curNode = pre.next;
+
+        // 使用头插法 1 2 3 4 -> 1 3 2 4 -> 1 4 3 2, cur节点是2，每次都把cur后面的元素翻到pre前
+        
+        for (int i = left; i < right; i++) {
+            ListNode temp = curNode.next; // temp将来是要放到pre的后面的。
+
+            curNode.next = temp.next;   // 当前节点应该链接temp后面的那个
+            temp.next = pre.next;   // 因为temp将来是反转后排头儿的，那temp.next = cur(pre.next)
+            pre.next = temp;    // tempNode就是要被放到pre.next，
+        }
+        return dummyNode.next;
+    }
+}
+```
+
+
+
+## 4.7 k个节点一组反转
+
+[25. K 个一组翻转链表](https://leetcode.cn/problems/reverse-nodes-in-k-group/)
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    // 因为反转链表，所以链表结构改变，头节点有可能被反转->dummyNode
+    public ListNode reverseKGroup(ListNode head, int k) {
+        // 思路： 1 遍历链表  2 判断够不够k个  3 反转k个。不够的话直接返回
+
+        ListNode dummyNode = new ListNode(-1);
+        dummyNode.next = head;
+
+        ListNode node = dummyNode;
+
+        // 1 遍历链表
+        while (node.next != null) {
+            ListNode pre = node;
+            ListNode check = node;
+
+            // 2 检查够不够k个元素，不够的话直接返回
+            for (int i = 0; i < k; i++) {
+                if (check.next == null) {
+                    return dummyNode.next;
+                }
+                check = check.next;
+            }
+
+            // 3 链表节点够k个的话，开始反转. 3个节点反转2次，2个反转一次，所以反转次数是k-1
+            ListNode cur = pre.next;
+            for (int i = 0; i < k - 1; i++) {
+                ListNode temp = cur.next;
+
+                cur.next = temp.next;
+                temp.next = pre.next;
+                pre.next = temp;
+            }
+
+            // 反转完成后，cur节点会移动到反转后的最后一个位置，比如1 2 3 反转饭后会变成 3 2 1. cur的指针一直是在1上
+            // 那么为了下一次反转，应该吧node（pre）指针给知道现在的cur上面
+            node = cur;
+        }
+        return dummyNode.next;
+    }
+}
+```
+
