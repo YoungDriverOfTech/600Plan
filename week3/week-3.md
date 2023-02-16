@@ -824,3 +824,93 @@ class Solution {
 }
 ```
 
+
+
+## 5.0 重排链表
+
+[143. 重排链表](https://leetcode.cn/problems/reorder-list/)
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    // 1 找到链表中点，分为两段
+    // 2 把后面那段反转一下
+    // 3 然后把两段链表在连起来
+    public void reorderList(ListNode head) {
+
+        // 1 找到链表中点，分为两段
+        ListNode mid = findMid(head);
+        
+        // 2 把后面那段反转一下
+        ListNode tail = reverseList(mid.next);
+        mid.next = null; // 记得把mid以后的断开，因为是两段不同的链表了
+
+        // 3 然后把两段链表在连起来
+        mergeList(head, tail);
+    }
+
+    private ListNode findMid(ListNode head) {
+        // 1 1 1 1 1
+        //     ↑
+        // 1 1 1 1 1 1
+        //     ↑
+        // 奇数/偶数的时候，中点的位置。找中点的时候先让fast走一步，这样就能达成上面的效果
+        ListNode fast = head.next;
+        ListNode slow = head;
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        return slow;
+    }
+
+    private ListNode reverseList(ListNode head) {
+        ListNode pre = null;
+        while (head != null) {
+            ListNode temp = head.next;
+
+            head.next = pre;
+            pre = head;
+            head = temp;
+        }
+        return pre;
+    }
+
+    private void mergeList(ListNode head, ListNode tail) {
+        // 利用一个index来进行重排。
+        int index = 0;
+        ListNode dummyNode = new ListNode(-1);
+
+        while (head != null && tail != null) {
+            if (index % 2 == 0) {
+                dummyNode.next = head;
+                head = head.next;
+            } else {
+                dummyNode.next = tail;
+                tail = tail.next;
+            }
+            dummyNode = dummyNode.next;
+            index++;
+        }
+
+        while (head != null) {
+            dummyNode.next = head;
+            head = head.next;
+        }
+        while (tail != null) {
+            dummyNode.next = tail;
+            tail = tail.next;
+        }
+    }
+}
+```
+
