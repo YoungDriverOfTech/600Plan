@@ -664,3 +664,163 @@ class Solution {
 }
 ```
 
+
+
+## 4.8 两两交换链表中的节点
+
+[24. 两两交换链表中的节点](https://leetcode.cn/problems/swap-nodes-in-pairs/)
+
+就是上面的解法，k=2而已
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode swapPairs(ListNode head) {
+        ListNode dummyNode = new ListNode(-1);
+        dummyNode.next = head;
+
+        ListNode node = dummyNode;
+        int k = 2;
+        // 1 遍历链表
+        while (node.next != null) {
+            ListNode pre = node;
+            ListNode check = node;
+
+            // 2 检查够不够k个元素，不够的话直接返回
+            for (int i = 0; i < k; i++) {
+                if (check.next == null) {
+                    return dummyNode.next;
+                }
+                check = check.next;
+            }
+
+            // 3 链表节点够k个的话，开始反转. 3个节点反转2次，2个反转一次，所以反转次数是k-1
+            ListNode cur = pre.next;
+            for (int i = 0; i < k - 1; i++) {
+                ListNode temp = cur.next;
+
+                cur.next = temp.next;
+                temp.next = pre.next;
+                pre.next = temp;
+            }
+
+            // 反转完成后，cur节点会移动到反转后的最后一个位置，比如1 2 3 反转饭后会变成 3 2 1. cur的指针一直是在1上
+            // 那么为了下一次反转，应该吧node（pre）指针给知道现在的cur上面
+            node = cur;
+        }
+        return dummyNode.next;
+    }
+}
+```
+
+
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode swapPairs(ListNode head) {
+        ListNode dummyNode = new ListNode(-1);
+        dummyNode.next = head;
+
+        ListNode node = dummyNode;
+        // 1 遍历链表
+        while (node != null && node.next != null && node.next.next != null) {   // 这个条件保证pre后面一定有两个节点可以用来反转
+            ListNode pre = node;
+
+            // 2个反转1次
+            ListNode cur = pre.next;
+            ListNode temp = cur.next;
+
+            cur.next = temp.next;
+            temp.next = pre.next;
+            pre.next = temp;
+
+            // 反转完成后，cur节点会移动到反转后的最后一个位置，比如1 2 3 反转饭后会变成 3 2 1. cur的指针一直是在1上
+            // 那么为了下一次反转，应该吧node（pre）指针给知道现在的cur上面
+            node = cur;
+        }
+        return dummyNode.next;
+    }
+}
+```
+
+
+
+## 4.9 两数相加问题2
+
+[445. 两数相加 II](https://leetcode.cn/problems/add-two-numbers-ii/)
+
+可以使用反转链表。先反转后相加，再反转回来（不写了）
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        if (l1 == null && l2 == null) {
+            return null;
+        }
+
+        Deque<Integer> stack1 = new ArrayDeque<>();
+        Deque<Integer> stack2 = new ArrayDeque<>();
+
+        while (l1 != null) {
+            stack1.push(l1.val);
+            l1 = l1.next;
+        }
+        while (l2 != null) {
+            stack2.push(l2.val);
+            l2 = l2.next;
+        }
+
+        ListNode pre = new ListNode(-1);
+        int carry = 0;
+        while (!stack1.isEmpty() || !stack2.isEmpty() || carry != 0) {
+            int num1 = stack1.isEmpty() ? 0 : stack1.pop();
+            int num2 = stack2.isEmpty() ? 0 : stack2.pop();
+            int sum = num1 + num2 + carry;
+
+            int value = sum % 10;
+            carry = sum / 10;
+
+            // 每次计算出来的值，是用头插法插入pre节点的后面，比如pre -> 1 -> 2  现在来了3，pre -> 3 -> 1 -> 2
+            // 1. 每次记录下pre.next的位置,记为temp，然后断开和pre的链接
+            // 2. 新节点来了以后，让pre.next 指向新节点
+            // 3. 把新节点的next指向tamp
+            ListNode temp = pre.next;
+            ListNode newNode = new ListNode(value);
+
+            pre.next = newNode;
+            newNode.next = temp;
+        }
+        return pre.next;
+    }
+}
+```
+
