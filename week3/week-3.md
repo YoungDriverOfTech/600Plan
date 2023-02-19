@@ -914,3 +914,72 @@ class Solution {
 }
 ```
 
+
+
+## 5.1 回文链表
+
+[234. 回文链表](https://leetcode.cn/problems/palindrome-linked-list/)
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public boolean isPalindrome(ListNode head) {
+        if (head == null || head.next == null) {
+            return true;
+        }
+
+        // find mid node
+        ListNode mid = findMid(head);
+        ListNode second = mid.next;
+        mid.next = null;
+
+        // reverse second part link lis
+        ListNode tail = reverseLinkedList(second);
+
+        while (head != null && tail != null) {
+            if (head.val != tail.val) {
+                return false;
+            }
+            head = head.next;
+            tail = tail.next;
+        }
+
+        return (head == null && tail == null) || (head != null && tail == null); 
+    }
+
+    private ListNode findMid(ListNode head) {
+        ListNode fast = head.next;
+        ListNode slow = head;
+
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+
+        return slow;
+    }
+
+    private ListNode reverseLinkedList(ListNode cur) {
+        ListNode pre = null;
+        while (cur != null) {
+            ListNode temp = cur.next;
+            cur.next= pre;
+
+            pre = cur;
+            cur = temp;
+        }
+
+        return pre;
+    }
+}
+```
+
