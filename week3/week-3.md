@@ -983,3 +983,65 @@ class Solution {
 }
 ```
 
+
+
+## 5.2 旋转链表
+
+[61. 旋转链表](https://leetcode.cn/problems/rotate-list/)
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    // 链表结构发生改变->dummy
+    // 1 2 3 4 5
+    //     ↑ 最终要的效果就是取到3，然后前面的1 2 接到5的后面
+    // 1. 快指针找到5，慢指针找到2（2.next能找到3），然后断开2和3的链接
+    // 2. 5.next接到head
+    public ListNode rotateRight(ListNode head, int k) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+
+        // 因为k可能很大，所以先获得长度，取余数，算出实际的旋转次数
+        int length = getLen(head);
+        k = k % length;
+
+        // 使用快慢指针找到3和5的位置
+        ListNode fast = head;
+        ListNode slow = head;
+        for (int i = 0; i < k; i++) {
+            fast = fast.next;
+        }
+
+        while (fast != null && fast.next != null) {
+            fast = fast.next;
+            slow = slow.next;
+        }
+
+        // 5和1连起来，然后3和4断开
+        fast.next = head;   // 这一行必须在下面那行前面，因为slow/fast都可能都在最后一个，直接用slow.next取结果，会取到空
+        ListNode result = slow.next;
+        slow.next = null;
+        return result;
+    }
+
+    private int getLen(ListNode head) {
+        int length = 0;
+        while (head != null) {
+            length++;
+            head = head.next;
+        }
+        return length;
+    }
+}
+```
+
