@@ -1045,3 +1045,33 @@ class Solution {
 }
 ```
 
+
+
+# 6. 递归
+
+## 6.1 斐波那契数列
+
+[剑指 Offer 10- I. 斐波那契数列](https://leetcode.cn/problems/fei-bo-na-qi-shu-lie-lcof/)
+
+```java
+class Solution {
+    public int fib(int n) {
+        if (n == 0) {
+            return 0;
+        } else if (n == 1) {
+            return 1;
+        }
+
+        int result1 = 0;
+        int result2 = 1;
+        int answer = 0;
+        for (int i = 2; i <= n; i++) {
+            answer = (result1 + result2) % 1000000007;
+            result1 = result2;
+            result2 = answer;
+        }
+        return answer;
+    }
+}
+```
+
