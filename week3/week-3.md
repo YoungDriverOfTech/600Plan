@@ -1075,3 +1075,35 @@ class Solution {
 }
 ```
 
+
+
+## 6.2 汉诺塔问题
+
+[面试题 08.06. 汉诺塔问题](https://leetcode.cn/problems/hanota-lcci/)
+
+```java
+class Solution {
+    public void hanota(List<Integer> A, List<Integer> B, List<Integer> C) {
+        if (A == null || A.size() == 0) {
+            return;
+        }
+
+        int n = A.size();
+        moveHanota(n, A, C, B);
+    }
+
+    private void moveHanota(int n, List<Integer> origin, List<Integer> destination, List<Integer> buffer) {
+        if (n == 1) {
+            int element = origin.remove(origin.size() - 1);
+            destination.add(element);
+            return;
+        }
+
+        moveHanota(n - 1, origin, buffer, destination);
+        int element = origin.remove(origin.size() - 1);
+        destination.add(element);
+        moveHanota(n - 1, buffer, destination, origin);
+    } 
+}
+```
+
