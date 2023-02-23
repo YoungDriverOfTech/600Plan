@@ -253,5 +253,59 @@ class Solution {
 
 
 
+### 中序遍历
 
+- 用栈模拟遍历
+- 先要对左子树进行迭代
+- 当前节点为空时进行出栈操作，将当前节点用右子节点替代
+
+[94. 二叉树的中序遍历](https://leetcode.cn/problems/binary-tree-inorder-traversal/)
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        if (root == null) {
+            return result;
+        }
+
+        Deque<TreeNode> stack = new ArrayDeque<>();
+        TreeNode node = root;
+
+        while(!stack.isEmpty() || node != null) {
+            
+            // 先压入左边那一排
+            while (node != null) {
+                stack.push(node);
+                node = node.left;
+            }
+
+            // 现在弹出的是最左边的叶子节点，找这个节点有没有右节点
+            node = stack.pop();
+
+            // 收集跟节点进入result，因为是左根右，最左边的叶子节点要最先进入结果集
+            result.add(node.val);
+
+            node = node.right;
+        }
+
+        return result;
+    }
+}
+```
 
