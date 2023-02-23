@@ -309,3 +309,144 @@ class Solution {
 }
 ```
 
+### 后序遍历
+
+- 三种遍历中最难
+
+- 双栈实现
+
+- 代码需要背诵
+
+  1. 创建两个栈s1，s2，将root压入s1中
+
+  2. 当s1不为空，执行以下操作
+
+     a. 弹出s1中的元素，并将该节点压入s2中
+
+     b. 如果该节点的左子节点不为空，将左子节点压入s1中
+
+     c. 如果该节点的右子节点不为空，将右子节点压入s1中
+
+  3. 循环迭代s2，弹出s2的元素加入到结果集
+
+[145. 二叉树的后序遍历](https://leetcode.cn/problems/binary-tree-postorder-traversal/)
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    // 双栈。 s2栈存储真正的数据：这个在站内顺序是根右左，那么弹出来的时候就是左右根了
+    // s1栈存储的时候 左 右 -》到s2（s2里面这时候已经有了根）里面就是右左
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        if (root == null) {
+            return result;
+        }
+
+        // 1. 创建两个栈s1，s2，将root压入s1中
+        Deque<TreeNode> s1 = new ArrayDeque<>();
+        Deque<TreeNode> s2 = new ArrayDeque<>();
+        s1.push(root);
+
+        // 2. 当s1不为空，执行以下操作
+        while (!s1.isEmpty()) {
+            // a. 弹出s1中的元素，并将该节点压入s2中
+            TreeNode node = s1.pop();
+            s2.push(node);
+
+            // b. 如果该节点的左子节点不为空，将左子节点压入s1中
+            if (node.left != null) {
+                s1.push(node.left);
+            }
+
+            // c. 如果该节点的右子节点不为空，将右子节点压入s1中
+            if (node.right != null) {
+                s1.push(node.right);
+            }
+        }
+
+        while (!s2.isEmpty()) {
+            result.add(s2.pop().val);
+        }
+        return result;
+    }
+}
+```
+
+单栈
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    class NodeWithFlag {
+        public TreeNode node;
+        public boolean isVisited;
+
+        public NodeWithFlag(TreeNode node, boolean isVisited) {
+            this.node = node;
+            this.isVisited = isVisited;
+        }
+    }
+
+    // 记住代码
+    public List<Integer> postorderTraversal(TreeNode root) {
+        if (root == null) {
+            return Collections.emptyList();
+        }
+
+        List<Integer> result = new ArrayList<>();
+        Deque<NodeWithFlag> stack = new ArrayDeque<>();
+        NodeWithFlag nodeWithFlag;
+        TreeNode node = root;
+
+        while (!stack.isEmpty() || node != null) {
+            
+            while (node != null) {
+                stack.push(new NodeWithFlag(node, false));
+                node = node.left;
+            }
+
+            nodeWithFlag = stack.pop();
+            node = nodeWithFlag.node;
+            if (nodeWithFlag.isVisited) {
+                result.add(node.val);
+                node = null;
+            } else {
+                nodeWithFlag.isVisited = true;
+                stack.push(nodeWithFlag);
+                node = node.right;
+            }
+        }
+
+        return result;
+    }
+}
+```
+
