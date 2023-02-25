@@ -617,3 +617,42 @@ class Solution {
 3. 删除：delete
 
 不论哪一种操作，时间复杂度均和树的高度有关。如果共有n个元素，平均操作需要O(logn)的时间
+
+
+
+#### 搜索实战
+
+[700. 二叉搜索树中的搜索](https://leetcode.cn/problems/search-in-a-binary-search-tree/)
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public TreeNode searchBST(TreeNode root, int val) {
+        while (root != null) {
+            if (root.val == val) {
+                return root;
+            } else if (root.val < val) {
+                root = root.right;
+            } else {
+                root = root.left;
+            }
+        }
+        return null;
+    }
+}
+```
+
