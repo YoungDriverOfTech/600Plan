@@ -464,7 +464,73 @@ class Solution {
 
 ### 前序/中序构造树
 
-105
+[105. 从前序与中序遍历序列构造二叉树](https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/)
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+
+    private int[] preorder;
+    private int[] inorder;
+    private Map<Integer, Integer> map;
+
+    // preorder = [3,9,20,15,7], inorder = [9,3,15,20,7]
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        if (preorder == null || preorder.length == 0 || inorder == null || inorder.length == 0) {
+            return null;
+        }
+        
+        this.preorder = preorder;
+        this.inorder = inorder;
+
+        // 中序遍历数组存入map，key：数组值，value：数组索引
+        map = new HashMap<>();
+        for (int i = 0; i < inorder.length; i++) {
+            map.put(inorder[i], i);
+        }
+        return helper(0, preorder.length - 1, 0, inorder.length - 1);
+    }
+
+    // 思路就是递归的构造根结点，把左子树和分开构造
+    private TreeNode helper(int pStart, int pEnd, int iStart, int iEnd) {
+        if (pStart > pEnd || iStart > iEnd) {
+            return null;
+        }
+
+        // 1. 在前序数组里面寻找root节点
+        TreeNode root = new TreeNode(preorder[pStart]);
+
+        // 2. 利用中序数组划分左右子树
+        // a. 找到中序数组中跟节点的索引
+        int rootPos = map.get(root.val);
+
+        // b.中序左子树：【iStart, rootPos - 1】 中序右子树： 【rootPos + 1, iEnd】
+        // c.前序左子树： 【pStart + 1, pStart + 中序从开头到root的节点数量】 前序右子树： 【pStart + leftNodeCount + 1, pEnd】
+        int leftNodeCount = rootPos - iStart;
+        root.left = helper(pStart + 1, pStart + leftNodeCount, iStart, rootPos - 1);
+        
+        root.right = helper(pStart + leftNodeCount + 1, pEnd, rootPos + 1, iEnd);
+        return root;
+    }
+
+}
+```
+
+
 
 
 
