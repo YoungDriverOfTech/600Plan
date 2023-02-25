@@ -532,7 +532,68 @@ class Solution {
 
 
 
+### 后序/中序构造树
 
+[106. 从中序与后序遍历序列构造二叉树](https://leetcode.cn/problems/construct-binary-tree-from-inorder-and-postorder-traversal/)
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    private int[] inorder;
+    private int[] postorder;
+    private Map<Integer, Integer> map;
+
+    public TreeNode buildTree(int[] inorder, int[] postorder) {
+        if (inorder == null || inorder.length == 0 || postorder == null || postorder.length == 0) {
+            return null;
+        }
+
+        this.inorder = inorder;
+        this.postorder = postorder;
+
+        // 中序遍历数组放入map，key：数组值 value：数组索引
+        map = new HashMap<>();
+        for (int i = 0; i < inorder.length; i++) {
+            map.put(inorder[i], i);
+        }
+
+        return helper(0, inorder.length - 1, 0, postorder.length - 1);
+    }
+
+    private TreeNode helper(int iStart, int iEnd, int pStart, int pEnd) {
+        if (iStart > iEnd || pStart > pEnd) {
+            return null;
+        }
+
+        // 从后序遍历中获得跟节点
+        TreeNode root = new TreeNode(postorder[pEnd]);
+        int rootPos = map.get(root.val);
+
+        // 求左子树节点的个数
+        int leftNodeCount = rootPos - iStart;
+
+        // 中序左子树：【iStart, rootPos - 1】 中序右子树： 【rootPos + 1, iEnd】
+        // 后序左子树：【pStart, pStart + leftNodeCount - 1】 后序右子树： 【pStart + leftNodeCount, pEnd】
+        root.left = helper(iStart, rootPos - 1, pStart, pStart + leftNodeCount - 1);
+        root.right = helper(rootPos + 1, iEnd, pStart + leftNodeCount, pEnd - 1); // 注意 pEnd已经作为跟节点了，所以构造右子树的时候应该把pEnd - 1
+        return root;
+    }
+}
+```
 
 
 
