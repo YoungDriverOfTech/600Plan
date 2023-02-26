@@ -896,6 +896,8 @@ public Result divideAndConquer(TreeNode root) {
 
 ### 最叉树最大深度
 
+#### 分治法
+
 [104. 二叉树的最大深度](https://leetcode.cn/problems/maximum-depth-of-binary-tree/)
 
 ```java
@@ -925,6 +927,51 @@ class Solution {
 
         int finalResult = Math.max(leftResult, rightResult) + 1;
         return finalResult;
+    }
+}
+```
+
+#### 遍历法
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    private int depth;
+    public int maxDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+
+        depth = 1;
+        helper(root, 1);
+        return depth;
+    }
+
+    private void helper(TreeNode root, int currentDepth) {
+        if (root == null) {
+            return;
+        }
+
+        if (currentDepth > depth) {
+            depth = currentDepth;
+        }
+
+        helper(root.left, currentDepth + 1);
+        helper(root.right, currentDepth + 1);
     }
 }
 ```
