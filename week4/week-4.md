@@ -1152,3 +1152,102 @@ class Solution {
 }
 ```
 
+
+
+### 对陈二叉树
+
+[101. 对称二叉树](https://leetcode.cn/problems/symmetric-tree/)
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public boolean isSymmetric(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+
+        return helper(root.left, root.right);
+    }
+
+    private boolean helper(TreeNode left, TreeNode right) {
+        if (left == null && right == null) {
+            return true;
+        }
+
+        if (left == null || right == null || left.val != right.val) {
+            return false;
+        }
+
+        return helper(left.left, right.right) && helper(left.right, right.left);
+    }
+}
+```
+
+
+
+### 平衡二叉树
+
+[110. 平衡二叉树](https://leetcode.cn/problems/balanced-binary-tree/)
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    // 题目要求：每个节点的左右子树的高度差绝对值不超过1 -> 每个左右子节点必须也是平衡的
+    public boolean isBalanced(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+
+        int leftHeight = getLen(root.left);
+        int rightHeight = getLen(root.right);
+
+        // 判断对于根节点的子节点高度差是不是小于等于1
+        boolean heightGapFlag = Math.abs(leftHeight - rightHeight) <= 1;
+
+        // 递归的判断子节点是不是也是平衡的
+        boolean isLeftBalanced = isBalanced(root.left);
+        boolean isRightBalanced = isBalanced(root.right);
+
+        return heightGapFlag && isLeftBalanced && isRightBalanced;
+    }
+
+    private int getLen(TreeNode node) {
+        if (node == null) {
+            return 0;
+        }
+
+        int leftHeight = getLen(node.left);
+        int rightHeight = getLen(node.right);
+        return Math.max(leftHeight, rightHeight) + 1;
+    }
+}
+```
+
