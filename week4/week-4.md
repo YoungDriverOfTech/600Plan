@@ -1336,11 +1336,9 @@ class Solution {
 
 
 
-### 二叉树的最近公共祖先
+### 二叉树的最近公共祖先（分治法）
 
 [236. 二叉树的最近公共祖先](https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/)
-
-#### 分治法
 
 ```java
 /**
@@ -1372,6 +1370,49 @@ class Solution {
         } else {
             return null;
         }
+    }
+}
+```
+
+
+
+### 二叉搜索树的最近公共祖先（分治法）
+
+[235. 二叉搜索树的最近公共祖先](https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-search-tree/)
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+
+class Solution {
+    // 有三种情况
+    // 1 p q位于root左子树侧 -> 左子树
+    // 2 p q位于root有子树侧 -> 右子树
+    // 3 p q位于root不同子树侧 -> 根节点
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null || root.val == p.val || root.val == q.val) {
+            return root;
+        }
+
+        // p q都小于root，那么就是左子树
+        if (p.val < root.val && q.val < root.val) {
+            return lowestCommonAncestor(root.left, p, q);
+        }
+
+        // p q都大于root，那么就是右子树
+        if (p.val > root.val && q.val > root.val) {
+            return lowestCommonAncestor(root.right, p, q);
+        }
+
+        // p q一大一小于root，那么就是root
+        return root;
     }
 }
 ```
