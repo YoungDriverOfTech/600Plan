@@ -894,7 +894,7 @@ public Result divideAndConquer(TreeNode root) {
 
 ## 2.4 实战
 
-### 最叉树最大深度
+### 二叉树最大深度
 
 #### 分治法
 
@@ -974,5 +974,55 @@ class Solution {
         helper(root.right, currentDepth + 1);
     }
 }
+```
+
+
+
+### 二叉树最小深度
+
+#### 分治法
+
+[111. 二叉树的最小深度](https://leetcode.cn/problems/minimum-depth-of-binary-tree/)
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public int minDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+
+        int leftResult = minDepth(root.left);
+        int rightResult = minDepth(root.right);
+
+        // 如果有特殊case，比如二叉树变成了一个链表，那么最短距离是链表的长度，而不能是0，所以要对这种case做特殊处理
+        if (leftResult == 0) {
+            return rightResult + 1;
+        } else if (rightResult == 0) {
+            return leftResult + 1;
+        } else {
+            return Math.min(leftResult, rightResult) + 1;
+        }
+    }
+}
+```
+
+#### 遍历法
+
+```java
 ```
 
