@@ -819,5 +819,74 @@ class Solution {
 
 
 
+## 2.2 模板
 
+### 一般图DFS模板
+
+```java
+public class DFS {
+  class Point {
+    int num;
+    int value;
+  }
+  
+  private boolean[] mared;
+  private int count;
+  public DFS(Graph G, Point start) {
+    marked = new boolean[G.v()];
+    dfs(G, start);
+  }
+  
+  public void dfs(Graph G, Point v) {
+    marked[v.num] = true;
+    count++;
+    for (Point w : G.adj(v)) {
+      if (!marked[w.num]) {
+        dfs(G, w);
+      }
+    }
+  }
+  
+  public int count() {
+    return count;
+  }
+}
+```
+
+
+
+### 二叉树dfs模板
+
+```java
+public void dfs(TreeNode node) {
+  doSomething(node);
+  dfs(node.left);
+  dfs(node.right);
+}
+```
+
+
+
+## 2.3 分治法（divide and conquer）
+
+### 概念
+
+- 分解（Divide）：将问题划分为一些子问题，子问题的形式与原问题一样，只是规模更小
+- 解决（Conquer）：递归的求解出子问题。如果子问题规模足够小，则停止递归，直接求解。
+- 合并（Combine）：将子问题的解组成成原问题的解
+
+### 二叉树分治法模板
+
+```java
+public Result divideAndConquer(TreeNode root) {
+  if (root == null) {
+    // do
+  }
+  
+  Result leftResult = divideAndConquer(root.left);
+  Result rightResult = divideAndConquer(root.right);
+  Result finalResult = combine(leftResult, rightResult);
+  return finalResult;
+}
+```
 
