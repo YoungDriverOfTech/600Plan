@@ -1203,6 +1203,8 @@ class Solution {
 
 [110. 平衡二叉树](https://leetcode.cn/problems/balanced-binary-tree/)
 
+#### 基本解法
+
 ```java
 /**
  * Definition for a binary tree node.
@@ -1246,6 +1248,48 @@ class Solution {
 
         int leftHeight = getLen(node.left);
         int rightHeight = getLen(node.right);
+        return Math.max(leftHeight, rightHeight) + 1;
+    }
+}
+```
+
+
+
+#### 优化解法
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public boolean isBalanced(TreeNode root) {
+        return getLen(root) != -1;
+    }
+
+    private int getLen(TreeNode node) {
+        if (node == null) {
+            return 0;
+        }
+        // 递归的计算高度，从叶子节点开始往根节点计算。(上一种方法计算高度的时候，有很多重复的计算，这次从底部开始算，省掉了重复计算)
+        int leftHeight = getLen(node.left);
+        int rightHeight = getLen(node.right);
+
+        // 只要有某个节点的子树高度差大于1了，那么直接返回-1
+        if (leftHeight == -1 || rightHeight == -1 || Math.abs(leftHeight - rightHeight) > 1) {
+            return -1;
+        }
         return Math.max(leftHeight, rightHeight) + 1;
     }
 }
