@@ -726,5 +726,72 @@ class Solution {
 
 1. 节点n没有任何子树  ->  直接删掉这个节点
 2. 节点n只有一个子树  ->  删掉n节点，把子节点提升到原来n的位置
-3. 节点n有两个子树  ->  ----
+3. 节点n有两个子树  -> 用n的前继/后继节点代替n，然后删掉原来前继/后继节点的位置（前继/后继节点是中序遍历中首个小于/大于n的节点）
+
+[450. 删除二叉搜索树中的节点](https://leetcode.cn/problems/delete-node-in-a-bst/)
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public TreeNode deleteNode(TreeNode root, int key) {
+        if (root == null) {
+            return null;
+        }
+
+        if (root.val < key) {
+            // 比根节点大，那么就可能在树的右边
+            root.right = deleteNode(root.right, key);
+        } else if (root.val > key) {
+            // 比根节点小，那么就可能在树的左边
+            root.left = deleteNode(root.left, key);
+        } else {
+            // 等于根节点，分三种情况
+            // 1 目标节点没有子树，那么直接删除目标节点即可
+            if (root.left == null && root.right == null) {
+                root = null;
+            } else if (root.left != null && root.right == null) {    // 为了防止不必要麻烦，把怕断条件写全
+                // 2 目标节点有单个子树，那么把子节点的位置挪到目标节点上面
+                // 2.1 只有左子树，没有右子树
+                root = root.left;
+            } else if (root.left == null && root.right != null) {
+                // 2.2 只有右子树，没有左子树
+                root = root.right;
+            } else {
+                // 3 目标节点同时有左右子树，那么就找后继节点（右子树中序遍历的第一个节点）
+                // 把root的值替换成后继节点的值
+                TreeNode afterNode = findAfterNode(root.right);
+                root.val = afterNode.val;
+
+                // 再把后继节点给删掉，把删掉后的右子树在接到root的右指针上面
+                root.right = deleteNode(root.right, afterNode.val);
+            }
+        }
+
+        return root;
+    }
+
+    private TreeNode findAfterNode(TreeNode root) {
+        if (root.left == null) {
+            return root;    // 找后继节点，不能返回null
+        }
+        return findAfterNode(root.left);
+    }
+}
+```
+
+
 
