@@ -1417,3 +1417,78 @@ class Solution {
 }
 ```
 
+
+
+### 验证二叉树
+
+[98. 验证二叉搜索树](https://leetcode.cn/problems/validate-binary-search-tree/)
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    // 判断每一个子树是不是二叉搜索树，叶子节点默认是二叉搜索树。
+    // 判断标准是左子树的最大值 < root.val < 右子树最小值。
+    class Result {
+        boolean isBST;
+        int max;
+        int min;
+
+        public Result (boolean isBST, int min, int max) {	// 注意构造函数的顺序
+            this.isBST = isBST;
+            this.min = min; // 取最小值的时候，一定取左子树最小值
+            this.max = max; // 取最大值的时候，一定取右子树最大值
+        }
+    }
+
+    public boolean isValidBST(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+
+        Result finalResult = divideAndCombile(root);
+        return finalResult.isBST;
+    }
+
+    private Result divideAndCombile(TreeNode root) {
+        // 递归到叶子节点的左右节点的时候，默认是true
+        if (root == null) {
+            return new Result(true, Integer.MAX_VALUE, Integer.MIN_VALUE);
+        }
+
+        // 从根节点开始一直递归到叶子节点，然后在往根节点推
+        Result leftResult = divideAndCombile(root.left);
+        Result rightResult = divideAndCombile(root.right);
+        
+        // 判断子树如果不是二叉搜索树，那么对于根来说也不是BST
+        if (!leftResult.isBST || !rightResult.isBST) {
+            return new Result(false, 0, 0);
+        }
+
+        // 如果不满足： 左子树的最大值 < root.val < 右子树最小值。那么对于根来说也不是BST
+        System.out.println("root.val: " + root.val);
+        System.out.println("leftResult.max: " + leftResult.max);
+        System.out.println("rightResult.min: " + rightResult.min);
+        if ((root.left != null && leftResult.max >= root.val) || 
+            (root.right != null && rightResult.min <= root.val)) {
+            return new Result(false, 0, 0);
+        }
+
+        return new Result(true, Math.min(leftResult.min, root.val), Math.max(rightResult.max, root.val));
+    }
+}
+```
+
