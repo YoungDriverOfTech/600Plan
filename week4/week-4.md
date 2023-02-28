@@ -1540,3 +1540,56 @@ class Solution {
 }
 ```
 
+
+
+### 二叉树中的最大路径和
+
+[124. 二叉树中的最大路径和](https://leetcode.cn/problems/binary-tree-maximum-path-sum/)
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+
+    private int maxSum = Integer.MIN_VALUE;
+
+    public int maxPathSum(TreeNode root) {
+        getSum(root);
+        return maxSum;
+    }
+
+    private int getSum(TreeNode node) {
+        if (node == null) {
+            return 0;
+        }
+
+        // 获得左右子树的和
+        // 只有在最大贡献值大于 0 时，才会选取对应子节点
+        int leftSum = Math.max(getSum(node.left), 0);
+        int rightSum = Math.max(getSum(node.right), 0);
+
+        // 获得当前节点及其子树的和
+        int currentSum = node.val + leftSum + rightSum;
+
+        // 更新最大值
+        maxSum = Math.max(maxSum, currentSum);
+
+        // 返回当前节点的最大的和
+        return node.val + Math.max(leftSum, rightSum);
+    }
+}
+```
+
