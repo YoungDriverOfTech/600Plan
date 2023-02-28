@@ -1564,31 +1564,35 @@ class Solution {
  */
 class Solution {
 
-    private int maxSum = Integer.MIN_VALUE;
-
+    private int max = Integer.MIN_VALUE;
     public int maxPathSum(TreeNode root) {
-        getSum(root);
-        return maxSum;
-    }
-
-    private int getSum(TreeNode node) {
-        if (node == null) {
+        if (root == null) {
             return 0;
         }
 
-        // 获得左右子树的和
-        // 只有在最大贡献值大于 0 时，才会选取对应子节点
-        int leftSum = Math.max(getSum(node.left), 0);
-        int rightSum = Math.max(getSum(node.right), 0);
+        helper(root);
+        return max;
+    }
 
-        // 获得当前节点及其子树的和
-        int currentSum = node.val + leftSum + rightSum;
+    private int helper(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
 
-        // 更新最大值
-        maxSum = Math.max(maxSum, currentSum);
+        // 分别计算出左子树和右子树的和，如果是负数，那么就返回0
+        int leftSum = Math.max(helper(root.left), 0);
+        int rightSum = Math.max(helper(root.right), 0);
 
-        // 返回当前节点的最大的和
-        return node.val + Math.max(leftSum, rightSum);
+        // 计算出当前这个根结点的最大值，即根+左子树+右子树。 因为左右子树如果是负值，会直接返回0.
+        // 这么算下来，这个currentSum其实包含了4种情况 根 / 根 + 左 / 根 + 右 / 根 + 左 + 右
+        int currentSum = root.val + leftSum + rightSum;
+
+        // 对于遍历到的每一个节点，都应改check一下最大值，因为最大值的路径，有可能不经过最后的根节点
+        max = Math.max(max, currentSum);
+
+        // 返回值的时候，不能返回currentSum，因为其包含了左右根的值，要继续向上遍历的话，只能是根+左/根+右。
+        // 那么选择大的那一方返回去
+        return Math.max(leftSum, rightSum) + root.val;
     }
 }
 ```
