@@ -1423,6 +1423,8 @@ class Solution {
 
 [98. 验证二叉搜索树](https://leetcode.cn/problems/validate-binary-search-tree/)
 
+#### 分治法
+
 ```java
 /**
  * Definition for a binary tree node.
@@ -1488,6 +1490,52 @@ class Solution {
         }
 
         return new Result(true, Math.min(leftResult.min, root.val), Math.max(rightResult.max, root.val));
+    }
+}
+```
+
+
+
+#### 遍历法
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public boolean isValidBST(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+
+        return helper(root, Long.MIN_VALUE, Long.MAX_VALUE);
+    }
+
+    private boolean helper(TreeNode root, long min, long max) {
+        if (root == null) {
+            return true;
+        }
+
+        // 从顶到底，判断root的值在min和max之间，不在的话就说明不是二叉搜索树
+        if (min >= root.val || max <= root.val) {
+            return false;
+        }
+
+        // 接着判断根节点的左右子树，对于左子树来说，最大的值，只能是root.val
+        // 对于右子树来说，最小的值，只能是root.val
+        return helper(root.left, min, root.val) && helper(root.right, root.val, max);
     }
 }
 ```
