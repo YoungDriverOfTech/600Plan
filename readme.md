@@ -3,8 +3,12 @@
 [Time Complexity](./week1/timeComplexity.md)   
 [Week-1](./week1/week-1.md) 
 
+
+
 # Week 2
 [Week-2](./week2/week-2.md) 
+
+
 
 # Week 3
 
@@ -15,3 +19,9 @@
 # Week 4
 
 [Week-4](./week4/week-4.md) 
+
+
+
+# Week 5
+
+[Week-5](./week5/week-5.md) 
