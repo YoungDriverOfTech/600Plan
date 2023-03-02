@@ -98,3 +98,53 @@ private void helper(List<List<Integer>> result, List<Integer> list, int[] nums, 
 }
 ```
 
+
+
+## 1.4 实战
+
+### 子集
+
+[78. 子集](https://leetcode.cn/problems/subsets/)
+
+```java
+class Solution {
+    public List<List<Integer>> subsets(int[] nums) {
+        // 解集
+        List<List<Integer>> result = new ArrayList<>();
+
+        // 校验input
+        if (nums == null || nums.length == 0) {
+            return result;
+        }
+
+        // 单一解
+        List<Integer> list = new ArrayList<>();
+
+        // 排序（本题不需要）
+        // Arrays.sort(nums);
+
+        // 计算解集：把单一list放入result中
+        helper(result, list, nums, 0);
+
+        return result;
+    }
+
+    private void helper(List<List<Integer>> result, List<Integer> list, int[] nums, int pos) {
+        // 1 什么时候退出递归
+
+        // 2 什么时候可以把单一解加(Deep copy)入到result中 -> 重点
+        result.add(new ArrayList<Integer>(list));
+
+        // 3 递归分解成子问题，到下一层（可能需要剪枝）
+        for (int i = pos; i < nums.length; i++) {
+            // (1) 把nums[i]加到单一解list中
+            list.add(nums[i]);
+            // (2) 递归计算以nums[i]结尾的子序列的单一解
+            helper(result, list, nums, i + 1);
+            // (3) 回溯，去掉最后一个元素
+            list.remove(list.size() - 1);
+        }
+    }
+}
+```
+
