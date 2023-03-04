@@ -339,3 +339,67 @@ class Solution {
 }
 ```
 
+
+
+### 组合总和2
+
+[40. 组合总和 II](https://leetcode.cn/problems/combination-sum-ii/)
+
+```java
+class Solution {
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        List<List<Integer>> result = new ArrayList<>();
+
+        if (candidates == null || candidates.length == 0) {
+            return result;
+        }
+
+        Arrays.sort(candidates);
+        List<Integer> list = new ArrayList<>();
+        helper(result, list, candidates, target, 0);
+        return result;
+    }
+
+
+    private void helper(List<List<Integer>> result, List<Integer> list, int[] candidates, int target, int pos) {
+        // 递归什么时候退出？
+        // 单一解什么时候加入result
+        if (target == 0) {
+            result.add(new ArrayList<Integer>(list));
+        }
+
+        // 如果target<0 ,应该直接退出. 剪枝
+        if (target < 0) {
+            return;
+        }
+
+        // 递归，到下一层
+        for (int i = pos; i < candidates.length; i++) {
+            // 去重, i > pos 不是0
+            if (i > pos && candidates[i] == candidates[i - 1]) {
+                continue;
+            }
+
+            list.add(candidates[i]);
+
+            helper(result, list, candidates, target - candidates[i], i + 1);
+
+            list.remove(list.size() - 1);
+        }
+    }
+}
+```
+
+
+
+
+
+### 复原ip地址
+
+93
+
+```java
+
+
+```
+
