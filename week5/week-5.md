@@ -511,7 +511,7 @@ class Solution {
 ### 括号生成
 
 [22. 括号生成](https://leetcode.cn/problems/generate-parentheses/)
-
+![recursion](./images/22.jpeg)
 ```java
 class Solution {
     public List<String> generateParenthesis(int n) {
