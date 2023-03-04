@@ -547,3 +547,45 @@ class Solution {
 }
 ```
 
+
+
+### 格雷编码
+
+[89. 格雷编码](https://leetcode.cn/problems/gray-code/)
+![recursion](./images/89.jpeg)
+```java
+class Solution {
+
+    private int[] zoreFirst = new int[]{0, 1};
+    private int[] oneFirst = new int[]{1, 0};
+
+    public List<Integer> grayCode(int n) {
+        List<Integer> result = new ArrayList<>();
+        // 单一解，用字符串来拼接二进制，然后在转换成十进制
+
+        StringBuilder sb = new StringBuilder();
+        helper(result, sb, n, zoreFirst);
+        return result;
+    }
+
+    private void helper(List<Integer> result, StringBuilder sb, int n, int[] nums) {
+        // 什么时候退出递归 & 把单一解加入到result中
+        if (sb.length() == n) {
+            int value = Integer.valueOf(sb.toString(), 2); // 把字符串按照二进制转成int
+            result.add(value);
+            return;
+        }
+
+        // 如图所示，先加0
+        sb.append(nums[0]);
+        helper(result, sb, n, zoreFirst);
+        sb.deleteCharAt(sb.length() - 1);
+
+        // 把上面剩下的0删除了，换成1
+        sb.append(nums[1]);
+        helper(result, sb, n, oneFirst);
+        sb.deleteCharAt(sb.length() - 1);
+    }
+}
+```
+
