@@ -295,3 +295,47 @@ class Solution {
 }
 ```
 
+
+
+### 组合总和
+
+[39. 组合总和](https://leetcode.cn/problems/combination-sum/)
+
+```java
+class Solution {
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> result = new ArrayList<>();
+
+        if (candidates == null || candidates.length == 0) {
+            return result;
+        }
+
+        List<Integer> list = new ArrayList<>();
+        helper(result, list, candidates, target, 0);
+        return result;
+    }
+
+    private void helper(List<List<Integer>> result, List<Integer> list, int[] candidates, int target, int pos) {
+        // 递归什么时候退出？
+        // 单一解什么时候加入result
+        if (target == 0) {
+            result.add(new ArrayList<Integer>(list));
+        }
+
+        // 如果target<0 ,应该直接退出. 剪枝
+        if (target < 0) {
+            return;
+        }
+
+        // 递归，到下一层
+        for (int i = pos; i < candidates.length; i++) {
+            list.add(candidates[i]);
+
+            helper(result, list, candidates, target - candidates[i], i); // pos取i，因为一个数字可以被多次取
+
+            list.remove(list.size() - 1);
+        }
+    }
+}
+```
+
