@@ -244,3 +244,54 @@ class Solution {
 }
 ```
 
+
+
+## 全排列2
+
+[47. 全排列 II](https://leetcode.cn/problems/permutations-ii/)
+
+如果有重复元素，选择靠前的，后面的全部都是重复
+
+```java
+class Solution {
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (nums == null || nums.length == 0) {
+            return result;
+        }
+
+        List<Integer> list = new ArrayList<>();
+        boolean[] visited = new boolean[nums.length]; // 访问过就是true
+        Arrays.sort(nums);
+        
+        helper(result, list, nums, visited);
+
+        return result;
+    }
+
+    private void helper(List<List<Integer>> result, List<Integer> list, int[] nums, boolean[] visited) {
+        if (list.size() == nums.length) {
+            result.add(new ArrayList<Integer>(list));
+            return;
+        }
+
+        for (int i = 0; i < nums.length; i++) {
+            // 【1，1，1】： 到底是已经访问过了
+            // 【1(1), 1(2), 2】【1(2), 1(1), 2】重复元素. 第一轮的时候会把第一个list装进result，然后第一个1(1)在被
+            // 重制为false。 第二轮的时候，发现如果元素相等，并且前一个没被访问过，说明前一轮被重置成false，那么应该跳过当前元素
+            if (visited[i] || (i != 0 && nums[i] == nums[i - 1] && !visited[i - 1])) {
+                // 如果有重复元素，选择靠前的，后面的全部都是重复.!nums[i - 1]条件保证了选择靠前的
+                // 如果回溯到了靠后的相同元素，会执行continue来跳过。
+                continue;
+            }
+            
+            list.add(nums[i]);
+            visited[i] = true;
+            helper(result, list, nums, visited);
+            list.remove(list.size() - 1);
+            visited[i] = false;
+        }
+    }
+}
+```
+
