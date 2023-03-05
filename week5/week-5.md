@@ -836,3 +836,62 @@ class Solution {
 }
 ```
 
+
+
+### 131
+
+
+
+
+![recursion](./images/131.png)
+```java
+class Solution {
+    public List<List<String>> partition(String s) {
+        List<List<String>> result = new ArrayList<>();
+        if (s == null || s.length() == 0) {
+            return result;
+        }
+
+        List<String> list = new ArrayList<>();
+        helper(result, list, s, 0);
+        return result;
+    }
+
+    private void helper(List<List<String>> result, List<String> list, String s, int pos) {
+        // 什么时候退出递归
+        if (pos == s.length()) {
+            result.add(new ArrayList<String>(list));
+            return;
+        }
+
+        // 递归+回溯
+        for (int i = pos; i < s.length(); i++) {
+            // 依次截取头部开始的字符串，判断段是否是回文，不是的话剪枝。是的话进行下一轮递归
+            String subStr = s.substring(pos, i + 1);
+            if (!isValid(subStr)) {
+                continue;
+            }
+
+            // 是回文的话，递归
+            list.add(subStr);
+            helper(result, list, s, i + 1); // 这里应该传i+1，因为i+1之前的已经被截图掉了
+            list.remove(list.size() - 1);
+        }
+    }
+
+    private boolean isValid(String subStr) {
+        int left = 0;
+        int right = subStr.length() - 1;
+        while (left < right) {
+            if (subStr.charAt(left) != subStr.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+
+        return true;
+    }
+}
+```
+
