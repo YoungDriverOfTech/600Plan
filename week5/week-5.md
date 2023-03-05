@@ -589,3 +589,68 @@ class Solution {
 }
 ```
 
+
+
+### 二叉树所有路径
+
+[257. 二叉树的所有路径](https://leetcode.cn/problems/binary-tree-paths/)
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public List<String> binaryTreePaths(TreeNode root) {
+        List<String> result =new ArrayList<>();
+        if (root == null) {
+            return result;
+        }
+
+        // single answer
+        List<String> list = new ArrayList<>();
+        list.add(String.valueOf(root.val));
+        helper(result, list, root);
+
+        return result;
+    }
+
+    private void helper(List<String> result, List<String> list, TreeNode root) {
+        // 什么以后退出递归
+        if (root == null) {
+            return;
+        }
+
+        // 什么时候吧单一解加入到result
+        if (root.left == null && root.right == null) {
+            result.add(String.join("->", list));
+            return;
+        }
+
+        // 回溯
+        if (root.left != null) {
+            list.add(String.valueOf(root.left.val));
+            helper(result, list, root.left);
+            list.remove(list.size() - 1);
+        }
+
+        if (root.right != null) {
+            list.add(String.valueOf(root.right.val));
+            helper(result, list, root.right);
+            list.remove(list.size() - 1);
+        }
+    }
+}
+```
+
