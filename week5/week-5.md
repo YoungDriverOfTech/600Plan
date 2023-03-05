@@ -246,7 +246,7 @@ class Solution {
 
 
 
-## 全排列2
+### 全排列2
 
 [47. 全排列 II](https://leetcode.cn/problems/permutations-ii/)
 
@@ -649,6 +649,127 @@ class Solution {
             list.add(String.valueOf(root.right.val));
             helper(result, list, root.right);
             list.remove(list.size() - 1);
+        }
+    }
+}
+```
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public List<String> binaryTreePaths(TreeNode root) {
+        List<String> result =new ArrayList<>();
+        if (root == null) {
+            return result;
+        }
+
+        // single answer
+        List<String> list = new ArrayList<>();
+        helper(result, list, root);
+
+        return result;
+    }
+
+    private void helper(List<String> result, List<String> list, TreeNode root) {
+        // 这种写法不同与上面的，一定要把root节点的值在这块加入，如果不加入的话，下面的if可能回直接return
+        // 这样跟节点的值就会被漏掉
+        list.add(String.valueOf(root.val));
+        
+        // 什么以后退出递归
+        if (root == null) {
+            return;
+        }
+
+        // 什么时候吧单一解加入到result
+        if (root.left == null && root.right == null) {
+            result.add(String.join("->", list));
+            return;
+        }
+
+        // 回溯
+        if (root.left != null) {
+            helper(result, list, root.left);
+            list.remove(list.size() - 1);
+        }
+
+        if (root.right != null) {
+            helper(result, list, root.right);
+            list.remove(list.size() - 1);
+        }
+    }
+}
+```
+
+
+
+### 求根节点到叶节点数字之和
+
+[129. 求根节点到叶节点数字之和](https://leetcode.cn/problems/sum-root-to-leaf-numbers/)
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public int sumNumbers(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        if (root == null) {
+            return 0;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        helper(result, sb, root);
+        
+        int sum = 0;
+        for (int num : result) {
+            sum += num;
+        }
+        return sum;
+    }
+
+    private void helper(List<Integer> result, StringBuilder sb, TreeNode root) {
+        sb.append(root.val);
+        // 什么时候退出递归
+        if (root.left == null && root.right == null) {
+            result.add(Integer.parseInt(sb.toString()));
+            return;
+        }
+
+        // 递归 + 回溯
+        if (root.left != null) {
+            helper(result, sb, root.left);
+            sb.deleteCharAt(sb.length() - 1);
+        }
+
+        if (root.right != null) {
+            helper(result, sb, root.right);
+            sb.deleteCharAt(sb.length() - 1);
         }
     }
 }
