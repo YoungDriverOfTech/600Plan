@@ -895,3 +895,169 @@ class Solution {
 }
 ```
 
+代码优化：有重复判断回文的地方，有些递归的结果是一样  ->  记忆化搜索（把算出来的东西，存起来）
+
+
+
+实现使用二维数组计算字符串的回文状况
+
+```java
+class Solution {
+
+    // 记录【i, j】是否是回文串
+    private boolean[][] isPalindrome;
+
+    public List<List<String>> partition(String s) {
+        List<List<String>> result = new ArrayList<>();
+        if (s == null || s.length() == 0) {
+            return result;
+        }
+
+        // 初始化并且计算出回文字符串的索引位置
+        isPalindrome = new boolean[s.length()][s.length()];
+        calculateIsPalindrome(s);
+
+        List<String> list = new ArrayList<>();
+        helper(result, list, s, 0);
+        return result;
+    }
+
+    private void helper(List<List<String>> result, List<String> list, String s, int pos) {
+        // 什么时候退出递归
+        if (pos == s.length()) {
+            result.add(new ArrayList<String>(list));
+            return;
+        }
+
+        // 递归+回溯
+        for (int i = pos; i < s.length(); i++) {
+            String subStr = s.substring(pos, i + 1);
+            if (!isPalindrome[pos][i]) { // 判断这个字符串的两个索引是不是回文
+                continue;
+            }
+
+            // 是回文的话，递归
+            list.add(subStr);
+            helper(result, list, s, i + 1); // 这里应该传i+1，因为i+1之前的已经被截图掉了
+            list.remove(list.size() - 1);
+        }
+    }
+
+    private void calculateIsPalindrome(String s) {
+        // 每一个字符，都是回文. 长度为1
+        for (int i = 0; i < s.length(); i++) {
+            isPalindrome[i][i] = true;
+        }
+
+        // 长度为2
+        for (int i = 0; i < s.length() - 1; i++) {
+            isPalindrome[i][i + 1] = s.charAt(i) == s.charAt(i + 1); 
+        }
+
+        // 长度在3及以上
+        // 算的时候，方向要一正一反，因为只有这样，才能根据已知的回文串推出未知的回文串
+        // 已知的是单个和相邻的。那么现在算法就是从尾部到头，3个的开始算起，计算三个的，因为两个的已经知道可以算出
+        for (int i = s.length() - 3; i >= 0; i--) {
+            for (int j = i + 2; j < s.length(); j++) {
+                isPalindrome[i][j] = isPalindrome[i + 1][j - 1] && s.charAt(i) == s.charAt(j);
+            }
+        }
+
+    }
+}
+```
+
+
+
+加入map保存计算结果
+
+```java
+class Solution {
+
+    // 记录【i, j】是否是回文串
+    private boolean[][] isPalindrome;
+
+    public List<List<String>> partition(String s) {
+        List<List<String>> result = new ArrayList<>();
+        if (s == null || s.length() == 0) {
+            return result;
+        }
+
+        // 初始化并且计算出回文字符串的索引位置
+        isPalindrome = new boolean[s.length()][s.length()];
+        calculateIsPalindrome(s);
+
+        List<String> list = new ArrayList<>();
+        Map<Integer, List<List<String>>> memo = new HashMap<>(); // key: start index; value: 切割方案
+        
+        return helper(memo, list, s, 0);
+    }
+
+    private List<List<String>> helper(Map<Integer, List<List<String>>> memo, List<String> list, String s, int pos) {
+        // 什么时候退出递归
+        if (pos == s.length()) {
+            List<List<String>> result = new ArrayList<>();
+            result.add(new ArrayList<String>(list));
+            return result;
+        }
+
+        if (memo.containsKey(pos)) {
+            return memo.get(pos);
+        }
+
+        List<List<String>> result = new ArrayList<>();
+        memo.put(pos, result);
+
+        // 递归+回溯
+        for (int i = pos; i < s.length(); i++) {
+            String subStr = s.substring(pos, i + 1);
+            if (!isPalindrome[pos][i]) { // 判断这个字符串的两个索引是不是回文
+                continue;
+            }
+
+            // 是回文的话，递归
+            List<List<String>> next = helper(memo, list, s, i + 1); // 这里应该传i+1，因为i+1之前的已经被截图掉了
+            for (List<String> item : next) {
+                List<String> singleResult = new ArrayList<>();
+                singleResult.add(subStr);
+                singleResult.addAll(item);
+                memo.get(pos).add(singleResult);
+            }
+        }
+
+        return memo.get(pos);
+    }
+
+    private void calculateIsPalindrome(String s) {
+        // 每一个字符，都是回文. 长度为1
+        for (int i = 0; i < s.length(); i++) {
+            isPalindrome[i][i] = true;
+        }
+
+        // 长度为2
+        for (int i = 0; i < s.length() - 1; i++) {
+            isPalindrome[i][i + 1] = s.charAt(i) == s.charAt(i + 1); 
+        }
+
+        // 长度在3及以上
+        // 算的时候，方向要一正一反，因为只有这样，才能根据已知的回文串推出未知的回文串
+        // 已知的是单个和相邻的。那么现在算法就是从尾部到头，3个的开始算起，计算三个的，因为两个的已经知道可以算出
+        for (int i = s.length() - 3; i >= 0; i--) {
+            for (int j = i + 2; j < s.length(); j++) {
+                isPalindrome[i][j] = isPalindrome[i + 1][j - 1] && s.charAt(i) == s.charAt(j);
+            }
+        }
+
+    }
+}
+```
+
+
+
+### 132
+
+
+
+```java
+```
+
