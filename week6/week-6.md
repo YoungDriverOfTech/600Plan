@@ -30,5 +30,9 @@
 ## 1.3 图的表示
 
 - 邻接矩阵
-  - 
+
+![linjiejuzhen](./images/linjiejuzhen.png)
+
+
+
 - 邻接表
