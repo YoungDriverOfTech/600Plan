@@ -33,6 +33,8 @@
 
 ![linjiejuzhen](./images/linjiejuzhen.png)
 
+---
 
+![linjiejuzhen](./images/youxiangtujuzhen.png)
 
 - 邻接表
