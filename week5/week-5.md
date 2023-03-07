@@ -838,7 +838,9 @@ class Solution {
 
 
 
-### 131
+### 分割回文串
+
+[131. 分割回文串](https://leetcode.cn/problems/palindrome-partitioning/)
 
 
 
@@ -1054,9 +1056,258 @@ class Solution {
 
 
 
-### 132
+### 分割回文串 II
+
+[132. 分割回文串 II](https://leetcode.cn/problems/palindrome-partitioning-ii/)
+
+```java
+class Solution {
+
+    private boolean[][] isValid;
+    private Integer result = Integer.MAX_VALUE;
+
+    public int minCut(String s) {
+        if (s == null || s.length() == 0) {
+            return -1;
+        }
+
+        // single result
+        precalculate(s);
+
+        // 定义int数组用来存储，在某i索引上，切最小k刀就能划分成回文串
+        int[] memo = new int[s.length()];
+        Arrays.fill(memo, Integer.MAX_VALUE);
+
+        helper(s, 0, 0, memo);
+        return result;
+    }
+
+    private void helper(String s, int pos, int currentVal, int[] memo) {
+        // 什么时候推出递归
+        if (s.length() == pos) {
+            result = Math.min(result, currentVal - 1);
+            return;
+        }
+
+        // 如果memo里面存着的切的次数已经比currentVal小了，那么说明也就没必要继续递归了
+        if (memo[pos] <= currentVal) {
+            return;
+        } else {
+            memo[pos] = currentVal;
+        }
+
+        // 递归+回溯
+        for (int i = s.length() - 1; i >= 0 ; i--) {
+            if (!isValid[pos][i]) {
+                continue;
+            }
+            currentVal++;
+            helper(s, i + 1, currentVal, memo);
+            currentVal--;
+        }
+    }
+
+    private void precalculate(String s) {
+        isValid = new boolean[s.length()][s.length()];
+
+        // 只有一个字符的时候，都是回文
+        for (int i = 0; i < s.length(); i++) {
+            isValid[i][i] = true;
+        }
+
+        // 只有两个的话，判断字符是不是相等
+        for (int i = 0; i < s.length() - 1; i++) {
+            isValid[i][i + 1] = s.charAt(i) == s.charAt(i + 1);
+        }
+
+        // 3个字符及以上的
+        for (int i = s.length() - 3; i >= 0; i--) {
+            for (int j = i + 2; j < s.length(); j++) {
+                isValid[i][j] = isValid[i + 1][j - 1] && s.charAt(i) == s.charAt(j);
+            }
+        }
+    }
+}
+```
 
 
+
+记忆化搜索
+
+```java
+class Solution {
+
+    private boolean[][] isValid;
+    private Integer result = Integer.MAX_VALUE;
+
+    public int minCut(String s) {
+        if (s == null || s.length() == 0) {
+            return -1;
+        }
+
+        // single result
+        precalculate(s);
+
+        // 定义int数组用来存储，在某i索引上，切最小k刀就能划分成回文串
+        int[] memo = new int[s.length()];
+        Arrays.fill(memo, Integer.MAX_VALUE);
+
+        helper(s, 0, 0, memo);
+        return result;
+    }
+
+    private void helper(String s, int pos, int currentVal, int[] memo) {
+        // 什么时候推出递归
+        if (s.length() == pos) {
+            result = Math.min(result, currentVal - 1);
+            return;
+        }
+
+        // 如果memo里面存着的切的次数已经比currentVal小了，那么说明也就没必要继续递归了
+        if (memo[pos] <= currentVal) {
+            return;
+        } else {
+            memo[pos] = currentVal;
+        }
+
+        // 递归+回溯
+        // 为什么要倒着遍历，因为倒着的时候，会先算最后的回文的值，然后存入到memo中
+        // 那么在递归的时候可以利用到这些值
+        for (int i = s.length() - 1; i >= pos ; i--) {
+            if (!isValid[pos][i]) {
+                continue;
+            }
+            currentVal++;
+            helper(s, i + 1, currentVal, memo);
+            currentVal--;
+        }
+    }
+
+    private void precalculate(String s) {
+        isValid = new boolean[s.length()][s.length()];
+
+        // 只有一个字符的时候，都是回文
+        for (int i = 0; i < s.length(); i++) {
+            isValid[i][i] = true;
+        }
+
+        // 只有两个的话，判断字符是不是相等
+        for (int i = 0; i < s.length() - 1; i++) {
+            isValid[i][i + 1] = s.charAt(i) == s.charAt(i + 1);
+        }
+
+        // 3个字符及以上的
+        for (int i = s.length() - 3; i >= 0; i--) {
+            for (int j = i + 2; j < s.length(); j++) {
+                isValid[i][j] = isValid[i + 1][j - 1] && s.charAt(i) == s.charAt(j);
+            }
+        }
+    }
+}
+```
+
+
+
+### 单词拆分
+
+[139. 单词拆分](https://leetcode.cn/problems/word-break/)
+
+```java
+class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        if (s == null || s.length() == 0 || wordDict == null || wordDict.size() == 0) {
+            return false;
+        }
+
+        // 把wordDict放到一个set里面，方便查询和去重复
+        Set<String> set = new HashSet<>(wordDict);
+
+        // int数组表示【0， i】切成的字符串在不在字典里面， -1: 初始化 0: false 1: true
+        int[] isExisted = new int[s.length()];
+        Arrays.fill(isExisted, -1);
+
+        return helper(isExisted, s, set, 0);
+    }
+
+    private boolean helper(int[] isExisted, String s, Set<String> set, int pos) {
+        // 什么时候推出递归
+        if (s.length() == pos) {
+            return true;
+        }
+
+        // 记忆话搜索，如果是初始化的话，可以继续执行，否则的话就退出
+        if (isExisted[pos] != -1) {
+            return isExisted[pos] == 1;
+        }
+
+        // 递归 + 回溯
+        for (int i = pos; i < s.length(); i++) {
+            String subStr = s.substring(pos, i + 1);
+            if (!set.contains(subStr)) {
+                continue;
+            }
+
+            // 如果包含的话，判断后面的字串是不是也包含，只有都包含，才会被更新成1
+            boolean result = helper(isExisted, s, set, i + 1);
+            if (result) {
+                isExisted[pos] = 1;
+                return true;
+            }
+        }
+
+        // 遍历了一遍没找到，那就是false
+        isExisted[pos] = 0;
+        return false;
+    }
+}
+```
+
+
+
+### 单词拆分 II
+
+[140. 单词拆分 II](https://leetcode.cn/problems/word-break-ii/)
+
+简单回溯
+
+```java
+class Solution {
+    public List<String> wordBreak(String s, List<String> wordDict) {
+        List<String> result = new ArrayList<>();
+        if (s == null || s.length() == 0 || wordDict == null || wordDict.size() == 0) {
+            return result;
+        }
+
+        List<String> list = new ArrayList<>();
+        Set<String> set = new HashSet<>(wordDict);
+
+        helper(result, list, s, set, 0);
+        return result;
+    }
+
+    private void helper(List<String> result, List<String> list, String s, Set<String> set, int pos) {
+        if (s.length() == pos) {
+            result.add(String.join(" ", list));
+            return;
+        }
+
+        for (int i = pos; i < s.length(); i++) {
+            String subStr = s.substring(pos, i + 1);
+            if (!set.contains(subStr)) {
+                continue;
+            }
+
+            list.add(subStr);
+            helper(result, list, s, set, i + 1);
+            list.remove(list.size() - 1);
+        }
+    }
+}
+```
+
+
+
+记忆化搜索
 
 ```java
 ```
