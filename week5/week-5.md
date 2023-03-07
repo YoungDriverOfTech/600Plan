@@ -1310,5 +1310,53 @@ class Solution {
 记忆化搜索
 
 ```java
+class Solution {
+    public List<String> wordBreak(String s, List<String> wordDict) {
+        if (s == null || s.length() == 0 || wordDict == null || wordDict.size() == 0) {
+            return Collections.emptyList();
+        }
+
+        Set<String> set = new HashSet(wordDict);
+
+        // 记忆化搜索. Key: 索引 Value: 这个索引开始往后的剩余字符串且分开以后都在set中存在，把这些切分后的字符串装进一个list
+        Map<Integer, List<String>> memo = new HashMap<>();
+        return helper(memo, s, set, 0);
+    }
+
+    private List<String> helper(Map<Integer, List<String>> memo, String s, Set<String> set, int pos) {
+        // 如果在map中存在，则直接返回
+        if (memo.containsKey(pos)) {
+            return memo.get(pos);
+        }
+
+        // 什么时候应该退出递归
+        // 如果走到了最后一个索引位置，那么也返回。这时候应该是返回了一个空list
+        List<String> result = new ArrayList<>();
+        if (pos == s.length()) {
+            return result;
+        }
+
+        // 如果切分后字符串在set中存在，那么把这个字符串加到list中，但是不能直接返回，因为除了这个字符串以外，剩下的字符串应该还能进行切分
+        if (set.contains(s.substring(pos))) {
+            result.add(s.substring(pos));
+        }
+
+        // 递归 + 回溯
+        for (int i = pos; i < s.length(); i++) {
+            String subStr = s.substring(pos, i + 1);
+            if (!set.contains(subStr)) {
+                continue;
+            }
+
+            // 现在已经截取了subStr， 那么restResult就是后面的字串所组成的所有结果集
+            // 那拼接的时候就是 subStr + item in restResult
+            List<String> restResult = helper(memo, s, set, i + 1);
+            for (String item : restResult) {
+                result.add(subStr + " " + item);
+            }
+        }
+        return result;
+    }
+}
 ```
 
