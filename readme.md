@@ -25,3 +25,9 @@
 # Week 5
 
 [Week-5](./week5/week-5.md) 
+
+
+
+# Week 6
+
+[Week-6](./week6/week-6.md) 
