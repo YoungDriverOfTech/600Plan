@@ -66,3 +66,10 @@ Space complexity:
 DFS: O(节点数)
 
 BFS: O(节点数)
+
+### 结论
+
+如果题目属于图搜索问题，既能采用DFS，也能采用BFS，优先考虑BFS
+
+
+
