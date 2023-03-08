@@ -42,3 +42,27 @@
 对某一个节点来说，有几条边和他相接，那么相接后的节点组成了邻接表
 
 ![linjiejuzhen](./images/linjiebiao.png)
+
+
+
+## 1.4 图搜索
+
+![linjiejuzhen](./images/graphsearch.png)
+
+Time complexity:
+
+BFS: 
+
+- 邻接表：O（节点数 + 边数）
+- 邻接矩阵：O（节点数^2）
+
+DFS:
+
+- 邻接表：O（节点数 + 边数）
+- 邻接矩阵：O（节点数^2）
+
+Space complexity:
+
+DFS: O(节点数)
+
+BFS: O(节点数)
