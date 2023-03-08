@@ -38,3 +38,7 @@
 ![linjiejuzhen](./images/youxiangtujuzhen.png)
 
 - 邻接表
+
+对某一个节点来说，有几条边和他相接，那么相接后的节点组成了邻接表
+
+![linjiejuzhen](./images/linjiebiao.png)
