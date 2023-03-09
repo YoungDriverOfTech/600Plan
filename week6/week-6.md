@@ -73,3 +73,151 @@ BFS: O(节点数)
 
 
 
+## 1.5 图DFS/BFS模板
+```java
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+// Undirected graph
+public class Graph {
+
+    class Node {
+        int no;
+        int value;
+
+        public Node(int no, int value) {
+            this.no = no;
+            this.value = value;
+        }
+
+        public int getNo() {
+            return no;
+        }
+
+        public void setNo(int no) {
+            this.no = no;
+        }
+
+        public int getValue() {
+            return value;
+        }
+
+        public void setValue(int value) {
+            this.value = value;
+        }
+    }
+
+    // 邻接表  Key: 当前节点   Value： 邻接节点
+    private final Map<Node, List<Node>> adjacencyList;
+
+    // 是否被访问涂色过
+    private boolean[] marked;
+
+    public Graph(int vertexCount) {
+        this.adjacencyList = new HashMap<>();
+        this.marked = new boolean[vertexCount];
+    }
+
+    public Graph(Map<Node, List<Node>> adjacencyList) {
+        this.adjacencyList = adjacencyList;
+    }
+
+    public Graph(Map<Node, List<Node>> adjacencyList, boolean[] marked) {
+        this.adjacencyList = adjacencyList;
+        this.marked = marked;
+    }
+
+    // 方法
+    // 加节点
+    public void addVertex(Node v) {
+        this.adjacencyList.put(v, new ArrayList<>());
+    }
+
+    // 给两个节点加上边
+    public void addEdge(Node u, Node v) {
+        this.adjacencyList.get(u).add(v);
+        this.adjacencyList.get(v).add(u);
+    }
+
+    public void printGraph() {
+        for (Node key : adjacencyList.keySet()) {
+            List<Node> adjNodes = adjacencyList.get(key);
+            System.out.println("key = " + key.getNo() + " adjNodes = " + adjNodes);
+        }
+    }
+
+    // dfs模板
+    public void dfs(Node start) {
+
+        // 标记本节点已经被访问
+        marked[start.getNo()] = true;
+
+        // 邻接节点
+        for (Node adjNode : adjacencyList.get(start)) {
+            if (!marked[adjNode.getNo()]) {
+                dfs(adjNode);
+            }
+        }
+
+    }
+
+
+    // bfs
+    public void bfs() {
+
+    }
+}
+```
+
+## 1.6 实战
+
+### 无向图中连通分量的数目
+
+323
+```java
+class Solution {
+    public int countComponents(int n, int[][] edges) {
+        // count：做了几次DFS
+        int count = 0;
+
+        // step 0: 构建邻接表
+        Map<Integer, List<Integer>> adj = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            adj.put(i, new ArrayList<>());
+        }
+
+        // 因为要构造成无向图，所以节点都需要双连
+        for (int i = 0; i < edges.length; i++) {
+            int u = edges[i][0];
+            int v = edges[i][1];
+            adj.get(u).add(v);
+            adj.get(v).add(u);
+        }
+
+        // step 1: 套模板
+        boolean[] marked = new boolean[n];
+        for (int i = 0; i < n; i++) {
+            // 只有没有被标记过，才能进行dfs
+            if (!marked[i]) {
+                dfs(adj, marked, i);
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private void dfs(Map<Integer, List<Integer>> adj, boolean[] marked, int nodeNum) {
+        // 首先标记节点
+        marked[nodeNum] = true;
+
+        // dfs
+        for (int node : adj.get(nodeNum)) {
+            if (!marked[node]) {
+                dfs(adj, marked, node);
+            }
+        }
+    }
+}
+```
