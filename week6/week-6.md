@@ -333,3 +333,61 @@ class Solution {
 }
 ```
 
+
+
+### 133 克隆图
+
+[133. 克隆图](https://leetcode.cn/problems/clone-graph/)
+
+```java
+/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public List<Node> neighbors;
+    public Node() {
+        val = 0;
+        neighbors = new ArrayList<Node>();
+    }
+    public Node(int _val) {
+        val = _val;
+        neighbors = new ArrayList<Node>();
+    }
+    public Node(int _val, ArrayList<Node> _neighbors) {
+        val = _val;
+        neighbors = _neighbors;
+    }
+}
+*/
+
+class Solution {
+
+    // 用Map<Old, New>来做映射，然后神拷贝每个节点，最后返回即可
+    public Node cloneGraph(Node node) {
+        if (node == null) {
+            return null;
+        }
+
+        Map<Node, Node> map = new HashMap<>();
+        return dfs(map, node);
+    }
+
+    private Node dfs(Map<Node, Node> map, Node node) {
+        if (map.containsKey(node)) {
+            return map.get(node);
+        }
+
+        // map中不包含的话，就需要进行神拷贝了
+        Node newNode = new Node(node.val); // 邻接的list回自动被创建出来
+        map.put(node, newNode);
+
+        for (Node neighbor : node.neighbors) {
+            // 需要对每一个邻接的节点进行神拷贝，然后加到newNode的邻接list中
+            Node newNeighbor = dfs(map, neighbor);
+            newNode.neighbors.add(newNeighbor);
+        }
+        return newNode;
+    }
+}
+```
+
