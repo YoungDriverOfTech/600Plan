@@ -175,7 +175,7 @@ public class Graph {
 
 ### 无向图中连通分量的数目
 
-323
+![recursion](./images/323.png)
 ```java
 class Solution {
     public int countComponents(int n, int[][] edges) {
@@ -221,3 +221,46 @@ class Solution {
     }
 }
 ```
+
+
+
+### 省份数量
+
+[547. 省份数量](https://leetcode.cn/problems/number-of-provinces/)
+
+```java
+class Solution {
+    // 求无向图中联通分量的个数
+    // 第一个例子：现在就是有3个城市，isConnected这个二维数组就是用来描述这3个城市的相连状况
+    // 第一行是第一个城市和其他城市的相连情况
+    // 第二行是第二个城市和其他城市的相连情况
+    // 第三行是第三个城市和其他城市的相连情况
+
+    // 如果横坐标纵坐标一样，说明城市自己是相连的
+    public int findCircleNum(int[][] isConnected) {
+        int count = 0;
+
+        // 创建标记城市数量的数组
+        boolean[] visited = new boolean[isConnected.length];
+        for (int i = 0; i < isConnected.length; i++) {
+            if (!visited[i]) {
+                dfs(isConnected, visited, i);
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private void dfs(int[][] isConnected, boolean[] visited, int cityNum) {
+        visited[cityNum] = true;
+
+        for (int i = 0; i < isConnected[cityNum].length; i++) {
+            int connectStatus = isConnected[cityNum][i];
+            if (connectStatus == 1 && !visited[i]) {
+                dfs(isConnected, visited, i);
+            }
+        }
+    }
+}
+```
+
