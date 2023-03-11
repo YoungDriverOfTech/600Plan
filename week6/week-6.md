@@ -413,3 +413,21 @@ class Solution {
 ## 2.2 技巧：怎么在二维空间移动
 
 ![recursion](./images/erweiyidong.png)
+
+代码实现
+
+```java
+// version
+final int[][] directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}}
+for (int[] offset : directions) {
+  Point next = new Point(cur.x + offset[0], cur.y + offset[1]);
+}
+
+// version
+int[] dx = {1, 0, -1, 0};
+int[] dy = {0, 1, 0, -1};
+for (int i = 0; i < 4; i++) {
+  Point next = new Point(cur.x + dx[i] + cur.y + dy[i]);
+}
+```
+
