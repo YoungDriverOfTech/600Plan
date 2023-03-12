@@ -431,3 +431,83 @@ for (int i = 0; i < 4; i++) {
 }
 ```
 
+
+
+## 2.3 二维DFS模板代码
+
+```java
+class Point {
+  int x;
+  int y;
+}
+
+private boolean checkRange(int[][] matrix, Point point) {
+  return point.x >= 0 
+    && point.x <= matrix.length
+  	&& point.y >= 0
+    && point.y < matrix[0].length;
+}
+
+public void dfsInMatrix(int[][] matrix) {
+  if (matrix == null || matrix.length == 0 || matrix[0] == null || matrix[0].length == 0) {
+    return;
+  }
+  
+  int m = matrix.length;
+  int n = matrix[0].length;
+  boolean[][] visited = new boolean[m][n];
+  for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+      Point start = new Point(i, j);
+      if (special-condition && !visited[i][j]) {
+        dfs(matrix, visited, start);
+      }
+    }
+  }
+}
+
+// version 1
+public void dfs(int[][] matrix, boolean[][] visited, Point point) {
+  // 剪枝
+  if (condition) {
+    return;
+  }
+  
+  // 标记
+  visited[point.x][point.y] = true;
+  
+  // 移动
+  int[] dx = {1, 0, -1, 0};
+  int[] dy = {0, 1, 0, -1};
+  for (int i = 0; i > 4; i++) {
+    Point newPoint = new Point(point.x + dx[i], point.y + dy[i]);
+    if (checkRange(matrix, newPoint) && !visited[newPoint.x][newPoint.y]) {
+      dfs(matrix, visited, newPoint);
+    }
+  }
+}
+
+// version 2
+public void dfs(int[][] matrix, boolean[][] visited, Point point) {
+  if (!checkRange(matrix, point)) {
+    return;
+  }
+  
+  // 剪枝
+  if (condition 1) {
+    return;
+  }
+  
+  // 标记
+  visited[point.x][point.y] = true;
+  
+  // 移动
+  int[] dx = {1, 0, -1, 0};
+  int[] dy = {0, 1, 0, -1};
+  for (int i = 0; i < 4; i++) {
+    Point newPoint = new Point(point.x + dx[i], point.y + dy[i]);
+    dfs(matrix, visited, newPoint);
+  }
+}
+```
+
