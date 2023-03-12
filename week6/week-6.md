@@ -393,7 +393,7 @@ class Solution {
 
 
 
-# 2 二纬题目
+# 2 二维矩阵题目
 
 ## 2.1 分类及特点
 
@@ -802,7 +802,9 @@ class Solution {
 
 
 
-### 岛屿数量
+### 岛屿类问题
+
+#### 岛屿数量
 
 [200. 岛屿数量](https://leetcode.cn/problems/number-of-islands/)
 
@@ -852,6 +854,63 @@ class Solution {
     }
 
     private boolean checkRange(char[][] grid, int x, int y) {
+        return x >= 0 && x < grid.length && y >= 0 && y < grid[0].length;
+    }
+}
+```
+
+
+
+#### 岛屿的最大面积
+
+[695. 岛屿的最大面积](https://leetcode.cn/problems/max-area-of-island/)
+
+```java
+class Solution {
+
+    private int[] dx = {1, 0, -1, 0};
+    private int[] dy = {0, 1, 0, -1};
+
+    public int maxAreaOfIsland(int[][] grid) {
+        if (grid == null || grid.length == 0 || grid[0] == null || grid[0].length == 0) {
+            return 0;
+        }
+
+        int count = 0;
+        int m = grid.length;
+        int n = grid[0].length;
+        boolean[][] visited = new boolean[m][n];
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 1 && !visited[i][j]) {
+                    count = Math.max(count, dfs(grid, visited, i, j));
+                }
+            }
+        }
+
+        return count;
+    }
+
+    private int dfs(int[][] grid, boolean[][] visited, int x, int y) {
+        if (grid[x][y] == 0) {
+            return 0;
+        }
+
+        visited[x][y] = true;
+        int result = 1;
+        for (int i = 0; i < 4; i++) {
+            int newX = x + dx[i];
+            int newY = y + dy[i];
+
+            if (checkRange(grid, newX, newY) && !visited[newX][newY]) {
+                result += dfs(grid, visited, newX, newY);
+            }
+        }
+        return result;
+    }
+
+    private boolean checkRange(int[][] grid, int x, int y) {
         return x >= 0 && x < grid.length && y >= 0 && y < grid[0].length;
     }
 }
