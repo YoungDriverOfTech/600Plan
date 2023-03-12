@@ -737,3 +737,66 @@ class Solution {
 }
 ```
 
+
+
+### 矩阵中的最长递增路径
+
+[329. 矩阵中的最长递增路径](https://leetcode.cn/problems/longest-increasing-path-in-a-matrix/)
+
+```java
+class Solution {
+    
+    private int[] dx = {1, 0, -1, 0};
+    private int[] dy = {0, 1, 0, -1};
+
+    public int longestIncreasingPath(int[][] matrix) {
+        if (matrix == null || matrix.length == 0 || matrix[0] == null || matrix[0].length == 0) {
+            return 0;
+        }
+
+        int m = matrix.length;
+        int n = matrix[0].length;
+        boolean[][] visited = new boolean[m][n];
+        
+        // 记忆化搜索，对于【i，j】如果访问过了就记住它的最大递增长度，因为visited是用来给记忆化搜索服务的，并不需要回溯
+        int result = 0;
+        int[][] memo = new int[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                result = Math.max(result, dfs(matrix, visited, memo, i, j));
+            }
+        }
+
+        return result;
+    }
+
+    private int dfs(int[][] matrix, boolean[][] visited, int[][] memo, int x, int y) {
+        // 如果已经被访问过了，那么就直接返回记忆化搜索的结果
+        if (visited[x][y]) {
+            return memo[x][y];
+        }
+
+        int len = 1; // 因为当前节点要被计算，所以初始化是1
+        visited[x][y] = true;
+
+        for (int i = 0; i < 4; i++) {
+            int newX = x + dx[i];
+            int newY = y + dy[i];
+
+            // 只有满足递增的才能计算
+            if (checkRange(matrix, newX, newY) && matrix[newX][newY] > matrix[x][y]) {
+                len = Math.max(len, dfs(matrix, visited, memo, newX, newY) + 1); // +1是因为要计算本节点
+            }
+        }
+
+        // 更新记忆化搜索
+        memo[x][y] = len;
+        return len;
+    }
+
+    private boolean checkRange(int[][] matrix, int x, int y) {
+        return x >= 0 && x < matrix.length && y >= 0 && y < matrix[0].length;
+    }
+}
+```
+
