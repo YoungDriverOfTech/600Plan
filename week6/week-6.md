@@ -511,3 +511,88 @@ public void dfs(int[][] matrix, boolean[][] visited, Point point) {
 }
 ```
 
+
+
+## 2.4 实战
+
+### 迷宫类问题
+
+#### 基础迷宫
+
+![recursion](./images/jichumigong.png)
+
+```java
+// 找到s->e 所有路径，然后移动只能上下左右
+public class Maze {
+  class Point {
+    int x;
+    int y;
+  }
+  
+  public List<List<Point>> solveMaze(int[][] maze, Point start, Point end) {
+    List<List<Point>> result = new ArrayList<>();
+    if (maze == null || maze.length == 0 || maze[0] == null || maze[0].length == 0) {
+      return result;
+    }
+    
+    int m = maze.length;
+    int n = maze[0].length;
+    boolean[][] visited = new boolean[m][n];
+    
+    List<Point> path = new ArrayList<>();
+    path.add(start);
+    dfs(result, path, maze, visited, start, end);
+    return result;
+  }
+  
+  private void dfs(List<List<Point>> result, 
+                   List<Point> path, 
+                   int[][] maze, 
+                   boolean[][] visited, 
+                   Point cur, 
+                   Point end) {
+    
+    // 剪枝：当前是黑块
+    if (maze[cur.x][cur.y] == 1) {
+      return;
+    }
+    
+    // 标记
+    visited[cur.x][cur.y] = true;
+    
+    // 找到单一解
+    if (cur.x == end.x && cur.y == end.y) {
+      result.add(new ArrayList(path));
+      // 取消标记，因为回溯需要
+    	visited[cur.x][cur.y] = false;
+      return;
+    }
+    
+    // 移动
+    int[] dx = {1, 0, -1, 0};
+    int[] dy = {0, 1, 0, -1};
+    for (int i = 0; i < 4; i++) {
+      Point newPoint = new Point(cur.x + dx[i], cur.y + dy[i]);
+      if (checkRange(maze, newPoint) && !visited[newPoint.x][newPoint.y]) {
+        
+        // 因为要求所有的路径，所以要进行回溯
+        path.add(newPoint);
+        dfs(result, path, maze, visited, newPoint, end);
+        path.remove(path.size() - 1);
+      }
+    }
+    
+    // 取消标记，因为回溯需要
+    visited[cur.x][cur.y] = false;
+  }
+  
+  
+  private boolean checkRange(int[][] maze, Point point) {
+    return point.x >= 0 
+      && point.x < maze.length
+      && point.y >= 0 
+      && point.y < maze[0].length;
+  }
+}
+```
+
