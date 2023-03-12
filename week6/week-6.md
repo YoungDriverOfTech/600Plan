@@ -596,3 +596,68 @@ public class Maze {
 }
 ```
 
+
+
+#### 迷宫
+
+![recursion](./images/490.png)
+
+```java
+class Solution {
+  private int[] dx = {1, 0, -1, 0};
+  private int[] dy = {0, 1, 0, -1};
+  
+  // 因为只用返回有没有路径，所以不需要回溯，只要能找到一条路径就行
+  // 当开始运动的时候，先朝着一个方向走，途中不能换方向，直到碰到墙壁才能换方向
+  public boolean hasPath(int[][] maze, int[] start, int[] dest) {
+    if (maze == null || maze.length == 0 || maze[0] == null || maze[0].length == 0) {
+      return false;
+    }
+    
+    int m = maze.length;
+    int n = maze[0].length;
+    boolean[][] visited = new boolean[m][n];
+    
+    return dfs(maze, visited, start[0], start[1], dest[0], dest[1]);
+  }
+  
+  private boolean dfs(int[][] maze, boolean[][] visited, int x, int y, int destX, int destY) {
+    // 当找到重点的时候，返回true. 边界的检查和是否访问在for循环里面做
+    if (x == destX && y == destY) {
+      return true;
+    }
+    
+    // 标记, 因为不需要回溯，所以不用重置回false
+    visited[x][y] = true;
+    
+    boolean result = false;
+    for (int i = 0; i < 4; i++) {
+      // 因为当开始运动的时候，先朝着一个方向走，途中不能换方向，直到碰到墙壁才能换方向
+      // 所以先朝着一个方向走, 直到走到了墙壁上面
+      int newX = x + dx[i];
+      int newY = y + dy[i];
+      while (checkRange(maze, newX, newY) && maze[newX][newY] != 1) {
+        newX++;
+        newY++;
+      }
+      
+      // 现在因为已经走到了墙壁上面，所以需要回退一步
+      newX = newX - dx[i];
+      newY = newY - dy[i];
+      if (!visited[newX][newY]) {
+        result = result || dfs(maze, visited, newX, newY, destX, destY);
+      }
+    }
+    
+    return result;
+  }
+  
+  private boolean checkRange(int[][] maze, Point point) {
+    return point.x >= 0 
+      && point.x < maze.length
+      && point.y >= 0 
+      && point.y < maze[0].length;
+  }
+}
+```
+
