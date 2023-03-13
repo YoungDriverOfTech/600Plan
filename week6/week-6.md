@@ -1186,3 +1186,67 @@ class Solution {
 }
 ```
 
+
+
+### N 叉树的层序遍历
+
+[429. N 叉树的层序遍历](https://leetcode.cn/problems/n-ary-tree-level-order-traversal/)
+
+```java
+/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public List<Node> children;
+
+    public Node() {}
+
+    public Node(int _val) {
+        val = _val;
+    }
+
+    public Node(int _val, List<Node> _children) {
+        val = _val;
+        children = _children;
+    }
+};
+*/
+
+class Solution {
+    public List<List<Integer>> levelOrder(Node root) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (root == null) {
+            return result;
+        }
+
+        // step 1: 构建队列
+        Queue<Node> queue = new LinkedList<>();
+
+        // step 2: 把跟节点加入队列
+        queue.offer(root);
+
+        // step 3: while判断队列是否是空，实现BFS，直到队列为空
+        while (!queue.isEmpty()) {
+            // (1) 先确定每一层又多少元素，然后在层序遍历
+            int size = queue.size();
+            List<Integer> levelList = new ArrayList<>();
+
+            // for循环层级遍历：需要分层必须要有for循环
+            for (int i = 0; i < size; i++) {
+                // 出队：以node为圆心画圆
+                Node node = queue.poll();
+                levelList.add(node.val);
+
+                // 子树入队
+                for (Node child : node.children) {
+                    queue.offer(child);
+                }
+            }
+
+            result.add(levelList);
+        }
+        return result;
+    }
+}
+```
+
