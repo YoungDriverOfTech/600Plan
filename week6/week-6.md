@@ -987,3 +987,72 @@ class Solution {
 }
 ```
 
+
+
+# 3 BFS广度优先
+
+
+
+## 3.1 实战
+
+### 二叉树层序遍历
+
+[102. 二叉树的层序遍历](https://leetcode.cn/problems/binary-tree-level-order-traversal/)
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (root == null) {
+            return result;
+        }
+
+        // step 1: 构建队列
+        Queue<TreeNode> queue = new LinkedList<>();
+
+        // step 2: 把跟节点加入队列
+        queue.offer(root);
+
+        // step 3: while判断队列是否是空，实现BFS，直到队列为空
+        while (!queue.isEmpty()) {
+            // (1) 先确定每一层又多少元素，然后在层序遍历
+            int size = queue.size();
+            List<Integer> levelList = new ArrayList<>();
+
+            // for循环层级遍历：需要分层必须要有for循环
+            for (int i = 0; i < size; i++) {
+                // 出队：以node为圆心画圆
+                TreeNode node = queue.poll();
+                levelList.add(node.val);
+
+                // 左右子树入队
+                if (node.left != null) {
+                    queue.offer(node.left);
+                }
+                if (node.right != null) {
+                    queue.offer(node.right);
+                }
+            }
+
+            result.add(levelList);
+        }
+        return result;
+    }
+}
+```
+
