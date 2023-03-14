@@ -1342,3 +1342,64 @@ public void bfs(Node start) {
 }
 ```
 
+
+
+## 3.3 实战
+
+### 无向图中连通分量
+
+
+
+![recursion](./images/323.png)
+
+```java
+class Solution {
+    public int countComponents(int n, int[][] edges) {
+        // count：做了几次DFS
+        int count = 0;
+
+        // step 0: 构建邻接表
+        Map<Integer, List<Integer>> adj = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            adj.put(i, new ArrayList<>());
+        }
+
+        // 因为要构造成无向图，所以节点都需要双连
+        for (int i = 0; i < edges.length; i++) {
+            int u = edges[i][0];
+            int v = edges[i][1];
+            adj.get(u).add(v);
+            adj.get(v).add(u);
+        }
+
+        // step 1: 套模板
+        boolean[] marked = new boolean[n];
+        for (int i = 0; i < n; i++) {
+            // 只有没有被标记过，才能进行dfs
+            if (!marked[i]) {
+                bfs(adj, marked, i);
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private void bfs(Map<Integer, List<Integer>> adj, boolean[] marked, int nodeNum) {
+      Queue<Integer> queue = new LinkedList<>();
+      queue.offer(nodeNum);
+      marked[nodeNum] = true;
+      
+      while (!queue.isEmpty()) {
+        Integer curNode = queue.poll();
+        
+        for (Integer adjNode : adj.get(curNode)) {
+          if (!marked[aadjNode]) {
+            marked[adjNode] = true;
+            queue.offer(adjNode);
+          }
+        }
+      }
+    }
+}
+```
+
