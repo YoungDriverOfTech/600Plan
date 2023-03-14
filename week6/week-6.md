@@ -1448,3 +1448,72 @@ class Solution {
 }
 ```
 
+
+
+### 以图判树
+
+![recursion](./images/261-1.png)
+
+![recursion](./images/261-3.png)
+
+```java
+class Solution {
+  
+  	// 树：边树=节点数-1
+		// 联通分量必须得是1
+    public int sulution(int n, int[][] edges) {
+        if (n == 0) {
+          return false;
+        }
+      	
+      	// 树：边树=节点数-1
+      	if (edges.length != n - 1) {
+          return false;
+        }
+      
+      	// step 1 构建邻接表
+      	Map<Integer, List<Integer>> map = new HashMap<>();
+      	for (int i = 0; i < n; i++) {
+        	map.put(i, new ArrayList<Integer>());
+        }
+      
+      	// step 2 填充邻接节点到邻接表
+      	for (int i = 0; i < edges.length; i++) {
+          int u = edges[i][0];
+          int v = edges[i][1];
+          
+          map.get(u).add(v);
+          map.get(v).add(u);
+        }
+      
+      	// step 计算联通分量
+      	int count = 0;
+      	boolean[] visited = new boolean[edges.length];
+      	for (int i = 0; i < n; i++) {
+          if (!visited[i]) {
+            bfs(map, visited, i);
+            count++;
+          }
+        }
+    }
+  
+  
+  	private void bfs(Map<Integer, List<Integer>> map, boolean[] visited, int node) {
+      Queue<Integer> queue = new LinkedList<>();
+      queue.offer(node);
+      visited[node] = true;
+      
+      while (!queue.isEmpty()) {
+        Integer curNode = queue.poll();
+        
+        for (int adj : map.get(curNode)) {
+          if (!visited[ajd]) {
+            visited[ajd] = true;
+            queue.offer(adj);
+          }
+        }
+      }
+    }
+}
+```
+
