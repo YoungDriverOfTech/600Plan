@@ -1314,3 +1314,31 @@ class Solution {
 }
 ```
 
+
+
+## 3.2 一般图的BFS模板
+
+```java
+public void bfs(Node start) {
+  // create queue
+  Queue<Node> queue = new LinkedList<>();
+
+  // put start node into queue
+  queue.offer(start);
+  marked[start.getNo()] = true;
+
+  // process bfs until queue is empty
+  while (queue.isEmpty()) {
+    Node cur = queue.poll();
+    
+    // 以cur Node为圆心画圆，找邻接节点
+    for(Node adjNode : adjacencyList.get(start)) {
+      if (!marked[adjNode.getNo()]) {
+        marked[adjNode.getNo()] = true;
+        queue.offer(adjNode);
+      }
+    }
+  }
+}
+```
+
