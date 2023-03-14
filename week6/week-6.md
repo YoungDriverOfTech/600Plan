@@ -1403,3 +1403,48 @@ class Solution {
 }
 ```
 
+
+
+### 省份数量
+
+[547. 省份数量](https://leetcode.cn/problems/number-of-provinces/)
+
+```java
+class Solution {
+    public int findCircleNum(int[][] isConnected) {
+        if (isConnected == null || isConnected.length == 0 || isConnected[0].length == 9) {
+            return 0;
+        }
+
+        boolean[] marked = new boolean[isConnected[0].length];
+        int result = 0;
+
+        for (int i = 0; i < isConnected.length; i++) {
+            if (!marked[i]) {
+                bfs(isConnected, marked, i);
+                result++;
+            }
+        }
+        return result;
+    }
+
+    private void bfs(int[][] isConnected, boolean[] marked, int cityNum) {
+        Queue<Integer> queue = new LinkedList<>();
+        queue.offer(cityNum);
+        marked[cityNum] = true;
+
+        while (!queue.isEmpty()) {
+            // 只有二维数组的值为0的时候，才能是邻接城市
+            Integer cityNo = queue.poll();
+
+            for (int i = 0; i < isConnected[cityNo].length; i++) {
+                if (isConnected[cityNo][i] == 1 && !marked[i]) {
+                    marked[i] = true;
+                    queue.offer(i);
+                }
+            }
+        }
+    }
+}
+```
+
