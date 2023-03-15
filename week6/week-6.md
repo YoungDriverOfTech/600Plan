@@ -1517,3 +1517,73 @@ class Solution {
 }
 ```
 
+
+
+### 克隆图
+
+[133. 克隆图](https://leetcode.cn/problems/clone-graph/)
+
+```java
+/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public List<Node> neighbors;
+    public Node() {
+        val = 0;
+        neighbors = new ArrayList<Node>();
+    }
+    public Node(int _val) {
+        val = _val;
+        neighbors = new ArrayList<Node>();
+    }
+    public Node(int _val, ArrayList<Node> _neighbors) {
+        val = _val;
+        neighbors = _neighbors;
+    }
+}
+*/
+
+class Solution {
+    public Node cloneGraph(Node node) {
+        if (node == null) {
+            return null;
+        }
+
+        // key: old node  value: new node
+        Map<Node, Node> map = new HashMap<>();
+        Queue<Node> queue = new LinkedList<>();
+
+        // clone node
+        Node cloneNode = new Node(node.val);
+        map.put(node, cloneNode);
+        queue.offer(node);
+
+        // bfs
+        while (!queue.isEmpty()) {
+            Node cur = queue.poll();
+            
+            for (Node curNeighbor : cur.neighbors) {
+                // 如果当前邻居节点没有被克隆，那么先进行克隆
+                if (!map.containsKey(curNeighbor)) {
+                    Node cloneCurNeighbor = new Node(curNeighbor.val);
+                    map.put(curNeighbor, cloneCurNeighbor);
+                    queue.offer(curNeighbor);
+                }
+
+                // 如果当前邻居节点已经被克隆，那么就应该把被克隆的邻居节点加入到，被克隆的当前节点上面
+                Node cloneCur = map.get(cur);
+                Node cloneCurNeighbor = map.get(curNeighbor);
+
+                // 这个其实就是双向绑定。可以想象节点1， 2。首次遍历1，然后取出克隆1，然后克隆2，把克隆好的2放到1的邻居节点里面
+                // 形成这样 1‘ -> 2'
+                // 第二次遍历先取出2'，因为1‘已经在map里面了，所以直接取出来1’，放到2‘的邻居里面最后形成的就是
+                // 1' -> 2' 2' -> 1'
+                cloneCur.neighbors.add(cloneCurNeighbor);
+            }
+        }
+        return cloneNode;
+    }
+}
+```
+
