@@ -1587,3 +1587,60 @@ class Solution {
 }
 ```
 
+
+
+## 3.4 矩阵类BFS
+
+### 二维BFS模板
+
+```java
+class Point {
+  int x;
+  int y;
+}
+
+private boolean checkRange(int[][] matrix, Point point) {
+  return point.x >= 0 && point.x < matrix.length && point.y >= 0 && point.y < matrix[0].length;
+}
+
+public void bfsInMatrix(int[][] matrix) {
+  if (matrix == null || matrix.length == 0 || matrix[0] == null || matrix[0].length == 0) {
+    return false;
+  }
+  
+  int m = matrix.length;
+  int n = matrix[0].length;
+  boolean[][] visited = new boolean[m][n];
+  
+  for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+      Point start = new Point(i, j);
+      if (special-condition && !visited[i][j]) {
+        bfs(matrix, visited, start);
+      }
+    }
+  }
+}
+
+public void bfs(int[][] matrix, boolean[][] visited, Point point) {
+  Queue<Point> queue = new LinkedList<>();
+  
+  // 标记并且加入队列
+  visited[point.x][point.y] = true;
+  
+  // bfs && move
+  int[] dx = {1, 0, -1, 0};
+  int[] dy = {0, 1, 0, -1};
+  while (!queue.isEmpty()) {
+    Point curPoint = queue.poll();
+    for (int i = 0; i < 4; i++) {
+      Point newPoint = new Point(curPoint.x + dx[i], curPoint.y + dy[i]);
+      if (checkRange(matrix, newPoint) && !visited[newPoint.x][newPoint.y] && special-condition) {
+        visited[newPoint.x][newPoint.y] = true;
+        queue.offer(newPoint);
+      }
+    }
+  }
+}
+```
+
