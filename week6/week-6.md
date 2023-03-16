@@ -1644,3 +1644,75 @@ public void bfs(int[][] matrix, boolean[][] visited, Point point) {
 }
 ```
 
+
+
+### 岛屿数量
+
+[200. 岛屿数量](https://leetcode.cn/problems/number-of-islands/)
+
+```java
+class Solution {
+    class Point {
+        int x;
+        int y;
+
+        public Point (int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+
+    private int[] dx = {1, 0, -1, 0};
+    private int[] dy = {0, 1, 0, -1};
+
+    public int numIslands(char[][] grid) {
+        if (grid == null || grid.length == 0 || grid[0] == null || grid[0].length == 0) {
+            return 0;
+        }
+
+        int m = grid.length;
+        int n = grid[0].length;
+        boolean[][] visited = new boolean[m][n];
+
+        int result = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                Point start = new Point(i, j);
+
+                if (grid[i][j] == '1' && !visited[i][j]) {
+                    bfs(grid, visited, start);
+                    result++;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private void bfs(char[][] grid, boolean[][] visited, Point start) {
+        visited[start.x][start.y] = true;
+        Queue<Point> queue = new LinkedList<>();
+        queue.offer(start);
+
+        while (!queue.isEmpty()) {
+            Point cur = queue.poll();
+
+            for (int i = 0; i < 4; i++) {
+                Point newPoint = new Point(cur.x + dx[i], cur.y + dy[i]);
+                if (checkRange(grid, newPoint) 
+                    && !visited[newPoint.x][newPoint.y] 
+                    && grid[newPoint.x][newPoint.y] == '1') {
+                    
+                    visited[newPoint.x][newPoint.y] = true;
+                    queue.offer(newPoint);
+                }
+            }
+        }
+    }
+
+    private boolean checkRange(char[][] grid, Point point) {
+        return point.x >= 0 && point.x < grid.length && point.y >= 0 && point.y < grid[0].length;
+    }
+}
+```
+
