@@ -1716,3 +1716,89 @@ class Solution {
 }
 ```
 
+
+
+### 被围绕的区域
+
+[130. 被围绕的区域](https://leetcode.cn/problems/surrounded-regions/)
+
+```java
+class Solution {
+    class Point {
+        int x;
+        int y;
+
+        public Point (int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+
+    private int[] dx = {1, 0, -1, 0};
+    private int[] dy = {0, 1, 0, -1};
+
+    public void solve(char[][] board) {
+        if (board == null || board.length == 0 || board[0] == null || board[0].length == 0) {
+            return;
+        }
+
+        int m = board.length;
+        int n =  board[0].length;
+        boolean[][] visited = new boolean[m][n];
+
+        // 找到和边缘相接的O，全部换成B，然后再次遍历board，把剩余的O，也就是没有和边缘O接壤的O，都换成X，把B再换回O
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (isBorder(m, n, i, j) && board[i][j] == 'O' && !visited[i][j]) {
+                    Point start = new Point(i, j);
+                    bfs(board, visited, start);
+                }
+            }
+        }
+
+        // 置换所有的O到X，B到O
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (board[i][j] == 'O') {
+                    board[i][j] = 'X';
+                }
+                if (board[i][j] == 'B') {
+                    board[i][j] = 'O';
+                }
+            }
+        }
+    }
+
+    private void bfs(char[][] board, boolean[][] visited, Point start) {
+        visited[start.x][start.y] = true;
+        Queue<Point> queue = new LinkedList<>();
+        queue.offer(start);
+
+        // 因为要把边缘以及边缘接壤的O换成B，所以在这里先更新一下
+        board[start.x][start.y] = 'B';
+
+        // bfs
+        while (!queue.isEmpty()) {
+            Point cur = queue.poll();
+
+            for (int i = 0; i < 4; i++) {
+                Point newCur = new Point(cur.x + dx[i], cur.y + dy[i]);
+                if (checkRange(board, newCur) && !visited[newCur.x][newCur.y] && board[newCur.x][newCur.y] == 'O') {
+                    visited[newCur.x][newCur.y] = true;
+                    board[newCur.x][newCur.y] = 'B';
+                    queue.offer(newCur);
+                }
+            }
+        }
+    }
+
+    private boolean isBorder(int m, int n, int x, int y) {
+        return x == 0 || x == m - 1 || y == 0 || y == n - 1;
+    }
+
+    private boolean checkRange(char[][] board, Point point) {
+        return point.x >= 0 && point.x < board.length && point.y >= 0 && point.y < board[0].length;
+    }
+}
+```
+
