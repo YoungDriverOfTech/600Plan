@@ -1937,3 +1937,84 @@ public class DirectedGraph {
 }
 ```
 
+
+
+### 课程表 II
+
+[210. 课程表 II](https://leetcode.cn/problems/course-schedule-ii/)
+
+
+
+![recursion](./images/210.png)
+
+
+
+```java
+class Solution {
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        // 构造邻接表 Map<Key, Value> Key: 第几门课程  Value: 这门课修完后，才能修的课程
+        Map<Integer, List<Integer>> adjTable = new HashMap<>();
+        for (int i = 0; i < numCourses; i++) {
+            adjTable.put(i, new ArrayList<>());
+        }
+
+        // 填充邻接表
+        for (int[] pre : prerequisites) {
+            int start = pre[1];
+            int end = pre[0];
+            adjTable.get(start).add(end);
+        }
+
+        // 计算每个邻接节点的入度
+        Map<Integer, Integer> inDegreeMap = new HashMap<>();
+        for (Map.Entry<Integer, List<Integer>> entry : adjTable.entrySet()) {
+            for (Integer adjNode : entry.getValue()) {
+                if (!inDegreeMap.containsKey(adjNode)) {
+                    inDegreeMap.put(adjNode, 1);
+                } else {
+                    inDegreeMap.put(adjNode, inDegreeMap.get(adjNode) + 1);
+                }
+            }
+        }
+
+        // 结果数组
+        int[] result = new int[numCourses];
+        int index = 0;
+
+        // 把入度为0的节点装进队列，然后bfs
+        Queue<Integer> queue = new LinkedList<>();
+        for (Integer course : adjTable.keySet()) {
+            // 邻接表里面取出没门课程，判断是不是在入度map里面存在，如果不存在，那么说明这门课程的入度就是0
+            if (!inDegreeMap.containsKey(course)) {
+                queue.offer(course);
+                result[index++] = course;
+            }
+        }
+
+        // BFS
+        while (!queue.isEmpty()) {
+            Integer curCourse = queue.poll();
+
+            // 减去当前课程的邻接课程的入度
+            List<Integer> adjCourses = adjTable.get(curCourse);
+            for (Integer ajdCourse : adjCourses) {
+                int updatedInDegree = inDegreeMap.get(ajdCourse) - 1;
+                inDegreeMap.put(ajdCourse, updatedInDegree);
+
+                // 如果出现入度==0的课程，那么需要加入队列中
+                if (updatedInDegree == 0) {
+                    queue.offer(ajdCourse);
+                    result[index++] = ajdCourse;
+                }
+            }
+        }
+
+        // 如果所有课程都学完，那么index应该正好等于numCourses，如果不等于的话，说明没有学完，那就是没有接，返回空数组即可
+        if (index == numCourses) {
+            return result;
+        }
+        return new int[0];
+    }
+}
+```
+
