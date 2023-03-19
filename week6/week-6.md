@@ -2132,7 +2132,7 @@ public int steps(int[][] maze, Point start, Point end) {
         int newY = curPoint.y + dy[j];
         Point newPoint = new Point(newX, newY);
         
-        if (checkRange(maze, newPoint) && !visited[newX][newY]) {
+        if (checkRange(maze, newPoint) && !visited[newX][newY] && maze[newX][newY] != 1) {
           visited[newX][newY] = true;
           queue.offer(newPoint);
         }
