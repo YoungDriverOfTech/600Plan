@@ -2089,3 +2089,58 @@ class Solution {
 }
 ```
 
+
+
+# 5 最短路径
+
+## 5.1 实战
+
+### 迷宫
+
+![recursion](./images/migong.png)
+
+```java
+public int steps(int[][] maze, Point start, Point end) {
+  
+  int steps = 0;
+  int m = maze.length;
+  int n = maze[0].length;
+  boolean[][] visited = new boolean[m][n];
+  
+  int[] dx = {1, 0, -1, 0};
+  int[] dy = {0, 1, 0, -1};
+  
+  Queue<Point> queue = new LinkedList<>();
+  queue.offer(start);
+  visited[start.x][start.y] = true;
+  int level = 1;
+  
+  while (!queue.isEmpty()) {
+    int size = queue.size();
+    level++;
+
+    for (int i = 0; i < size; i++) {
+      Point curPoint = queue.poll();
+      // 如果已经走到了end，说明已经找到了最后的点
+      if (curPoint.x == end.x && curPoint.y == end.y) {
+        steps = Math.min(steps, level);
+        continue;
+      }
+      
+      for (int j = 0; j < 4; j++) {
+        int newX = curPoint.x + dx[j];
+        int newY = curPoint.y + dy[j];
+        Point newPoint = new Point(newX, newY);
+        
+        if (checkRange(maze, newPoint) && !visited[newX][newY]) {
+          visited[newX][newY] = true;
+          queue.offer(newPoint);
+        }
+      }
+    }
+  }
+  
+  return steps;
+}
+```
+
