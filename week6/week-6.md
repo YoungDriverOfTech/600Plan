@@ -2144,3 +2144,76 @@ public int steps(int[][] maze, Point start, Point end) {
 }
 ```
 
+
+
+### 迷宫 II
+
+由空地和墙组成的迷宫中有一个球。
+球可以向上下左右四个方向滚动，但在遇到墙壁前不会停止滚动。
+当球停下时，可以选择下一个方向。
+
+给定球的起始位置，目的地和迷宫，找出让球停在目的地的最短距离。
+距离的定义是球从起始位置（不包括）到目的地（包括）经过的空地个数。
+如果球无法停在目的地，返回 -1。
+
+迷宫由一个0和1的二维数组表示。 1表示墙壁，0表示空地。
+你可以假定迷宫的边缘都是墙壁。
+起始位置和目的地的坐标通过行号和列号给出。
+![recursion](./images/505.png)
+
+```java
+public class Solution {
+    public int shortestDistance(int[][] maze, int[] start, int[] end) {
+        if (maze == null || maze.length == 0 || maze[0] == null || maze[0].length == 0) {
+            return -1;
+        }
+
+        // 记忆化搜索：记录start到该点(x, y)的最小步数
+        int m = maze.length;
+        int n = maze[0].length;
+        int[][] memo = new int[m][n];
+
+        for (int[] row : memo) {
+            Arrays.fill(row, Integer.MAX_VALUE);
+        }
+
+        int[] dx = {1, 0, -1, 0};
+        int[] dy = {0, 1, 0, -1};
+
+        Queue<int[]> queue = new LinkedList<>();
+        queue.offer(start);
+        memo[start[0]][start[1]] = 0;
+
+        while (!queue.isEmpty()) {
+            int[] point = queue.poll();
+            for (int i = 0; i < 4; i++) {
+                int newX = point[0] + dx[i];
+                int newY = point[1] + dy[i];
+
+                // 直到移动到墙上, 最后上墙了，需要在往后走一步
+                int step = 0;
+                while (changeRange(maze, newX, newY) && maze[newX][newY] == 0) {
+                    newX += dx[i];
+                    newY += dy[i];
+                    step++;
+                }
+                newX -= dx[i];
+                newY -= dy[i];
+
+                // 什么时候能够入队
+                if (memo[newX][newY] > memo[point[0]][point[1]] + step) {
+                    memo[newX][newY] = memo[point[0]][point[1]] + step;
+                    queue.offer(new int[] {newX, newY});
+                }
+            }
+        }
+
+        return memo[end[0]][end[1]] == Integer.MAX_VALUE ? -1 : memo[end[0]][end[1]];
+    }
+
+    private boolean changeRange(int[][] maze, int x, int y) {
+        return x >= 0 && x < maze.length && y >= 0 && y < maze[0].length;
+    }
+}
+```
+
