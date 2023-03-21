@@ -2233,7 +2233,186 @@ public class Solution {
 
 ## 6.2 实战
 
-### 127
+### 单词接龙
+
+[127. 单词接龙](https://leetcode.cn/problems/word-ladder/)
+
+#### 单向BFS
+
+```java
+class Solution {
+
+    // 利用广度优先遍历，去wordList找出startWord，然后变换每一个字符，找到了就加入队列，然后就是按着这个单词
+    // 画圆，在找下一层的单词，直到找到endword。那么返回层数就可以了
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        // 构造字典
+        Set<String> dict = new HashSet<>(wordList);
+        if (beginWord.equals(endWord)) {
+            return 0;
+        }
+
+        // 构造BFS的队列以及visited标记容器
+        Queue<String> queue = new LinkedList<>();
+        queue.offer(beginWord);
+        Set<String> visited = new HashSet<>();
+      	visited.add(beginWord);
+        int level = 1;  // 为什么要初始化为1，因为首个单词已经进入了队列
+
+        while (!queue.isEmpty()) {
+            level++;
+            int size = queue.size();    // 因为要求的是层数，所以需要用for循环来从queue中去单词
+
+            for (int i = 0; i < size; i++) {
+                // 如果是进入的第一个单词，则不用判断，因为上面最开始的部分已经进行判断了，只需要判断邻接节点
+                // 是不是和end相等即可
+                String curWord = queue.poll();
+
+                // 取到当前单词的邻接单词list（就是以当前单词画圆）
+                List<String> adjWords = getAdjWords(curWord, dict);
+                for (String adjWord : adjWords) {
+                    // 邻接节点只有没有被访问过，才能进行入队
+                    if (!visited.contains(adjWord)) {
+                        if (adjWord.equals(endWord)) {
+                            return level;
+                        }
+
+                        queue.offer(adjWord);
+                        visited.add(adjWord);
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+
+    private List<String> getAdjWords(String curWord, Set<String> dict) {
+        List<String> result = new ArrayList<>();
+
+        // 从a到z依次替换curWord的每个字符，去查看在字典中存在不存在，存在的话加入到结果集
+        for (int i = 0; i < curWord.length(); i++) {
+            int ch = curWord.charAt(i);
+
+            // 如果遍历到的字符和ch相等的话就跳过
+            for (char j = 'a'; j <= 'z'; j++) {
+                if (j == ch) {
+                    continue;
+                }
+
+                String replaceddWord = replacedWord(curWord, i, j);
+                if (dict.contains(replaceddWord)) {
+                    result.add(replaceddWord);
+                }
+            }
+        }
+        return result;
+    }
+
+    private String replacedWord(String curWord, int index, char j) {
+        char[] curWordArr = curWord.toCharArray();
+        curWordArr[index] = j;
+        return new String(curWordArr);
+    }
+}
+```
 
 
+
+#### 双向BFS
+
+```java
+class Solution {
+
+    // 双向BFS，从头部尾部开始进行BFS，然后遍历的时候尽量让邻接节点的数量相当
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        if (beginWord.equals(endWord)) {
+            return 0;
+        }
+        
+        // 注意， beginWord 不需要在 wordList 中 -> 在进行双向BFS的时候，把begin word加到字典里面
+        Set<String> dict = new HashSet<>(wordList);
+        dict.add(beginWord);
+        if (!dict.contains(endWord)) {
+            return 0;
+        }
+
+        // 双队列来进行BFS. q1 = left to right; q2 = right to left
+        Queue<String> q1 = new LinkedList<>();
+        Set<String> visited1 = new HashSet<>();
+        q1.offer(beginWord);
+        visited1.add(beginWord);
+        int level1 = 1;
+
+        Queue<String> q2 = new LinkedList<>();
+        Set<String> visited2 = new HashSet<>();
+        q2.offer(endWord);
+        visited2.add(endWord);
+        int level2 = 1;
+
+        while (!q1.isEmpty() && !q2.isEmpty()) {
+            // 哪边节点少，就去扩展哪边，尽量要让节点的数量相当
+            if (q1.size() <= q2.size()) {
+                if (update(dict, q1, visited1, visited2)) {
+                    return level1 + level2;
+                }
+                level1++;
+            } else {
+                if (update(dict, q2, visited2, visited1)) {
+                    return level1 + level2;
+                }
+                level2++;
+            }
+        }
+        return 0;
+    }
+
+    private boolean update(Set<String> dict, Queue<String> updateQueue, Set<String> visited, Set<String> checkVisited) {
+        int size = updateQueue.size();
+        for (int i = 0; i < size; i++) {
+            String curWord = updateQueue.poll();
+            List<String> adjWords = getAdjWords(curWord, dict);
+
+            for (String adjWord : adjWords) {
+                if (!visited.contains(adjWord)) {
+                    if (checkVisited.contains(adjWord)) {
+                        return true;
+                    }
+
+                    visited.add(adjWord);
+                    updateQueue.offer(adjWord);
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private List<String> getAdjWords(String curWord, Set<String> dict) {
+        List<String> result = new ArrayList<>();
+
+        // 从a到z依次替换curWord的每个字符，去查看在字典中存在不存在，存在的话加入到结果集
+        for (int i = 0; i < curWord.length(); i++) {
+            int ch = curWord.charAt(i);
+
+            // 如果遍历到的字符和ch相等的话就跳过
+            for (char j = 'a'; j <= 'z'; j++) {
+                if (j == ch) {
+                    continue;
+                }
+
+                String replaceddWord = replacedWord(curWord, i, j);
+                if (dict.contains(replaceddWord)) {
+                    result.add(replaceddWord);
+                }
+            }
+        }
+        return result;
+    }
+
+    private String replacedWord(String curWord, int index, char j) {
+        char[] curWordArr = curWord.toCharArray();
+        curWordArr[index] = j;
+        return new String(curWordArr);
+    }
+}
+```
 
