@@ -70,3 +70,65 @@ public class Main {
 
 ```
 
+
+
+## 1.3 归并排序
+
+### 写法1
+
+```java
+public class Main {
+    public void sort(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return;
+        }
+
+        mergeSort(nums, 0, nums.length - 1);
+    }
+
+    public void mergeSort(int[] nums, int start, int end) {
+        if (start < end) {
+            int mid = start + (end - start) / 2;
+            mergeSort(nums, start, mid);
+            mergeSort(nums, mid + 1, end);
+            merge(nums, start, mid, end);
+        }
+    }
+
+    private void merge(int[] nums, int start, int mid, int end) {
+        int leftLength = mid - start + 1;
+        int rightLength = end - mid;
+
+        int[] left = new int[leftLength]; // 存[start, ..., mid]
+        int[] right = new int[rightLength]; // 存[mid + 1, ..., end]
+
+        for (int i = 0; i < leftLength; i++) {
+            left[i] = nums[start + i];
+        }
+        for (int j = 0; j < leftLength; j++) {
+            right[j] = nums[mid + 1 + j];
+        }
+
+        int index = start;
+        int i = 0;
+        int j = 0;
+        
+        // merge two sorted array
+        while (i < leftLength && j < rightLength) {
+            if (left[i] < right[j]) {
+                nums[index++] = left[i++];
+            } else {
+                nums[index++] = right[j++];
+            }
+        }
+        
+        while (i < leftLength) {
+            nums[index++] = left[i++];
+        }
+        while (j <rightLength) {
+            nums[index++] = right[j++];
+        }
+    }
+}
+```
+
