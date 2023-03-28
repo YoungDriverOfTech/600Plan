@@ -214,3 +214,59 @@ Space: O(n)
 - 分解：将数组划分为两个（可能为空）子数组，使得前一个子数组中的每个元素都小于或等于nums[pivot]，后一个都大于nums[pivot]
 - 解决：递归地对两个子数组分别排序
 - 合并：由于子数组都是原地排序不需要合并
+
+
+
+### 写法1
+
+```java
+public class Main {
+    public void sort(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return;
+        }
+
+        int[] temp = new int[nums.length];
+
+        quickSort(nums, 0, nums.length - 1);
+    }
+
+    private void quickSort(int[] nums, int start, int end) {
+        if (start >= end) {
+            return;
+        }
+
+        int pivot = partition(nums, start, end);
+        quickSort(nums, start, pivot - 1);
+        quickSort(nums, pivot + 1, end);
+    }
+
+    private int partition(int[] nums, int start, int end) {
+        int pivotValue = nums[end];
+
+        int j = start - 1;
+
+        for (int i = start; i < end; i++) {
+            if (nums[i] <= pivotValue) {
+                j++;
+
+                // 说明 i之前一定有元素大于pivotValue，需要交换
+                if (i != j) {
+                    swap(nums, i, j);
+                }
+            }
+        }
+        
+        // start ... j : x < value   j + 1: value  j + 2 ... end: x > value
+        swap(nums, j + 1, end);
+        return j + 1;
+    }
+
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+}
+```
+
