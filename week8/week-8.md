@@ -74,6 +74,10 @@ public class Main {
 
 ## 1.3 归并排序
 
+Time: O(nlogn)
+
+Space: O(n)
+
 ### 写法1
 
 ```java
