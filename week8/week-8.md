@@ -270,3 +270,57 @@ public class Main {
 }
 ```
 
+### 写法2 
+
+```java
+public class Main {
+    public void sort(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return;
+        }
+
+        int[] temp = new int[nums.length];
+
+        quickSort(nums, 0, nums.length - 1);
+    }
+
+    private void quickSort(int[] nums, int start, int end) {
+        if (start >= end) {
+            return;
+        }
+
+        int pivot = partition(nums, start, end);
+        quickSort(nums, start, pivot - 1);
+        quickSort(nums, pivot + 1, end);
+    }
+
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+
+    private int partition(int[] nums, int start, int end) {
+        int pivot = start;
+        int value = nums[pivot];
+
+        while (start < end) {
+            while (start < end && nums[end] >= value) {
+                end--;
+            }
+
+            // find the element that smaller than value
+            swap(nums, start, end);
+            
+            while (start < end && nums[start] <= value) {
+                start++;
+            }
+            
+            // find the element that larger than value
+            swap(nums, start, end);
+        }
+        return start;
+    }
+}
+```
+
