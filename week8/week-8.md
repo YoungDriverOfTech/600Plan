@@ -132,3 +132,58 @@ public class Main {
 }
 ```
 
+
+
+### 写法2
+
+```java
+public class Main {
+    public void sort(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return;
+        }
+
+        int[] temp = new int[nums.length];
+
+        mergeSort(nums, temp, 0, nums.length - 1);
+    }
+
+    public void mergeSort(int[] nums, int[] temp, int start, int end) {
+        if (start >= end) {
+            return;
+        }
+
+        int mid = start + (end - start) / 2;
+        mergeSort(nums, temp, start, mid);
+        mergeSort(nums, temp, mid + 1, end);
+        merge(nums, temp, start, mid, end);
+    }
+
+    private void merge(int[] nums, int[] temp, int start, int mid, int end) {
+        int left = start;
+        int right = mid + 1;
+        int index = start;
+
+        // merge two sorted array
+        while (left <= mid && right <= end) {
+            if (nums[left] <= nums[right]) {
+                temp[index++] = nums[left++];
+            } else {
+                temp[index++] = nums[right++];
+            }
+        }
+
+        while (left <= mid) {
+            temp[index++] = nums[left++];
+        }
+        while (right <= end) {
+            temp[index++] = nums[right++];
+        }
+
+        for (int i = start; i <= end; i++) {
+            nums[i] = temp[i];
+        }
+    }
+}
+```
+
