@@ -324,3 +324,122 @@ public class Main {
 }
 ```
 
+### 扩展: 期望为线性时间的快速选择算法（quick select）
+求数组nums中第k小的元素
+
+***quick select运行过程***
+- 检查递归基本情况
+- 将数组划分为两个（可能为空）子鼠族，是的前一个子数组中的每个元素都小于或者等于nums[index],后一个都大于nums[index]
+- 检查nums[index]是否为第k小的元素
+    1. 如果是则返回nums[index]
+    2. 否则需要确定第k小的元素落在哪一个子数组
+        - 如果num > k, 则落入划分低区
+        - 繁殖num < k, 则落入划分高区，而且我们已经知道有num个元素比nums[index]小
+
+```java
+public class QuickSelect {
+
+    // 求数组中第k小的元素
+    public int getKthSmallerElement(int[] nums, int k) {
+        if (nums == null || nums.length == 0) {
+            throw new RuntimeException();
+        }
+
+        return quickSelect(0, nums.length,  - 1, k, nums);
+    }
+
+    private int quickSelect(int start, int end, int k, int[] nums) {
+        // 递归最基本条件
+        if (start == end) {
+            return nums[start];
+        }
+
+        int index = partition(nums, start, end);
+        int num = index - start + 1; // 包括nums[index]
+        if (k == num) {
+            return nums[index];
+        } else if (k < num) {
+            return quickSelect(start, index - 1, k, nums); // 为什么index - 1， 因为int num = index - start + 1; // 包括nums[index]
+        } else {
+            // 为什么要 k - num， 因为index（包括index）前面的数子都小于nums[index]. 那么要找第k小的，只能在高区找
+            // 这时候得需要减去比nums[index]小的num个元素，在高区找剩下的第 k - num 小的元素
+            return quickSelect(index + 1, end, k - num, nums);
+        }
+    }
+    
+    // 这个partition可以被替换成写法2的partition
+    private int partition(int[] nums, int start, int end) {
+        int pivotValue = nums[end];
+
+        int j = start - 1;
+
+        for (int i = start; i < end; i++) {
+            if (nums[i] <= pivotValue) {
+                j++;
+
+                // 说明 i之前一定有元素大于pivotValue，需要交换
+                if (i != j) {
+                    swap(nums, i, j);
+                }
+            }
+        }
+
+        // start ... j : x < value   j + 1: value  j + 2 ... end: x > value
+        swap(nums, j + 1, end);
+        return j + 1;
+    }
+
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+
+}
+```
+
+## 1.5 实战
+
+### 对链表进行插入排序
+
+[147. 对链表进行插入排序](https://leetcode.cn/problems/insertion-sort-list/)
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode insertionSortList(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+
+        ListNode dummyNode = new ListNode(-1);
+        while (head != null) {
+            ListNode node = dummyNode;
+
+            // 从左往右找到node里面第一个大于head.val的节点，那么把head节点加到这个大节点的前面
+            while (node.next != null && node.next.val < head.val) {
+                node = node.next;
+            }
+
+            // 找到node.next.val > head.val 那么就把head塞到node的后面
+            ListNode temp = head.next;
+            head.next = node.next;
+            node.next = head;
+
+            // 现在已经把head接到node后面了，那么应该就绪便利head后面的节点
+            head = temp;
+        }
+
+        return dummyNode.next;
+    }
+}
+```
