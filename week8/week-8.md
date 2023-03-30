@@ -270,7 +270,66 @@ public class Main {
 }
 ```
 
-### 写法2 
+### 写法2
+```java
+package sortTemplate;
+
+import java.util.Arrays;
+
+public class QuickSort{
+
+    public void sort(int[] sourceArray) throws Exception {
+        quickSort(sourceArray, 0, sourceArray.length - 1);
+    }
+
+    private void quickSort(int[] arr, int left, int right) {
+        // 如果只剩下一个元素，那么就不需要排序了
+        if (left >= right) {
+            return;
+        }
+
+        int pivotIndex = partition(arr, left, right);
+        quickSort(arr, left, pivotIndex - 1);
+        quickSort(arr, pivotIndex + 1, right);
+    }
+
+    private int partition(int[] arr, int left, int right) {
+        // 挑选最右边的元素作为基准值
+        int pivot = arr[right];
+
+        // 从左到右的遍历整个数组，日过比基准值小，那么就和storeIndex交换
+        int storeIndex = left;
+        for (int i = left; i < right; i++) {    // 这里i < right 不应该有等于号，因为最右边的元素被当成比较标准元素，最后会进行交换，所以不能写等号
+            if (arr[i] <= pivot) {
+                swap(arr, i, storeIndex);
+                storeIndex += 1;    // 这个的左边，一直存放的小于pivot的值，所以一旦发生了交换，这个索引就需要往右移动
+            }
+        }
+
+        // 最后storeIndex存放的是大于pivot的值，所以要和pivotIndex进行再一次交换
+        // 因为一开始的时候，把pivot丢到了最右边，所以和最右边交换即可
+        swap(arr, storeIndex, right);
+
+        return storeIndex;
+    }
+
+    private void swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
+    public static void main(String[] args) throws Exception {
+        QuickSort quickSort = new QuickSort();
+        int[] param = new int[]{3,2,1,5,6,4};
+        System.out.println(Arrays.toString(param));
+        quickSort.sort(param);
+        System.out.println(Arrays.toString(param));
+    }
+}
+```
+
+### 写法3 
 
 ```java
 public class Main {
@@ -450,6 +509,7 @@ class Solution {
 
 [148. 排序链表](https://leetcode.cn/problems/sort-list/)
 
+归并排序解法
 ```java
 /**
  * Definition for singly-linked list.
@@ -519,5 +579,71 @@ class Solution {
 }
 ```
 
+快速排序解法
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    // 利用快速排序
+    // 把链表划分成高区和低区还有pivot，低 -> pivot -> 高 即可完成排序
+    public ListNode sortList(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
 
+        ListNode lowNodeDummy = new ListNode(-1);
+        ListNode lowNode = lowNodeDummy;
+        ListNode highNodeDummy = new ListNode(-1);
+        ListNode highNode = highNodeDummy;
 
+        // 遍历这个节点，把head当作pivot的节点，比pivot小的进低区，大的或者等于的进高区
+        int pivotValue = head.val;
+        ListNode node = head.next;
+
+        while (node != null) {
+            // 不能把和pivot值一样的放入低区，无限循环，比如【1, 1】
+            if (node.val < pivotValue) {
+                lowNode.next = node;
+                lowNode = lowNode.next;
+            } else {
+                highNode.next = node;
+                highNode = highNode.next;
+            }
+
+            // 遍历节点也需要往后走
+            node = node.next;
+        }
+
+        // 现在lowNode/highNode都指向了各区的最后一个节点。现在需要做的是，如果各区最后一个节点后还连着别的节点
+        // sortedLowHead -> pivot
+        lowNode.next = head;
+        highNode.next = null;
+
+        // 需要断开，因为pivot节点要加到低区区排序
+        head.next = null;
+
+        // 然后递归的调用，调用方法会返回排好序的低区和高区的头节点
+        ListNode sortedLowHead = sortList(lowNodeDummy.next);
+        ListNode sortedHighHead = sortList(highNodeDummy.next);
+
+        // 不能等到这里才接上head，因为有可能递归之前，所有节点都落在高区，那么sortedHighHead就是一个null节点
+        // 最后return sortedLowHead 的话，就是null了
+        // lowNode.next = head; 
+
+        // sortedLowHead -> pivot -> sortedHighHead
+        head.next = sortedHighHead;
+        return sortedLowHead;
+    }
+}
+```
+
+### 
+[148. 排序链表](https://leetcode.cn/problems/sort-list/)
