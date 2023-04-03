@@ -699,3 +699,38 @@ class Solution {
 }
 ```
 
+
+
+### 颜色分类
+
+[75. 颜色分类](https://leetcode.cn/problems/sort-colors/)
+
+```java
+class Solution {
+    public void sortColors(int[] nums) {
+        int first = 0;
+        int second = nums.length - 1;
+        int i = 0;
+
+        while (i <= second) {
+            if (nums[i] == 0) {
+                swap(nums, i, first);
+                first++;
+                i++;
+            } else if (nums[i] == 2) {
+                swap(nums, i, second);
+                second--; // 这里不需要i++，因为不确定从second换过去的值，所以还需要while循环里面判断一下
+            } else {
+                i++;
+            }
+        }
+    }
+
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+}
+```
+
