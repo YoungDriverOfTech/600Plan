@@ -404,7 +404,7 @@ public class QuickSelect {
             throw new RuntimeException();
         }
 
-        return quickSelect(0, nums.length,  - 1, k, nums);
+        return quickSelect(0, nums.length - 1, k, nums);
     }
 
     private int quickSelect(int start, int end, int k, int[] nums) {
@@ -645,5 +645,57 @@ class Solution {
 }
 ```
 
-### 
-[148. 排序链表](https://leetcode.cn/problems/sort-list/)
+
+
+### 数组中的第K个最大元素
+
+[215. 数组中的第K个最大元素](https://leetcode.cn/problems/kth-largest-element-in-an-array/)
+
+```java
+class Solution {
+    // 取到第k大的元素 -> 取第 length - k + 1小的元素
+    // 取第2大的元素 在[3,2,1,5,6,4] -> 5
+    // 6 - 2 + 1= 5 第5小的元素
+    public int findKthLargest(int[] nums, int k) {
+        k = nums.length - k + 1;
+        return quickSort(nums, 0, nums.length - 1, k);
+    }
+
+    private int quickSort(int[] nums, int start, int end, int k) {
+        if (start == end) {
+            return nums[start];
+        }
+
+        int pivotIndex = pritition(nums, start, end);
+        int num = pivotIndex - start + 1;
+        if (num == k) {
+            return nums[pivotIndex];
+        } else if (num < k) {
+            return quickSort(nums, pivotIndex + 1, end, k - num);
+        } else {
+            return quickSort(nums, start, pivotIndex - 1, k);
+        }
+    }
+
+    private int pritition(int[] nums, int start, int end) {
+        int pivotIndex = end;
+        int traversalIndex= start;
+
+        for (int i = start; i < end; i++) {
+            if (nums[i] <= nums[pivotIndex]) {
+                swap(nums, i, traversalIndex);
+                traversalIndex++;
+            }
+        }
+        swap(nums, traversalIndex, end);
+        return traversalIndex;
+    }
+
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+}
+```
+
