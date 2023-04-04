@@ -109,7 +109,7 @@ public class Main {
         for (int i = 0; i < leftLength; i++) {
             left[i] = nums[start + i];
         }
-        for (int j = 0; j < leftLength; j++) {
+        for (int j = 0; j < rightLength; j++) {
             right[j] = nums[mid + 1 + j];
         }
 
