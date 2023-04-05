@@ -934,3 +934,12 @@ public int hashCode(char[] key, int hashSize) {
 }
 ```
 
+
+
+## 2.3 hash冲突
+
+- 表面原因：会有一些key会map到相同的index上
+- 本质：无限空间往有限空间映射
+
+
+
