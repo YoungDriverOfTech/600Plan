@@ -890,3 +890,47 @@ class Solution {
 }
 ```
 
+
+
+# 2. 查询时间为O(1)的数据结构-哈希表
+
+## 2.1 哈希表基本原理
+
+- 数组通过下标访问数据的一种拓展
+- 核心：利用哈希函数，将键值映射到数组上（bucket）
+
+
+
+## 2.2 Hash Function哈希函数
+
+- 哈希函数是用来将一个字符串或者任何其他类型转换为小于hash表大小且大于等于0的整数
+- 一个好的哈希函数
+  - 尽可能少的产生冲突
+  - 算得快
+
+
+
+ ### 哈希函数案例
+
+一种广泛使用的哈希函数算法是使用数值33（Times 33算法）
+
+hashcode("abcd") = ascii(a) * 33^3 + ascii(b) * 33^2 + ascii(c) * 33^1 + ascii(d)
+
+​								=(97 * * 33^3 + 98  * 33^2 + 99 * 33^1 + 100) % HASH_SIZE
+
+​								= 3595978 % HASH_SIZE
+
+其中HASH_SIZE表示哈希表的大小
+
+给出一个字符串作为key和一个哈希表的大小，返回着个字符串的哈希值
+
+```java
+public int hashCode(char[] key, int hashSize) {
+  long result = 0;
+  for (int i = 0; i < key.length; i++) {
+    result = (result * 33 + (int)(key[i])) % hashSize;
+  }
+  return (int) result;
+}
+```
+
