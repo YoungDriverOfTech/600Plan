@@ -973,3 +973,8 @@ public int hashCode(char[] key, int hashSize) {
 
 
 
+### 扩容：重hashrehashing
+
+- 哈希表容量的大小在一开始是不确定的，在需要的时候，可以对底层数组进行扩容
+- 一种简单策略：如果哈希表存储元素太多，将哈希表容量扩大一倍，并将所有的key的哈希值重新计算映射到信的bucket上
+
