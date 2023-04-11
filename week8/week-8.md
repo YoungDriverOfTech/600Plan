@@ -1063,3 +1063,33 @@ class Solution {
 
 
 
+### 同构字符串
+
+[205. 同构字符串](https://leetcode.cn/problems/isomorphic-strings/)
+
+```java
+class Solution {
+    public boolean isIsomorphic(String s, String t) {
+        Map<Character, Character> map = new HashMap<>();
+        char[] sChars = s.toCharArray();
+        char[] tChars = t.toCharArray();
+
+        for (int i = 0; i < sChars.length; i++) {
+            char sChar = sChars[i];
+            char tChar = tChars[i];
+
+            if (map.containsKey(sChar)) {
+                if (map.get(sChar) != tChar) {
+                    return false;
+                }
+            } else if (map.containsValue(tChar)) {
+                return false;
+            } else {
+                map.put(sChar, tChar);
+            }
+        }
+        return true;
+    }
+}
+```
+
