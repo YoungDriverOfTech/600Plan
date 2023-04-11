@@ -980,5 +980,32 @@ public int hashCode(char[] key, int hashSize) {
 
 
 
-## 2.4 实现自己的hashMap
+## 2.5 实战
+
+
+
+### 存在重复元素
+
+[217. 存在重复元素](https://leetcode.cn/problems/contains-duplicate/)
+
+```java
+class Solution {
+    public boolean containsDuplicate(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return false;
+        }
+
+        Set<Integer> set = new HashSet<>();
+        for (int num : nums) {
+            if (set.contains(num)) {
+                return true;
+            }
+            set.add(num);
+        }
+        return false;
+    }
+}
+```
+
+
 
