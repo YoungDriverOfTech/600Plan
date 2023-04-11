@@ -1067,6 +1067,8 @@ class Solution {
 
 [205. 同构字符串](https://leetcode.cn/problems/isomorphic-strings/)
 
+利用一个map
+
 ```java
 class Solution {
     public boolean isIsomorphic(String s, String t) {
@@ -1082,10 +1084,45 @@ class Solution {
                 if (map.get(sChar) != tChar) {
                     return false;
                 }
-            } else if (map.containsValue(tChar)) {
+            } else if (map.containsValue(tChar)) { // 不同的字符映射到了同一个字符 X
                 return false;
             } else {
                 map.put(sChar, tChar);
+            }
+        }
+        return true;
+    }
+}
+```
+
+利用两个map
+
+双映射
+
+```java
+class Solution {
+    public boolean isIsomorphic(String s, String t) {
+        Map<Character, Character> map1 = new HashMap<>();
+        Map<Character, Character> map2 = new HashMap<>();
+
+        char[] sChars = s.toCharArray();
+        char[] tChars = t.toCharArray();
+
+        for (int i = 0; i < sChars.length; i++) {
+            char sChar = sChars[i];
+            char tChar = tChars[i];
+
+            if (map1.containsKey(sChar)) {
+                if (map1.get(sChar) != tChar) {
+                    return false;
+                }
+            } else if (map2.containsKey(tChar)) {
+                if (map2.get(tChar) != sChar) {
+                    return false;
+                }
+            } else {
+                map1.put(sChar, tChar);
+                map2.put(tChar, sChar);
             }
         }
         return true;
