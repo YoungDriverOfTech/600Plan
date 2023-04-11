@@ -1034,3 +1034,32 @@ class Solution {
 }
 ```
 
+
+
+### 两数之和
+
+[1. 两数之和](https://leetcode.cn/problems/two-sum/)
+
+```java
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            int num = nums[i];
+
+            if (map.containsKey(target - num)) {
+                int[] result = new int[2];
+                result[0] = i;
+                result[1] = map.get(target - num);
+                return result;
+            }
+
+            map.put(num, i);
+        }
+        return null;
+    }
+}
+```
+
+
+
