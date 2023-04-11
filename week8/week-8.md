@@ -1130,3 +1130,42 @@ class Solution {
 }
 ```
 
+
+
+### 单词规律
+
+[290. 单词规律](https://leetcode.cn/problems/word-pattern/)
+
+```java
+class Solution {
+    public boolean wordPattern(String pattern, String s) {
+        Map<Character, String> map = new HashMap<>();
+        Set<String> set = new HashSet<>();
+
+        String[] words = s.split(" ");
+        if (pattern.length() != words.length) {
+            return false;
+        }
+
+        for (int i = 0; i < words.length; i++) {
+            char key = pattern.charAt(i);
+            String word = words[i];
+
+            if (map.containsKey(key)) {
+                if (!word.equals(map.get(key))) {
+                    return false;
+                }
+            } else if (set.contains(word)) {
+                // 两个字符对应一个单词，错
+                return false;
+            } else {
+                map.put(key, word);
+                set.add(word);
+            }
+        }
+
+        return true;
+    }
+}
+```
+
