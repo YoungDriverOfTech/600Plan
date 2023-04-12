@@ -1169,3 +1169,45 @@ class Solution {
 }
 ```
 
+
+
+### 有效的字母异位词
+
+[242. 有效的字母异位词](https://leetcode.cn/problems/valid-anagram/)
+
+```java
+class Solution {
+
+    // 字符相减可以计算出来一个ascii码值，这个值可以当作索引
+    public boolean isAnagram(String s, String t) {
+        if (s == null || t == null || s.length() != s.length()) {
+            return false;
+        }
+
+        int[] indexArr = new int[26];
+        // 统计s里面每个字符出现的次数
+        for (int i = 0; i < s.length(); i++) {
+            indexArr[s.charAt(i) - 'a'] += 1;
+        }
+
+        // 计算t里面出现的次数，如果出现负值，说明t里面有字符是多余s的，不满足条件
+        for (int i = 0; i < t.length(); i++) {
+            indexArr[t.charAt(i) - 'a'] -= 1;
+
+            if (indexArr[t.charAt(i) - 'a'] < 0) {
+                return false;
+            }
+        }
+
+        // 如果s里面的字符有多余t的字符，也不满足
+        for (int i = 0; i < indexArr.length; i++) {
+            if (indexArr[i] != 0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+}
+```
+
