@@ -1217,6 +1217,8 @@ class Solution {
 
 [49. 字母异位词分组](https://leetcode.cn/problems/group-anagrams/)
 
+解法1
+
 ```java
 class Solution {
   	// Time: O(n * klogk) n是strs的size，k是strs里面单词的平均长度
@@ -1234,6 +1236,50 @@ class Solution {
             Arrays.sort(strArr);
             String key = new String(strArr);
 
+            List<String> list = map.getOrDefault(key, new ArrayList<String>());
+            list.add(str);
+            map.put(key, list);
+        }
+
+        for (Map.Entry<String, List<String>> entry : map.entrySet()) {
+            result.add(entry.getValue());
+        }
+        return result;
+    }
+}
+```
+
+解法2
+
+```java
+class Solution {
+    // Time: O(n * klogk) n是strs的size，k是strs里面单词的平均长度
+  	// Space: O(n * k)
+    public List<List<String>> groupAnagrams(String[] strs) {
+        if (strs == null || strs.length == 0) {
+            return Collections.emptyList();
+        }
+
+        List<List<String>> result = new ArrayList<>();
+        Map<String, List<String>> map = new HashMap<>();
+
+        for (String str : strs) {
+            // 统计字符个数
+            int[] arr = new int[26];
+            for (int i = 0; i < str.length(); i++) {
+                arr[str.charAt(i) - 'a'] += 1;
+            }
+
+            // key是拼接出来的，字符串的某个字符+数量成为key
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < arr.length; i++) {
+                if (arr[i] != 0) {
+                    char ch = (char)(i + 'a'); // 需要进行强制类型转换
+                    sb.append(ch).append(arr[i]);
+                }
+            }
+
+            String key = sb.toString();
             List<String> list = map.getOrDefault(key, new ArrayList<String>());
             list.add(str);
             map.put(key, list);
