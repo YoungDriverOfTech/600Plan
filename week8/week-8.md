@@ -1211,3 +1211,37 @@ class Solution {
 }
 ```
 
+
+
+### 字母异位词分组
+
+[49. 字母异位词分组](https://leetcode.cn/problems/group-anagrams/)
+
+```java
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        if (strs == null || strs.length == 0) {
+            return Collections.emptyList();
+        }
+
+        List<List<String>> result = new ArrayList<>();
+        Map<String, List<String>> map = new HashMap<>();
+
+        for (String str : strs) {
+            char[] strArr = str.toCharArray();
+            Arrays.sort(strArr);
+            String key = new String(strArr);
+
+            List<String> list = map.getOrDefault(key, new ArrayList<String>());
+            list.add(str);
+            map.put(key, list);
+        }
+
+        for (Map.Entry<String, List<String>> entry : map.entrySet()) {
+            result.add(entry.getValue());
+        }
+        return result;
+    }
+}
+```
+
