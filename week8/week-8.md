@@ -1219,6 +1219,8 @@ class Solution {
 
 ```java
 class Solution {
+  	// Time: O(n * klogk) n是strs的size，k是strs里面单词的平均长度
+  	// Space: O(n * k)
     public List<List<String>> groupAnagrams(String[] strs) {
         if (strs == null || strs.length == 0) {
             return Collections.emptyList();
