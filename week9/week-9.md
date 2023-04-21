@@ -92,3 +92,51 @@ class Solution {
 }
 ```
 
+
+
+### 最接近的三数之和
+
+[16. 最接近的三数之和](https://leetcode.cn/problems/3sum-closest/)
+
+```java
+class Solution {
+    public int threeSumClosest(int[] nums, int target) {
+        Arrays.sort(nums);
+
+        int result = Integer.MAX_VALUE;
+        for (int i = 0; i < nums.length - 2; i++) {
+            if (i > 0 && nums[i] == nums[i - 1]) {
+                continue;
+            }
+
+            int start = i + 1;
+            int end = nums.length  -1;
+            while (start < end) {
+                int sum = nums[i] + nums[start] + nums[end];
+                if (sum == target) {
+                    return sum;
+                }
+
+                if (Math.abs(sum - target) < Math.abs(result - target)) {
+                    result = sum;
+                }
+
+                if (sum > target) {
+                    // 去重
+                    while (start < end && nums[end] == nums[end - 1]) {
+                        end--;
+                    }
+                    end--;
+                } else {
+                    while (start < end && nums[start] == nums[start + 1]) {
+                        start++;
+                    }
+                    start++;
+                }
+            }
+        }
+        return result;
+    }
+}
+```
+
