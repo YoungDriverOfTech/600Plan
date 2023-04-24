@@ -140,3 +140,34 @@ class Solution {
 }
 ```
 
+
+
+### 有效三角形的个数
+
+[611. 有效三角形的个数](https://leetcode.cn/problems/valid-triangle-number/)
+
+```java
+class Solution {
+    public int triangleNumber(int[] nums) {
+        Arrays.sort(nums);
+
+        int result = 0;
+        for (int i = nums.length - 1; i >= 2; i--) {
+            int start = 0;
+            int end = i - 1;
+
+            while (start < end) {
+                int sum = nums[start] + nums[end];
+                if (sum > nums[i]) {
+                    result += end - start;// 因为已经排序过了，所以start后面的一定都满足条件
+                    end--;
+                } else {
+                    start++;
+                }
+            }
+        }
+        return result;
+    }
+}
+```
+
