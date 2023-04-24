@@ -171,3 +171,31 @@ class Solution {
 }
 ```
 
+
+
+### 盛最多水的容器
+
+[11. 盛最多水的容器](https://leetcode.cn/problems/container-with-most-water/)
+
+```java
+class Solution {
+    public int maxArea(int[] height) {
+        int left = 0;
+        int right = height.length - 1;
+        int result = 0;
+
+        while (left < right) {
+            int square = Math.min(height[left], height[right]) * (right - left);
+            result = Math.max(square, result);
+
+            if (height[left] < height[right]) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+        return result;
+    }
+}
+```
+
