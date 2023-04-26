@@ -274,3 +274,37 @@ class Solution {
 }
 ```
 
+
+
+## 1.2 同向型双指针
+
+### 滑动窗口模板
+
+```java
+public void slidingWindow(int[] nums) {
+  // 可能需要map记录窗口内元素
+  Map<Integer, Integer> map;
+  
+  // 同向双指针
+  int i = 0;
+  int j = 0;
+  
+  // 外层for循环，内层while循环作为主体
+  for (int i = 0; i < nums.length; i++) {
+    while (j < nums.length) {
+      // 搞清楚窗口扩展条件
+      if (condition 1) {
+        j++;
+        
+        // 更新j状态，窗口内数据更新
+      } else {
+        break;
+      }
+    }
+    
+    // 窗口收缩条件
+    // 更新i的状态，窗口内数据更新
+  }
+}
+```
+
