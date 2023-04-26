@@ -343,3 +343,32 @@ class Solution {
 }
 ```
 
+解法2
+
+```java
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        int[] arr = new int[256];
+        int i = 0;
+        int j = 0;
+        int result = 0;
+
+        for (i = 0; i < s.length(); i++) {
+            while (j < s.length()) {
+                char ch = s.charAt(j);
+                if (arr[ch] == 0) {
+                    arr[ch] = 1;
+                    result = Math.max(result, j - i + 1);
+                    j++;
+                } else {
+                    break;
+                }
+            }
+
+            arr[s.charAt(i)] = 0;
+        }
+        return result;
+    }
+}
+```
+
