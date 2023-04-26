@@ -199,3 +199,78 @@ class Solution {
 }
 ```
 
+
+
+### 接雨水
+
+[42. 接雨水](https://leetcode.cn/problems/trapping-rain-water/)
+
+三重循环
+
+```java
+class Solution {
+    public int trap(int[] height) {
+        // 找到每个点左右两边最大的柱子。计算当前点可以储存多少水的时候，就可以用较小柱子的高度-当前柱子高度
+        if (height == null || height.length <= 2) {
+            return 0;
+        }
+
+        // 每个点左边的最大柱子高度
+        int[] left = new int[height.length];
+        int max = Integer.MIN_VALUE;
+        for (int i = 0; i < height.length; i++) {
+            max = Math.max(max, height[i]);
+            left[i] = max; // 如果当前柱子是最高的，那么就把当前柱子的高度，赋值给left[i]. 那么在计算的时候，当前的点可以存储的水一定是0
+        }
+
+        int[] right = new int[height.length];
+        max = Integer.MIN_VALUE;
+        for (int i = height.length - 1; i >= 0; i--) {
+            max = Math.max(max, height[i]);
+            right[i] = max;
+        }
+
+        int result = 0;
+        for (int i = 0; i < height.length; i++) {
+            result += Math.min(left[i], right[i]) - height[i];
+        }
+        return result;
+    }
+}
+```
+
+
+
+双指针
+
+```java
+class Solution {
+    public int trap(int[] height) {
+        if (height == null || height.length <= 2) {
+            return 0;
+        }
+
+        int result = 0;
+        int left = 0;
+        int right = height.length - 1;
+        int leftMax = height[left];
+        int rightMax = height[right];
+
+        // 必须写上等于，因为左右指针相等的时候，相等的这个索引所在的位置，也可能存水
+        while (left <= right) {
+            // 根据短板的原理，如果leftMax < rightMax，说明左边的存水量是leftMax - height[i]
+            if (leftMax < rightMax) {
+                leftMax = Math.max(leftMax, height[left]);
+                result += leftMax - height[left];
+                left++;
+            } else {
+                rightMax = Math.max(rightMax, height[right]);
+                result += rightMax - height[right];
+                right--;
+            }
+        }
+        return result;
+    }
+}
+```
+
