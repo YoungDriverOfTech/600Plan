@@ -308,3 +308,38 @@ public void slidingWindow(int[] nums) {
 }
 ```
 
+
+
+### 无重复字符的最长子串
+
+[3. 无重复字符的最长子串](https://leetcode.cn/problems/longest-substring-without-repeating-characters/)
+
+模板解法
+
+```java
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        Set<Character> set = new HashSet<>();
+        int i = 0;
+        int j = 0;
+        int result = 0;
+
+        for (i = 0; i < s.length(); i++) {
+            while (j < s.length()) {
+                char ch = s.charAt(j);
+                if (!set.contains(ch)) {
+                    set.add(ch);
+                    result = Math.max(result, j - i + 1);
+                    j++;
+                } else {
+                    break;
+                }
+            }
+
+            set.remove(s.charAt(i));
+        }
+        return result;
+    }
+}
+```
+
