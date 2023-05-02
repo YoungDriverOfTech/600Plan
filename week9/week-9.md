@@ -632,3 +632,44 @@ Robin-karp算法
 
 
 
+
+
+## 2.4 堆排序
+
+- 核心思想：将堆顶节点与最末的节点进行交换，然后重新根据堆性质是的堆顶节点（根）成为最值
+- 步骤
+  - 建堆
+  - 把根节点去除，放到结果集里面，和head-size-1
+  - 把最后的叶子节点放到根节点的位置，进行MAX-HEAPIFY
+  - 循环第二/三步，直到length 到2
+- Time：O(nlogn)
+
+
+
+## 2.5 实战 
+
+### 数组中的第K个最大元素
+
+[215. 数组中的第K个最大元素](https://leetcode.cn/problems/kth-largest-element-in-an-array/)
+
+```java
+class Solution {
+    public int findKthLargest(int[] nums, int k) {
+        if (nums == null || nums.length == 0) {
+            return -1;
+        }
+
+        Queue<Integer> queue = new PriorityQueue<>((a, b) -> b - a);
+        for (int i = 0; i < nums.length; i++) {
+            queue.offer(nums[i]);
+        }
+
+        // 删除掉堆中前面k-1个
+        for (int i = 0; i < k - 1; i++) {
+            queue.poll();
+        }
+        return queue.peek();
+    }
+}
+```
+
