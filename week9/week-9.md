@@ -652,6 +652,8 @@ Robin-karp算法
 
 [215. 数组中的第K个最大元素](https://leetcode.cn/problems/kth-largest-element-in-an-array/)
 
+利用类库
+
 ```java
 class Solution {
     public int findKthLargest(int[] nums, int k) {
@@ -669,6 +671,66 @@ class Solution {
             queue.poll();
         }
         return queue.peek();
+    }
+}
+```
+
+手写堆排序
+
+```java
+class Solution {
+    public int findKthLargest(int[] nums, int k) {
+        if (nums == null || nums.length == 0) {
+            return -1;
+        }
+
+        int heapSize = nums.length;
+        // 建立大根堆
+        buildMaxHeap(nums);
+
+        // 使用堆排序，把堆顶的元素，和堆尾的元素交换，这样数组会被分成两个部分，左边是大根堆，右边是排序后的元素
+        // 那么我们只需要把堆顶的元素交换k-1次，那么剩下的堆顶元素就自然是第k大的了
+        for (int i = nums.length - 1; i >= nums.length - (k - 1); i--) {
+            swap(nums, 0, i);
+
+            // 堆的元素减少了一个，所以size也要减1，减完以后需要堆堆重新堆化
+            heapSize--;
+            maxHeapify(nums, 0, heapSize);
+        }
+
+        return nums[0];
+    }
+
+    private void buildMaxHeap(int[] nums) {
+        for (int i = nums.length / 2; i >= 0; i--) {
+            maxHeapify(nums, i, nums.length);
+        }
+    }
+
+    private void maxHeapify(int[] nums, int i, int heapSize) {
+        // 根据公式算出所有节点
+        int l = 2 * i + 1;
+        int r = 2 * i + 2;
+        int largest = i;
+        if (l < heapSize && nums[l] > nums[largest]) {
+            largest = l;
+        }
+
+        if (r < heapSize && nums[r] > nums[largest]) {
+            largest = r;
+        }
+
+        if (largest != i) {
+            swap(nums, i, largest);
+            // 交换玩以后，要对largest重新进行堆化
+            maxHeapify(nums, largest, heapSize);
+        }
+    }
+
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
     }
 }
 ```
