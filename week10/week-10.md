@@ -142,3 +142,36 @@ class Solution {
 }
 ```
 
+
+
+### 使用最小花费爬楼梯
+
+[746. 使用最小花费爬楼梯](https://leetcode.cn/problems/min-cost-climbing-stairs/)
+
+```java
+class Solution {
+    public int minCostClimbingStairs(int[] cost) {
+        // 题意解释：到达楼梯顶部是要走完整个cost，要超出cost数组最后一个元素才算走完
+        if (cost == null || cost.length == 0) {
+            return 0;
+        }
+
+        // State: dp[n]:到达第n级阶梯所需要的最小花费
+        int[] dp = new int[2];
+        
+        // 因为 你可以选择从下标为 0 或下标为 1 的台阶开始爬楼梯。 -》 说明0和1级阶梯的话是不用花费的，初始为0即可
+        dp[0] = 0;
+        dp[1] = 0;
+
+        int n = cost.length;
+        for (int i = 2; i <= n; i++) {
+            // Function: dp[i] = min(dp[i - 1] + cost[i - 1], dp[i - 2] + cost[i - 2])
+            dp[i % 2] = Math.min(dp[(i - 1) % 2] + cost[i - 1], dp[(i - 2) % 2] + cost[i - 2]);
+        }
+
+        // Solution: dp[n % 2].  因为n是超过了cost的索引，是最终的结果
+        return dp[n % 2];
+    }
+}
+```
+
