@@ -735,3 +735,73 @@ class Solution {
 }
 ```
 
+
+
+
+
+
+
+### 23 todo  视频不能看
+
+
+
+### 数据流的中位数
+
+[295. 数据流的中位数](https://leetcode.cn/problems/find-median-from-data-stream/)
+
+```java
+class MedianFinder {
+    // 使用双堆，一个大根堆：存左半部分。一个小根堆：存右半部分
+    private Queue<Integer> leftQueue;
+    private Queue<Integer> rightQueue;
+
+    public MedianFinder() {
+        leftQueue = new PriorityQueue<>((a, b) -> b - a);
+        rightQueue = new PriorityQueue<>((a, b) -> a - b);
+    }
+    
+    public void addNum(int num) {
+        // 左边的堆要比右边的多存一个，多处来的那个就是中位数，如果size一样，则取平均值
+        int leftSize = leftQueue.size();
+        int rightSize = rightQueue.size();
+
+        if (leftSize == rightSize) {
+            // size相同，存入左边。但是存入的元素要比右边的堆顶小才行，如果比右边堆顶大，那么把右边堆顶的元素放到左边的堆，新元素存到右边
+            if (leftQueue.isEmpty() || num <= rightQueue.peek()) {
+                leftQueue.offer(num);
+            } else {
+                leftQueue.offer(rightQueue.poll());
+                rightQueue.offer(num);
+            }
+        } else {
+            // 如果size不同，那么应该把元素放到右边的堆中。
+            // 如果新元素 >= left堆的顶，那么可以无脑放到右边的堆。如果新元素 < left堆顶，那么就要把左堆顶的元素拿出来，放到右边
+            // 新元素放到左堆
+            if (num >= leftQueue.peek()) {
+                rightQueue.offer(num);
+            } else {
+                rightQueue.offer(leftQueue.poll());
+                leftQueue.offer(num);
+            }
+        }
+    }
+    
+    public double findMedian() {
+        int leftSize = leftQueue.size();
+        int rightSize = rightQueue.size();
+        if (leftSize != rightSize) {
+            return leftQueue.peek();
+        } else {
+            return ((double)leftQueue.peek() + (double)rightQueue.peek()) / 2;
+        }
+    }
+}
+
+/**
+ * Your MedianFinder object will be instantiated and called as such:
+ * MedianFinder obj = new MedianFinder();
+ * obj.addNum(num);
+ * double param_2 = obj.findMedian();
+ */
+```
+
