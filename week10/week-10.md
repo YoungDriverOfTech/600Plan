@@ -175,3 +175,56 @@ class Solution {
 }
 ```
 
+
+
+## 2.2 单序列动态规划：打家劫舍系列
+
+### 打家劫舍
+
+[198. 打家劫舍](https://leetcode.cn/problems/house-robber/)
+
+普通dp
+
+```java
+class Solution {
+    public int rob(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+
+        // dp多一个单位来计算，为了防止空指针之类的问题
+        int[] dp = new int[nums.length + 1];
+        dp[0] = 0;
+        dp[1] = nums[0];
+
+        for (int i = 2; i < dp.length; i++) {
+            dp[i] = Math.max(dp[i - 2] + nums[i - 1], dp[i - 1]);
+        }
+        return dp[nums.length];
+    }
+}
+```
+
+滚动数组
+
+```java
+class Solution {
+    public int rob(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+
+        // dp多一个单位来计算，为了防止空指针之类的问题
+        int[] dp = new int[2];
+        dp[0] = 0;
+        dp[1] = nums[0];
+        int n = nums.length;
+
+        for (int i = 2; i <= n; i++) {
+            dp[i % 2] = Math.max(dp[(i - 2) % 2] + nums[i - 1], dp[(i - 1) % 2]);
+        }
+        return dp[n % 2];
+    }
+}
+```
+
