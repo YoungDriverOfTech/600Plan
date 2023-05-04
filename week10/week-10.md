@@ -330,3 +330,43 @@ class Solution {
 }
 ```
 
+
+
+### 删除并获得点数
+
+[740. 删除并获得点数](https://leetcode.cn/problems/delete-and-earn/)
+
+```java
+class Solution {
+    // 思路：选了一个数字以后，数组里面的这个数组会被全部选择。这个数字（具体值，不是索引）的左边/右边则不能选择
+    // -> 打家劫舍问题，Math.max(dp[i - 1], dp[i - 2] + nums[i])
+    // 可以先把nums转换成一个价值数组，这个数组索引是原来nums里面的值，即nums[i], 而索引对应的值则是nums[i] * count ，即总价值
+    public int deleteAndEarn(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+
+        // 求出nums最大值，确定values数组的长度
+        int max = Integer.MIN_VALUE;
+        for (int num : nums) {
+            max = Math.max(num, max);
+        }
+
+        // new出价值数组，因为数组索引从0开始，所以总长度上需要加1
+        int[] values = new int[max + 1];
+        for (int num : nums) {
+            values[num] += num; // 以nums = [2,2,3,3,3,4]为例 -- values = [0, 0, 4, 9, 4]
+        }
+
+        int[] dp = new int[2];
+        dp[0] = 0; // dp[0] 肯定等于0. 因为在计算values数组是，nums[i] == 0 的值不管加几次，最终结果都是0
+        dp[1] = values[1]; // 原本应该是 Math.max(values[0], values[1]). 因为values[0]始终等于0，所以就简化了
+
+        for (int i = 2; i < values.length; i++) {
+            dp[i % 2] = Math.max(dp[(i - 1) % 2], dp[(i - 2) % 2] + values[i]);
+        }
+        return dp[(values.length - 1) % 2];
+    }
+}
+```
+
