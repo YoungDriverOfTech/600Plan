@@ -417,3 +417,63 @@ class Solution {
 }
 ```
 
+
+
+### 最长递增子序列的个数
+
+[673. 最长递增子序列的个数](https://leetcode.cn/problems/number-of-longest-increasing-subsequence/)
+
+```java
+class Solution {
+    public int findNumberOfLIS(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+
+        // State
+        // dp[i]: 表示以i结尾的最长递增子序列的长度，初始化为1
+        // count[i]: 表示以i结尾的最长递增子序列的的个数，初始化为1
+        int[] dp = new int[nums.length];
+        int[] count = new int[nums.length];
+        Arrays.fill(dp, 1);
+        Arrays.fill(count, 1);
+
+        // Function
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = 0; j < i; j++) {
+                // 只有当nums[i] > nums[j]的时候，才可能出现更长的子序列
+                if (nums[i] > nums[j]) {
+                    // 出现更长的子序列以后需要做两件事
+                    // 1. 更新dp[i]的长度，因为出现更长的子序列了
+                    // 2. 更新count[i]的个数：如果dp[j] + 1 > dp[i] -> 说明新的最长子序列出现了，需要把dp[i]更新成dp[j] + 1, count[i] = count[j]
+                    //                      如果dp[j] + 1 == dp[i] -> 说明等长的最长子序列出现了，需要把count[i] += 1
+                    if (dp[j] + 1 > dp[i]) {
+                        dp[i] = dp[j] + 1;
+                        count[i] = count[j];
+                    } else if (dp[j] + 1 == dp[i]) {
+                        count[i] += count[j]; // PS: 这里不能+=1
+                    } else {
+                        // 没有这种情况，因为
+                    }
+                }
+            }
+        }
+
+        // Solution:
+        // 找到最长的最长子序列的长度
+        int max = 0;
+        for (int num : dp) {
+            max = Math.max(num, max);
+        }
+
+        int result = 0;
+        for (int i = 0; i < dp.length; i++) {
+            if (max == dp[i]) {
+                result += count[i];
+            }
+        }
+        return result;
+    }
+}
+```
+
