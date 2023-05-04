@@ -477,3 +477,76 @@ class Solution {
 }
 ```
 
+
+
+### 俄罗斯套娃信封问题
+
+[354. 俄罗斯套娃信封问题](https://leetcode.cn/problems/russian-doll-envelopes/)
+
+```java
+class Solution {
+    // 思路： width生序排序，如果width一样的话，堆宽度逆序排序，这样的话在对宽度求最长子序列长度即可求出答案
+    // 会超时一些case. 85 / 87 个通过测试用例
+    /**
+        例子： 这样的话就能求出 1，2，3
+        [2,3].
+        [5,4],
+        [6,7],
+        [6,4]
+
+        更为复杂的例子：答案就是1，2，4，5.  对宽度求最长子序列的时候会自动把[6,7]过滤掉，去选择[6,5]
+        [2,3].
+        [5,4],
+        [6,7],
+        [6,5],
+        [7,6]
+     */
+    public int maxEnvelopes(int[][] envelopes) {
+        if (envelopes == null || envelopes.length == 0 || envelopes[0].length == 0) {
+            return 0;
+        }
+
+        // Sort
+        Arrays.sort(envelopes, (int[]a, int[]b) -> {
+            return a[0] == b[0] ? b[1] - a[1] : a[0] - b[0];
+        });
+
+        // 把排好序的信封的高度做成一个数组，然后进行最长子序列取得
+        int[] heights = new int[envelopes.length];
+        for (int i = 0; i < envelopes.length; i++) {
+            heights[i] = envelopes[i][1];
+        }
+
+        return lengthOfLIS(heights);
+    }
+
+    // 思路：dp[i]: 以nums[i]结尾的最长严格递增子序列的长度
+    // 那么我们就便利nums，取出每一个数字来，和这个数字之前的每一个数nums[j]比，如果说大于之前的数nums[j]，那么i这个位置上
+    // dp的值，就应该是dp[i] = Math.max(dp[0] + 1...dp[i - 1] + 1)
+    public int lengthOfLIS(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+
+        // dp[i]: 表示以i结尾的最长子序列的长度,初始化为1
+        int[] dp = new int[nums.length];
+        Arrays.fill(dp, 1);
+
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = 0; j < i; j++) {
+                // 当nums[i] > nums[j]的时候，才会产生更长的子序列
+                if (nums[i] > nums[j]) {
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
+                }
+            }
+        }
+
+        int result = 0;
+        for (int value : dp) {
+            result = Math.max(result, value);
+        }
+        return result;
+    }
+}
+```
+
