@@ -621,3 +621,41 @@ class Solution {
 }
 ```
 
+
+
+### 乘积最大子数组
+
+[152. 乘积最大子数组](https://leetcode.cn/problems/maximum-product-subarray/)
+
+```java
+class Solution {
+    // 思路：使用双dp数组。
+    // maxDp[i]: 表示以i结尾的元素的最大乘积（正数）
+    // minDp[i]: 表示以i结尾的元素的最小乘积（负数）
+    // 遍历的时候判断nums[i]的正负，正的话最大乘积=maxDp[i - 1] * nums[i].负的话最大乘积=minDp[i - 1] * nums[i]
+    public int maxProduct(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+
+        int[] maxDp = new int[nums.length];
+        int[] minDp = new int[nums.length];
+        maxDp[0] = minDp[0] = nums[0];
+        
+        int result = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            maxDp[i] = minDp[i] = nums[i];
+            if (nums[i] > 0) {
+                maxDp[i] = Math.max(maxDp[i], maxDp[i - 1] * nums[i]);
+                minDp[i] = Math.min(minDp[i], minDp[i - 1] * nums[i]);
+            } else if (nums[i] < 0) {
+                maxDp[i] = Math.max(maxDp[i], minDp[i - 1] * nums[i]);
+                minDp[i] = Math.min(minDp[i], maxDp[i - 1] * nums[i]);
+            }
+            result = Math.max(result, maxDp[i]);
+        }
+        return result;
+    }
+}
+```
+
