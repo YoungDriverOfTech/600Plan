@@ -559,3 +559,65 @@ class Solution {
 
 
 
+### 最大子数组和
+
+[53. 最大子数组和](https://leetcode.cn/problems/maximum-subarray/)
+
+普通解法
+
+```java
+class Solution {
+    public int maxSubArray(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+
+        // dp[i]: 表示的是以i结尾的最大收益。
+        // 当遍历到i的索引的时候，那么我们需要判断的是dp[i - 1]是不是正收益，
+        // 如果是正的（包括0） -> dp[i] = dp[i - 1] + nums[i]
+        // 如果是负的 -> dp[i] = nums[i]
+        int[] dp = new int[nums.length];
+        dp[0] = nums[0];
+
+        for (int i = 1; i < nums.length; i++) {
+            if (dp[i - 1] > 0) {
+                dp[i] = dp[i - 1] + nums[i];
+            } else {
+                dp[i] = nums[i];
+            }
+        }
+
+        int result = Integer.MIN_VALUE;
+        for (int value : dp) {
+            result = Math.max(value, result);
+        }
+        return result;
+    }
+}
+```
+
+状态压缩优化
+
+```java
+class Solution {
+    public int maxSubArray(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+
+        int dp = nums[0];
+        int result = nums[0];   // 这块是为了只有一个元素的数组
+
+        for (int i = 1; i < nums.length; i++) {
+            if (dp > 0) {
+                dp = dp + nums[i];
+            } else {
+                dp = nums[i];
+            }
+            result = Math.max(result, dp);
+        }
+        return result;
+    }
+}
+```
+
