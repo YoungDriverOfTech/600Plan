@@ -370,3 +370,50 @@ class Solution {
 }
 ```
 
+
+
+## 2.3 单序列动态规划：最长上升子序列LIS系列
+
+- 题目特点：经典单序列dp问题，经典状态设计
+- 解题要点：dp[i]表示以nums[i]结尾的最长递增子序列长度
+
+### 最长递增子序列
+
+[300. 最长递增子序列](https://leetcode.cn/problems/longest-increasing-subsequence/)
+
+```java
+class Solution {
+    // 思路：dp[i]: 以nums[i]结尾的最长严格递增子序列的长度
+    // 那么我们就便利nums，取出每一个数字来，和这个数字之前的每一个数nums[j]比，如果说大于之前的数nums[j]，那么i这个位置上
+    // dp的值，就应该是dp[i] = Math.max(dp[0] + 1...dp[i - 1] + 1)
+    public int lengthOfLIS(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+
+        // 制表法
+        // State: dp[i]: 以nums[i]结尾的最长严格递增子序列的长度
+        // 以nums[i]结尾的最长严格递增子序列的长度至少为1，所以初始化为1
+        // 因为最终要便利dp数组去的最长严格递增子序列的长度，所以无法压缩状态，不能用滚动数组
+        int[] dp = new int[nums.length];
+        Arrays.fill(dp, 1);
+        for (int i = 0; i < nums.length; i++) {
+            // Function: 通过制表法。
+            // 遍历找之前结尾比nums【i】小的递增子序列，然后找到其中最长的
+            for (int j = 0; j < i; j++) {
+                if (nums[i] > nums[j]) {
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
+                }
+            }
+        }
+
+        // Solution: 计算结果
+        int result = 0;
+        for (int value : dp) {
+            result = Math.max(result, value);
+        }
+        return result;
+    }
+}
+```
+
