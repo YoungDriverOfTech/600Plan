@@ -6,11 +6,13 @@
 
 
 
+
+
 ## 1.2 四个步骤设计动态规划
 
 - 定义状态（State）：刻画一个最优解的结构特征
 - 定义状态转移方程（Function）：状态之间的联系与状态转移【核心难点】
-- 初始条件与边界条件（Condition）：基本条件是什么，最小状态是什么
+- 初始条件与边界条件（Condition）：基本条件是什么，最小状态是什么. 初始化第0个元素（数组的话填充最大/小值）
 - 最优解求解（Solution）
 
 
@@ -658,4 +660,63 @@ class Solution {
     }
 }
 ```
+
+
+
+## 2.5 单序列动态规划：带维度的单序列dp
+
+- 题目特点：在单序列的基础上，子问题还与维度k有关，k可能是颜色，长度，个数等
+- 解题要点：状态定义为dp[i] [k]，i和k分别为两个不同维度的单序列dp问题
+
+
+
+### 256. 粉刷房子
+
+![256](./images/256.png)
+
+
+
+![256](./images/256example.png)
+
+
+
+```java
+class Solution {
+  public int minCost(int[][] costs) {
+    if (costs == null || costs.length == 0 || costs[0] == null || cost[0].lenth == 0) {
+      return 0;
+    }
+    
+    int n = costs.length;
+    // State: dp[i][j]: 用颜色j粉刷第i个房子的最小花费
+    // 滚动数组： dp[i][j] = dp[i - 1][j] + costs[i][k]
+    // Solution: min(dp[n - 1][k]), 其中k=0，1，2
+    int[][] dp = new int[2][3];
+    
+    // 因为要求最小的花费，所以每个元素初始化为最大值
+    Arrays.fill(dp, new int[]{Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE});
+    
+    // 初始化第0个房子粉刷成不同颜色的花费
+    for (int i = 0; i < 3; i++) {
+      dp[0][i] = costs[0][i];
+    }
+    
+    for (int i = 0; i < n; i++) {
+      for (int j = 0; j < 3; j++) {
+        // 因为相邻的房子颜色不能一样，所以要控制j
+        for (int k = 0; k < 3; k++) {
+          if (j != k) {
+            dp[i % 2][j] = Math.min(dp[i][j], dp[(i - 1) % 2][k] + costs[i][j]);
+          }
+        }
+      }
+    }
+    
+    // Solution 刷完最后一个房子的总花费
+    return Math.min(Math.min(dp[(n - 1) % 2][0], dp[(n - 1) % 2][2]), dp[(n - 1) % 2][2]);
+  }
+}
+```
+
+
 
