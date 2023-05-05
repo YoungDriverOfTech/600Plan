@@ -844,3 +844,29 @@ class Solution {
 }
 ```
 
+
+
+### 买卖股票的最佳时机
+
+[121. 买卖股票的最佳时机](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock/)
+
+```java
+class Solution {
+    public int maxProfit(int[] prices) {
+        if (prices == null || prices.length == 0) {
+            return 0;
+        }
+
+        int minPrice = Integer.MAX_VALUE;
+        int maxProfit = Integer.MIN_VALUE;
+
+        // 贪心算法：每天的价格都拿出来和最小的价格算出利润。
+        for (int price : prices) {
+            minPrice = price < minPrice ? price : minPrice;
+            maxProfit = price - minPrice > maxProfit ? price - minPrice : maxProfit;
+        }
+        return maxProfit;
+    }
+}
+```
+
