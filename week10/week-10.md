@@ -870,3 +870,30 @@ class Solution {
 }
 ```
 
+
+
+### 买卖股票的最佳时机 II
+
+[122. 买卖股票的最佳时机 II](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-ii/)
+
+```java
+class Solution {
+
+    // 题目给出：任何时候最多只能持有1支股票，所以股票不能存着，也不能隔天买多股，然后等高价一起卖掉
+    // 只能是买入了以后，以发现有利可图就直接卖掉（贪心）。
+    public int maxProfit(int[] prices) {
+        if (prices == null || prices.length == 0) {
+            return 0;
+        }
+
+        int profit = 0;
+        for (int i = 1; i < prices.length; i++) {
+            if (prices[i] > prices[i - 1]) {
+                profit += prices[i] - prices[i - 1];
+            }
+        }
+        return profit;
+    }
+}
+```
+
