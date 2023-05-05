@@ -701,7 +701,7 @@ class Solution {
       dp[0][i] = costs[0][i];
     }
     
-    for (int i = 0; i < n; i++) {
+    for (int i = 1; i < n; i++) {
       for (int j = 0; j < 3; j++) {
         // 因为相邻的房子颜色不能一样，所以要控制j
         for (int k = 0; k < 3; k++) {
@@ -719,4 +719,128 @@ class Solution {
 ```
 
 
+
+### 粉刷房子follow up
+
+现在要求不是3中颜色，而是k中颜色
+
+Time: O(n * k^2)
+
+```java
+class Solution {
+  public int minCost(int[][] costs) {
+    if (costs == null || costs.length == 0 || costs[0] == null || cost[0].lenth == 0) {
+      return 0;
+    }
+    
+    int n = costs.length;
+    int K = costs[0].length;
+    // State: dp[i][j]: 用颜色j粉刷第i个房子的最小花费
+    // 滚动数组： dp[i][j] = dp[i - 1][j] + costs[i][k]
+    // Solution: min(dp[n - 1][k]), 其中k=0，1，2
+    int[][] dp = new int[2][K];
+    
+    // 因为要求最小的花费，所以每个元素初始化为最大值
+    for (int i = 0; i < n; i++) {
+      int[] colors = new int[K];
+      Arrays.fill(colors, Integer.MAX_VALUE);
+      dp[i] = colors;
+    }
+    
+    // 初始化第0个房子粉刷成不同颜色的花费
+    for (int i = 0; i < K; i++) {
+      dp[0][K] = costs[0][K];
+    }
+    
+    for (int i = 1; i < n; i++) {
+      for (int j = 0; j < K; j++) {
+        // 因为相邻的房子颜色不能一样，所以要控制j
+        for (int k = 0; k < K; k++) {
+          if (j != k) {
+            dp[i % 2][j] = Math.min(dp[i][j], dp[(i - 1) % 2][k] + costs[i][j]);
+          }
+        }
+      }
+    }
+    
+    // Solution 刷完最后一个房子的总花费
+    int result = Integer.MAX_VALUE;
+    for (int i = 0; i < K; i++) {
+      result = Math.min(dp[(n - 1) % 2][i], result);
+    }
+    
+    return result;
+  }
+}
+```
+
+
+
+优化时间复杂度到O(n * k)
+
+记录两个变量 minCost 和 secondMinCost。在求dp[i] [j]的时候，先求出 i - 1 房子图k中颜色的minCost 和 secondMinCost
+
+然后再比较当前房子粉刷的某种颜色和 i - 1房子的最小和次小的成本。如果最小的成本相同了，那么说明颜色一样，选择次小的成本当作dp[i] [j]的值。否则就选择最小的成本
+
+```java
+class Solution {
+  public int minCost(int[][] costs) {
+    if (costs == null || costs.length == 0 || costs[0] == null || cost[0].lenth == 0) {
+      return 0;
+    }
+    
+    int n = costs.length;
+    int K = costs[0].length;
+    // State: dp[i][j]: 用颜色j粉刷第i个房子的最小花费
+    // 滚动数组： dp[i][j] = dp[i - 1][j] + costs[i][k]
+    // Solution: min(dp[n - 1][k]), 其中k=0，1，2
+    int[][] dp = new int[2][K];
+    
+    // 因为要求最小的花费，所以每个元素初始化为最大值
+    for (int i = 0; i < n; i++) {
+      int[] colors = new int[K];
+      Arrays.fill(colors, Integer.MAX_VALUE);
+      dp[i] = colors;
+    }
+    
+    // 初始化第0个房子粉刷成不同颜色的花费
+    for (int i = 0; i < K; i++) {
+      dp[0][K] = costs[0][K];
+    }
+    
+    int minCost = Integer.MAX_VALUE;
+    int secondMinCost = Integer.MAX_VALUE;
+    for (int i = 1; i < n; i++) {
+      // 计算出最小和次小的成本
+      minCost = Integer.MAX_VALUE;
+      secondMinCost = Integer.MAX_VALUE;
+      for (int j = 0; j < K; j++) {
+        if (dp[(i - 1) % 2][j] <= minCost) {
+          secondMinCost = minCost;
+          minCost = dp[(i - 1) % 2][j];
+        } else if (dp[(i - 1) % 2][j] <= secondMinCost) {
+          secondMinCost = dp[(i - 1) % 2][j];
+        }
+      }
+      
+      // 取出dp的最小成本
+      for (int j = 0; j < K; j++) {
+        if (dp[(i - 1) % 2][j] == minCost) {
+          dp[i][j] = secondMinCost + costs[i][j];
+        } else {
+          dp[i][j] = minCost + costs[i][j];
+        }
+      }
+    }
+    
+    // Solution 刷完最后一个房子的总花费
+    int result = Integer.MAX_VALUE;
+    for (int i = 0; i < K; i++) {
+      result = Math.min(dp[(n - 1) % 2][i], result);
+    }
+    
+    return result;
+  }
+}
+```
 
