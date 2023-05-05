@@ -932,3 +932,62 @@ class Solution {
 }
 ```
 
+
+
+123
+
+
+
+### 买卖股票的最佳时机 IV
+
+[188. 买卖股票的最佳时机 IV](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-iv/)
+
+```java
+class Solution {
+    // DP动态规划思路： 这次规定了交易的最大次数k，这个k意味着买入+卖出才能构成一次交易. 
+    // 我们在这里定义，只有卖出操作完成时候，才能让交易次数+1
+
+    // dp[i][k][m]: 代表了第i天第k次交易后的最大利润 m=0: 未持股 m=1: 持股
+    // dp[i][k][0] -> dp[i - 1][k][0] 昨天未持股处在第k笔交易，今天也没持股，也处在第k笔交易
+    //             -> dp[i - 1][k - 1][1] + prices[i] 昨天持股处在第k - 1笔交易，今天卖出，所以交易次数+1 = k（因为买+卖=1笔）
+    // dp[i][k][1] -> dp[i - 1][k][1] 昨天持股处在第k笔交易，今天也持股，也处在第k笔交易
+    //             -> dp[i - 1][k][0] - prices[i] 昨天未持股处在第k笔交易，今天买入，也处在第k笔交易（因为买+卖=1笔）
+
+    // 初始条件(交易次数): dp[0][k][0] = 0
+    //                  dp[0][k][1] = -prices[0]
+    // 初始条件(天数):    dp[i]][0][0] = 0
+    //                  dp[i][0][1] = Math.max(dp[i - 1][0][1], dp[i - 1][0][0] + prices[i])  昨天已持有； 昨天未持有，今天买入
+
+    public int maxProfit(int k, int[] prices) {
+        if (prices == null || prices.length == 0 || k <= 0) {
+            return 0;
+        }
+
+        // PS: 只有卖出的时候才能算作交易次数
+        int n = prices.length;
+        int[][][] dp = new int[n][k + 1][2];
+
+        // 初始化交易次数
+        for (int i = 0; i <= k; i++) {
+            dp[0][i][0] = 0;
+            dp[0][i][1] = -prices[0];
+        }
+
+        // 初始化交易天数
+        for (int i = 1; i < n; i++) {
+            dp[i][0][0] = 0;
+            // 为什么k可以等于0，因为我们定义卖出才算一笔交易才会给k加1
+            dp[i][0][1] = Math.max(dp[i - 1][0][1], dp[i - 1][0][0] - prices[i]);
+        }
+
+        for (int i = 1; i < n; i++) {
+            for (int j = 1; j <= k; j++) {
+                dp[i][j][0] = Math.max(dp[i - 1][j][0], dp[i - 1][j - 1][1] + prices[i]);
+                dp[i][j][1] = Math.max(dp[i - 1][j][1], dp[i - 1][j][0] - prices[i]);
+            }
+        }
+        return dp[n - 1][k][0];
+    }
+}
+```
+
