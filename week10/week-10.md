@@ -876,11 +876,13 @@ class Solution {
 
 [122. 买卖股票的最佳时机 II](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-ii/)
 
+贪心
+
 ```java
 class Solution {
 
     // 题目给出：任何时候最多只能持有1支股票，所以股票不能存着，也不能隔天买多股，然后等高价一起卖掉
-    // 只能是买入了以后，以发现有利可图就直接卖掉（贪心）。
+    // 只能是买入了以后，一发现有利可图就直接卖掉（贪心）。
     public int maxProfit(int[] prices) {
         if (prices == null || prices.length == 0) {
             return 0;
@@ -893,6 +895,39 @@ class Solution {
             }
         }
         return profit;
+    }
+}
+```
+
+动态规划(可以用滚动数组优化，因为i的状态值和i-1有关系)
+
+```java
+class Solution {
+
+    // 动态规划思路
+    // dp[i][j]: 表示第i天交易之后（注意是交易完以后）能获得的最大利润，而j表示股票持有的状态0:未持股  1:持股
+    // dp[i][0] -> 昨天未持股，今天也为持股（没买入）dp[i - 1][0]
+    //          -> 昨天持股，今天卖出 dp[i - 1][1] + prices[i] (可以直接+价格，因为买入的时候已经在当天把价格当作成本支付了)
+    // dp[i][1] -> 昨天持股，今天也持股（没卖出） dp[i - 1][1]
+    //          -> 昨天未持股，今天买入 dp[i - 1][0] - prices[i]
+    // 初始化条件： dp[0][0] = 0;  dp[0][1] = -prives[i]
+    public int maxProfit(int[] prices) {
+        if (prices == null || prices.length == 0) {
+            return 0;
+        }
+
+        int n = prices.length;
+        int[][] dp = new int[n][2];
+        dp[0][0] = 0;
+        dp[0][1] = -prices[0];
+
+        for (int i = 1; i < prices.length; i++) {
+            dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][1] + prices[i]);
+            dp[i][1] = Math.max(dp[i - 1][1], dp[i - 1][0] - prices[i]);
+        }
+
+        // 因为获得最大利润的时候，一定是手上没有股票的时候
+        return dp[n - 1][0];
     }
 }
 ```
