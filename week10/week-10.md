@@ -1243,3 +1243,54 @@ class Solution {
   - 用i，j两个变量分别代表x，y坐标
   - dp[i] [j]代表行坐标[0..i]，纵坐标[0..j] 原问题的解
   - 推导dp[i] [j]仅与dp[i - 1] [j]， dp[i] [j - 1]，dp[i - 1] [j - 1]有关
+
+### 不同路径
+
+[62. 不同路径](https://leetcode.cn/problems/unique-paths/)
+
+```java
+class Solution {
+    public int uniquePaths(int m, int n) {
+        int[][] dp = new int[m][n];
+
+        // 初始化
+        for (int i = 0; i < m; i++) {
+            dp[i][0] = 1;
+        }
+        for (int j = 0; j < n; j++) {
+            dp[0][j] = 1;
+        }
+
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+            }
+        }
+        return dp[m - 1][n - 1];
+    }
+}
+```
+
+滚动数组优化
+
+```java
+class Solution {
+    public int uniquePaths(int m, int n) {
+        int[][] dp = new int[2][n];
+
+        // 初始化
+        for (int j = 0; j < n; j++) {
+            dp[0][j] = 1;
+        }
+
+        for (int i = 1; i < m; i++) {
+            dp[i % 2][0] = 1; // 滚动数组优化
+            for (int j = 1; j < n; j++) {
+                dp[i % 2][j] = dp[(i - 1) % 2][j] + dp[i % 2][j - 1];
+            }
+        }
+        return dp[(m - 1) % 2][n - 1];
+    }
+}
+```
+
