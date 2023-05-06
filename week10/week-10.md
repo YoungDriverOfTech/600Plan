@@ -1336,6 +1336,8 @@ class Solution {
 
 [120. 三角形最小路径和](https://leetcode.cn/problems/triangle/)
 
+可以使用滚动数组优化
+
 ```java
 class Solution {
     /**
