@@ -1421,3 +1421,47 @@ class Solution {
 }
 ```
 
+
+
+### 地下城游戏
+
+[174. 地下城游戏](https://leetcode.cn/problems/dungeon-game/)
+
+```java
+class Solution {
+    // dp[i][j] 表示移动到右下角需要的最低血量。
+    // 只有需要的血量 - 当前各自消耗的血量 >= 1 才能继续往下面/右边的格子走
+    // dp[i][j](需要的最低血量) - dungeon[i][j] >= 1
+
+    // 我们从尾到头进行状态转移，这样的话计算每个格子里面需要的最低血量是在当前格子的右边和下边
+    // dp[i][j](如果想要往右/下走需要的血量) = max(min(dp[i + 1][j], dp[i][j + 1]) - dungeon[i][j], 1)
+    public int calculateMinimumHP(int[][] dungeon) {
+        if (dungeon == null || dungeon.length == 0) {
+            return 0;
+        }
+
+        // 定义dp的时候行列多一个单位，因为我们从最后一个元素开始状态转移的时候，需要用到超出边界的一行和一列
+        int m = dungeon.length;
+        int n = dungeon[0].length;
+        int[][] dp = new int[m + 1][n + 1];
+
+        // 初始化：因为我们求的是min(dp[i + 1][j], dp[i][j + 1])，所以把每行每列都填充最大值
+        // 只需要最后一个元素的右边和下面格子填充1就行了（表明到了最后一个格子的时候，至少需要1点的hp）
+        for (int i = 0; i <= m; i++) {
+            int[] arr = new int[n + 1];
+            Arrays.fill(arr, Integer.MAX_VALUE);
+            dp[i] = arr;
+        }
+        dp[m - 1][n] = dp[m][n - 1] = 1;
+
+        for (int i = m - 1; i >= 0; i--) {
+            for (int j = n - 1; j >= 0; j--) {
+                int minHp = Math.min(dp[i + 1][j], dp[i][j + 1]) - dungeon[i][j];
+                dp[i][j] = Math.max(minHp, 1);
+            }
+        }
+        return dp[0][0];
+    }
+}
+```
+
