@@ -1552,3 +1552,54 @@ https://space.bilibili.com/477641493/video
   - dp[i] [v] = dp[i - 1] [v],    Otherwise
 - 滚动dp数组**<u>(顺序)</u>**
 
+
+
+
+
+### 分割等和子集
+
+[416. 分割等和子集](https://leetcode.cn/problems/partition-equal-subset-sum/)
+
+```java
+class Solution {
+    public boolean canPartition(int[] nums) {
+        if (nums == null || nums.length <= 1) {
+            return false;
+        }
+
+        int sum = 0;
+        for (int num : nums) {
+            sum += num;
+        }
+
+        // 奇数的情况下肯定是false
+        if (sum % 2 != 0) {
+            return false;
+        }
+        int target = sum / 2;
+
+        // dp[i][j]: 表示在【0，i】这个区间里面有一些数字的和正好等于j
+        boolean[][] dp = new boolean[nums.length][target + 1];
+
+        // 初始化
+        for (int i = 0; i < nums.length; i++) {
+            dp[i][0] = true; // 在【0，i】这个区间里面有一些数字的和正好等于0 (即在【0，i】中，一个数字也不选)
+        }
+
+        for (int i = 1; i < nums.length; i++) {
+            for (int j = 0; j <= target; j++) {
+                // 如果背包容量不够
+                if (j < nums[i]) {
+                    dp[i][j] = dp[i - 1][j];
+                } else {
+                    // 不选择当前数字： dp[i - 1][j]
+                    // 选择当前数组： dp[i - 1][j - nums[i]]
+                    dp[i][j] = dp[i - 1][j] | dp[i - 1][j - nums[i]]; // 不能使用短路与
+                }
+            }
+        }
+        return dp[nums.length - 1][target];
+    }
+}
+```
+
