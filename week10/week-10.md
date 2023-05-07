@@ -1506,6 +1506,8 @@ class Solution {
 
 ## 2.8 背包动态规划：Knapsack DP
 
+https://space.bilibili.com/477641493/video
+
 - NP完全问题
 - 基本描述：有n种物品，每种物品i都有自己的重量w和价值v，在限定的总重量内，选择物品是的物品的总价值最高
 
