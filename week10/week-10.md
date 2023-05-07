@@ -1603,3 +1603,48 @@ class Solution {
 }
 ```
 
+
+
+### 零钱兑换
+
+[322. 零钱兑换](https://leetcode.cn/problems/coin-change/)
+
+```java
+class Solution {
+
+    
+    public int coinChange(int[] coins, int amount) {
+        // 特殊处理的时候，不能amount <= 0。因为如果不取硬币的话，可以满足条件
+        if (coins == null || coins.length == 0 || amount < 0) {
+            return -1;
+        }
+
+        // dp[i][j]: 取前i枚硬币所组成的和等于j的硬币总数
+        int n = coins.length;
+        int[][] dp = new int[n + 1][amount + 1];    // n + 1是因为取硬币的时候语义化，i=1就是取第一枚
+
+        // 初始化
+        for (int[] array : dp) {
+            // 因为求最小的硬币数量，会用到min函数，所以初始化的时候初始化大一些的数值
+            // 取第0枚硬币（实际上没取）永远组不成和>=1  ->  硬币的数量就算是最大也没关系，因为本身就不成立
+            Arrays.fill(array, 20000);
+        }
+
+        // 取硬币以后，永远组不成和为0，所以硬币数量是0
+        for (int i = 0; i <= n; i++) {
+            dp[i][0] = 0;
+        }
+
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= amount; j++) {
+                // 同一枚硬币能去多少次，就看看总和j和这枚硬币的面值是多少
+                for (int k = 0; k <= j / coins[i - 1]; k++) {
+                    dp[i][j] = Math.min(dp[i][j], dp[i - 1][j - k * coins[i - 1]] + k);
+                }
+            }
+        }
+        return dp[n][amount] == 20000 ? -1 : dp[n][amount];
+    }
+}
+```
+
