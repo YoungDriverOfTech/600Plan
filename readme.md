@@ -3,6 +3,20 @@
 [Time Complexity](./week1/timeComplexity.md)   
 [Week-1](./week1/week-1.md) 
 
+## 前缀和公式
+```java
+// 构造前缀和
+int[] prefixSum = new int[num.length + 1];
+for (int i = 0; i < num.length; i++) {
+    prefixSum[i + 1] = prefixSum[i] + num[i];
+}
+
+// 获取某一个元素
+nums[i] = prefixSum[i + 1] - prefixSum[i]
+
+// 获取某一段的和
+interval[i, j] = prefixSum[j + 1] - prefixSum[i]
+```
 
 
 # Week 2
