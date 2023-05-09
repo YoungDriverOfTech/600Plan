@@ -22,6 +22,30 @@ interval[i, j] = prefixSum[j + 1] - prefixSum[i]
 # Week 2
 [Week-2](./week2/week-2.md) 
 
+## 单调栈
+### 递减栈
+```java
+// 单调递减栈 bottom -> top
+Deque<Integer> stack = new ArrayDeque<>();
+for (int i = 0; i < nums.length; i++) {
+    while (!stack.isEmpty() && stack.peek() < nums[i]) {
+        stack.pop();
+    }
+    stack.push(nums[i]);
+}
+```
+
+### 递增栈
+```java
+// 单调递增栈 bottom -> top
+Deque<Integer> stack = new ArrayDeque<>();
+for (int i = 0; i < nums.length; i++) {
+    while (!stack.isEmpty() && stack.peek() > nums[i]) {
+        stack.pop();
+    }
+    stack.push(nums[i]);
+}
+```
 
 
 # Week 3
