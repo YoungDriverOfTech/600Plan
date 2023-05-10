@@ -756,6 +756,75 @@ class Solution {
 }
 ```
 
+```java
+class Solution {
+    public int[] searchRange(int[] nums, int target) {
+        int len = nums.length;
+        if (len == 0) {
+            return new int[] {-1, -1};
+        }
+
+        int firstPosition = findFirstPosition(nums, target);
+        if (firstPosition == -1) {
+            return new int[] {-1, -1};
+        }
+        int lastPosition = findLastPosition(nums, target);
+        return new int[] {firstPosition, lastPosition};
+    }
+
+    private int findFirstPosition(int[] nums, int target) {
+        int left = 0;
+        int right = nums.length - 1;
+
+        // 这里写成left <= right的话，加入left = right = mid = 3 那么会死循环
+        while (left < right) {
+            int mid = (left + right) / 2;
+            if (nums[mid] >= target) {
+                // mid 有可能是target第一次出现的位置，
+                // mid之后一定不是target首次出现的位置
+                // 下一轮搜索区间【left， mid】
+                right = mid;
+            } else {
+                // 下一轮搜索区间【mid + 1， right】
+                left = mid + 1;
+            }
+        }
+
+        if (nums[left] == target) {
+            return left;
+        }
+
+        return -1;
+    }
+
+    private int findLastPosition(int[] nums, int target) {
+        int left = 0;
+        int right = nums.length - 1;
+
+        // 由于第一个方法里面判断过了left right重合以后，一定是target，所以这个方法里面就不用再次判断
+        // 直接left < right即可。因为当他们重合以后，一定是要找的target
+        while (left < right) {
+
+            // 加入left = 4 right = 5 mid = 4 求mid的时候如果使用这种方法 int mid = (left + right + 1) / 2;
+            // 会造成死循环，所以使用下面的加1 方法
+            int mid = (left + right + 1) / 2;
+            if (nums[mid] <= target) {
+                // mid有可能是target最后一次的位置
+                // mid之前的不可能是target最后一次出现的位置
+                // 下次搜索区间【mid, right】
+                left = mid;
+            } else {
+                // mid大于target，那么说明mid之后的都大于target
+                // 下次搜索区间【left, mid - 1】
+                right = mid - 1;
+            }
+        }
+
+        return left;
+    }
+}
+```
+
 
 
 ## 5.5 搜索插入位置
