@@ -777,7 +777,7 @@ class Solution {
         int right = nums.length - 1;
 
         // 这里写成left <= right的话，加入left = right = mid = 3 那么会死循环
-        while (left < right) {
+        while (left < right) {  // 不写等号的话，退出循环以后left和right是重合的
             int mid = (left + right) / 2;
             if (nums[mid] >= target) {
                 // mid 有可能是target第一次出现的位置，
@@ -807,12 +807,14 @@ class Solution {
 
             // 加入left = 4 right = 5 mid = 4 求mid的时候如果使用这种方法 int mid = (left + right + 1) / 2;
             // 会造成死循环，所以使用下面的加1 方法
+            // 造成死循环的原因：加入数组元素是偶数个，left = 4，right = 5 那么按照不加1的写法求出来的mid还是4，在执行left = mid的时候
+            // left实际上是没有变化的，那么在计算mid的时候就必须要使用下面的+1写法
             int mid = (left + right + 1) / 2;
             if (nums[mid] <= target) {
                 // mid有可能是target最后一次的位置
                 // mid之前的不可能是target最后一次出现的位置
                 // 下次搜索区间【mid, right】
-                left = mid;
+                left = mid; // 出现 left = mid 计算mid的时候一定要使用int mid = (left + right + 1) / 2; 来计算mid
             } else {
                 // mid大于target，那么说明mid之后的都大于target
                 // 下次搜索区间【left, mid - 1】
