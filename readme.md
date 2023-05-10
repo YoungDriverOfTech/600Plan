@@ -23,6 +23,7 @@ interval[i, j] = prefixSum[j + 1] - prefixSum[i]
 [Week-2](./week2/week-2.md) 
 
 ## 单调栈
+> 大单减小单增，遍历方向题目中 (大单减小单增，指的是找下一个更大/小的元素)
 ### 递减栈
 ```java
 // 单调递减栈 bottom -> top
