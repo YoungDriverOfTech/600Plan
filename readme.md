@@ -49,6 +49,59 @@ for (int i = 0; i < nums.length; i++) {
 }
 ```
 
+### 二分查找模板
+
+```java
+    public int binarySearch(int[] nums, int target) {
+        int left = 0;
+        int right = nums.length - 1;
+
+        // 不加等于号是为了让循环退出时候left和right重合
+        while (left < right) {
+            int mid = (left + right) / 2;
+
+            if (nums[mid] < target) {
+                // 如果nums[mid] < target, 说明mid之前的所有元素都比target小
+                // 那么下次搜索的范围就是【mid + 1, right】
+                left = mid + 1;
+            } else {
+                // 如果nums[mid] >= target, 说明mid之后的所有元素都比target大
+                // 那么下次搜索的范围就是【left, mid】
+                right = mid;
+            }
+        }
+
+        // 如果target不在【left,right】中，需要在做一次判断
+        return left;
+    }
+```
+
+```java
+    public int binarySearch1(int[] nums, int target) {
+        int left = 0;
+        int right = nums.length - 1;
+
+        // 不加等于号是为了让循环退出时候left和right重合
+        while (left < right) {
+            int mid = (left + right + 1) / 2;
+
+            if (nums[mid] > target) {
+                // 如果nums[mid] > target，说明mid以后的元素都大于target
+                // 那么下轮搜索范围就是【left, mid - 1】
+                right = mid - 1;
+            } else {
+                // 如果nums[mid] <= target，说明mid以前的元素都小于target
+                // 那么下轮搜索范围就是【mid, right】
+                left = mid;   // 因为这块可能出现死循环，所以算mid的时候就要使用+1的办法
+            }
+        }
+
+        // 如果target不在【left,right】中，需要在做一次判断
+        return left;
+    }
+```
+
+
 
 # Week 3
 
