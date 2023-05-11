@@ -101,6 +101,18 @@ for (int i = 0; i < nums.length; i++) {
     }
 ```
 
+### 一/二维坐标转换
+```java
+矩阵中行列计算，坐标转换计算技巧：
+
+行数：m
+
+列数：n
+
+二维坐标转换到一维：row * n + col (row, col是这个元素的第row行，第col列)
+
+一维坐标转换到二维：x = index / n, y = index % n
+```
 
 
 # Week 3
