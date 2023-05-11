@@ -835,34 +835,32 @@ class Solution {
 
 ```java
 class Solution {
-    // 二分查找：根据题目描述，找的是第一个大于等于target的索引，那么使用二分查找，先判断start，在判断end
-    // 有个特殊情况就是，当target比数组中的所有元素都打的时候，那么应该插入的地方是end+1
     public int searchInsert(int[] nums, int target) {
         if (nums == null || nums.length == 0) {
-            return -1;
+            return 0;
         }
 
-        int start = 0;
-        int end = nums.length - 1;
+        int left = 0;
+        int right = nums.length - 1;
 
-        while (start + 1 < end) {
-            int mid = start + (end - start) / 2;
-            if (target == nums[mid]) {
-                end = mid;
-            } else if (target > nums[mid]) {
-                start = mid;
+        if (target > nums[nums.length - 1]) {
+            return nums.length;
+        }
+
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+
+            // nums = [1,3,5,6], target = 5 假如nums[mid]==5 = 5那么解=2
+            // nums = [1,3,5,6], target = 2 加入nums[mid]==3 > 2那么解=1
+            // 由上面可知，只有当nums[mid] >= target的情况下才有解，小于的情况下是没有解的
+            if (nums[mid] < target) {
+                left = mid + 1;
             } else {
-                end = mid;
+                right = mid;
             }
         }
 
-        if (nums[start] >= target) {
-            return start;
-        } else if (nums[end] >= target) {
-            return end;
-        } else {
-            return end + 1;
-        }
+        return left;
     }
 }
 ```
