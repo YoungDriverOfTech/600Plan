@@ -1238,7 +1238,44 @@ class Solution {
     }
 }
 ```
+```java
+class Solution {
+    public int search(int[] nums, int target) {
+        int start = 0;
+        int end = nums.length - 1;
 
+        // 因为有可能不存在，所以重合的时候也判断一下
+        while (start <= end) {
+            int mid = start + (end - start) / 2;
+            if (nums[mid] == target) {
+                return mid;
+            }
+
+            // 如果没发生旋转，那么nums[start] < nums[mid]
+            // 如果上面的不等式不成立，那么说明发生了旋转。
+
+            // [start, mid]发生了旋转,查找的时候优先[mid + 1, end]
+            if (nums[start] > nums[mid]) {
+                if (nums[mid] < target && target <= nums[end]) {
+                    start = mid + 1;
+                } else {
+                    end = mid - 1;
+                }
+            } else {
+                // [start, mid]没有旋转,查找的时候优先[start, mid - 1]
+                if (nums[start] <= target && target < nums[mid]) {
+                    end = mid - 1;
+                } else {
+                    start = mid + 1;
+                }
+            }
+        }
+
+        // 因为循环的时候已经进行了返回，到这里肯定是找不到了，所以直接返回-1即可
+        return -1;
+    }
+}
+```
 
 
 ## 6.0 69. x 的平方根
