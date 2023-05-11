@@ -1091,7 +1091,38 @@ class Solution {
     }
 }
 ```
+```java
+class Solution {
+    public int findMin(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
 
+        int start = 0;
+        int end = nums.length - 1;
+
+        while (start < end) {
+            if (nums[start] < nums[end]) {
+                return nums[start];
+            }
+
+            int mid = start + (end - start) / 2;
+
+            if (nums[mid] == nums[start]) {
+                // 因为有重复的元素，加入遇到这样的case 【10, 1, 10, 10, 10】
+                // 那么nums[start] == nums[mid]时，执行start = mid + 1;以后就会完美错误最小值的索引
+                // 应该是要让start慢慢+1，直到让start和mid出现不同的时候
+                start = start + 1;
+            } else if (nums[mid] > nums[start]) {
+                start = mid + 1;
+            } else {
+                end = mid;
+            }
+        }
+        return nums[start];
+    }
+}
+```
 
 
 ## 5.8 山脉数组
