@@ -1020,7 +1020,39 @@ class Solution {
     }
 }
 ```
+```java
+class Solution {
+    public int findMin(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
 
+        int start = 0;
+        int end = nums.length - 1;
+
+        while (start < end) {
+            // 不旋转的时候，直接返回nums[start]
+            if (nums[start] < nums[end]) {
+                return nums[start];
+            }
+
+            // 旋转发生的时候
+            int mid = start + (end - start) / 2;
+            
+            // 如果start和mid相等的时候, 因为发生旋转，最小值一定不在start，所以要把start收缩到mid + 1
+            // 同理大于也需要收到mid + 1
+            if (nums[mid] == nums[start]) {
+                start = mid + 1;
+            } else if (nums[mid] > nums[start]) {
+                start = mid + 1;
+            } else {
+                end = mid;
+            }
+        }
+        return nums[start];
+    }
+}
+```
 
 
 [154. 寻找旋转排序数组中的最小值 II](https://leetcode.cn/problems/find-minimum-in-rotated-sorted-array-ii/)
