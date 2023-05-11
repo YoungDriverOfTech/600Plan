@@ -1321,4 +1321,29 @@ class Solution {
     }
 }
 ```
+```java
+class Solution {
+    public int mySqrt(int x) {
+        int left = 0;
+        int right = x;
+
+        while (left < right) {
+            int mid = left + (right - left) / 2 + 1;
+
+            if (mid == x / mid) {
+                return mid;
+            } else if (mid > x / mid) {
+	    	// 如果mid平方大于x，那么说明mid之后的也都大于
+		// 那么下一轮搜索应该是[start, mid - 1]
+                right = mid - 1;
+            } else {
+	    	// 如果mid平方小于x，那么说明mid之前的也都小于
+		// 那么下一轮搜索应该是[mid, end], 确定这块范围的时候，只需要和上面的反着来就行了，不需要话太多时间倒腾，反而容易出错
+                left = mid;
+            }
+        }
+        return left;
+    }
+}
+```
 
