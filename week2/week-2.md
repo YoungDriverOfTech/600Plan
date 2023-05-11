@@ -1160,7 +1160,30 @@ class Solution {
     }
 }
 ```
+```java
+class Solution {
+    public int peakIndexInMountainArray(int[] arr) {
+        if (arr == null || arr.length == 0) {
+            return 0;
+        }
 
+        // 因为题目明确写了没有重复的元素，可以使用单调性来解决
+        // 不能使用mid和start比较了，因为mid可能落在升的区间，也可能落在将的区间，他们都有可能大于nums[start]
+        int start = 0;
+        int end = arr.length - 1;
+        while (start < end) {
+            int mid = start + (end - start) / 2;
+            if (arr[mid] > arr[mid + 1]) {
+                // 在降的区间里面，要收缩end到mid，因为mid有可能是降区间的开头
+                end = mid;
+            } else {
+                start = mid + 1;
+            }
+        }
+        return start;
+    }
+}
+```
 
 
 ## 5.9 搜索旋转排序数组
