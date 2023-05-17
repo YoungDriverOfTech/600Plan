@@ -469,44 +469,6 @@ class Solution {
     }
 }
 ```
-```java
-/**
- * Definition for singly-linked list.
- * public class ListNode {
- *     int val;
- *     ListNode next;
- *     ListNode() {}
- *     ListNode(int val) { this.val = val; }
- *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
- * }
- */
-class Solution {
-    public ListNode deleteDuplicates(ListNode head) {
-        if (head == null || head.next == null) {
-            return head;
-        }
-
-        ListNode dummyNode = new ListNode(-1, head);
-        ListNode node = dummyNode;
-
-        // 这块其实就是保证了最少得要有2个节点
-        while (node.next != null && node.next.next != null) {
-
-            // 精髓就是判断是否相等的时候，和node没关系，是判断node后面两个节点是否相等
-            if (node.next.val == node.next.next.val) {
-                int val = node.next.val;
-                while (node.next != null && node.next.val == val) {
-                    node.next = node.next.next;
-                }
-            } else {
-                node = node.next;
-            }
-        }
-
-        return dummyNode.next;
-    }
-}
-```
 
 
 ## 4.4 删除链表重复元素2
@@ -556,7 +518,44 @@ class Solution {
     }
 }
 ```
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode deleteDuplicates(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
 
+        ListNode dummyNode = new ListNode(-1, head);
+        ListNode node = dummyNode;
+
+        // 这块其实就是保证了最少得要有2个节点
+        while (node.next != null && node.next.next != null) {
+
+            // 精髓就是判断是否相等的时候，和node没关系，是判断node后面两个节点是否相等
+            if (node.next.val == node.next.next.val) {
+                int val = node.next.val;
+                while (node.next != null && node.next.val == val) {
+                    node.next = node.next.next;
+                }
+            } else {
+                node = node.next;
+            }
+        }
+
+        return dummyNode.next;
+    }
+}
+```
 
 
 ## 4.5 反转链表
