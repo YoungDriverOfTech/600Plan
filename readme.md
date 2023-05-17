@@ -145,6 +145,13 @@ class Solution {
             slow = slow.next;
         }
         return slow;
+        
+        // 如果是偶数个节点，那么中间节点会是这个前面的那个，如果想返回后面的那个中间节点，参照这个
+        // fast == null : 奇数个节点 直接返回slow
+        // fast != null : 偶数个节点 需要返回slow.next
+        // 1 1 1 1 1 1
+        //       ↑
+        // return fast == null ? slow : slow.next;
     }
 }
 ```
