@@ -132,21 +132,21 @@ for (int i = 0; i < nums.length; i++) {
  * }
  */
 class Solution {
-
-    // 快慢指针，快指针每次走两步，慢指针每次走一步
-    // 分析下来，节点个数是奇数，那么慢指针是最后想要的答案。节点个数是偶数，那么慢指针还需要再走一步才能走到中间位置
-    public ListNode middleNode(ListNode head) {
-        ListNode fast = head;
+    
+    // 1 1 1 1 1
+    //     ↑
+    // 1 1 1 1 1 1
+    //     ↑
+    private ListNode findMid(ListNode head) {
+        // 1 1 1 1 1
+        //     ↑
+        // 1 1 1 1 1 1
+        //     ↑
+        // 奇数/偶数的时候，中点的位置。找中点的时候先让fast走一步，这样就能达成上面的效果
+        ListNode fast = head.next;
         ListNode slow = head;
-
-        while (fast.next != null && fast.next.next != null) {
+        while (fast != null && fast.next != null) {
             fast = fast.next.next;
-            slow = slow.next;
-        }
-
-        // 节点个数是偶数个的时候
-        while (fast.next != null) {
-            fast = fast.next;
             slow = slow.next;
         }
         return slow;
