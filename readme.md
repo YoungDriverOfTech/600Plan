@@ -224,6 +224,40 @@ class Solution {
 }
 ```
 
+### 反转链表模板
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+
+        ListNode pre = null;
+        ListNode cur = head;
+        while (cur != null) {
+            // 把cur的下一个节点保存起来，当作temp。 然后修改cur的下一个节点的指针到pre
+            // 把pre挪到cur的位置，cur挪到temp的位置
+            ListNode temp = cur.next;
+            cur.next = pre;
+
+            pre = cur;
+            cur = temp;
+        }
+        return pre;
+    }
+}
+```
+
 # Week 4
 
 [Week-4](./week4/week-4.md) 
