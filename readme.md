@@ -258,6 +258,46 @@ class Solution {
 }
 ```
 
+### 反转链表--头插法
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    // 因为反转链表，所以链表结构改变，头节点有可能被反转->dummyNode
+    public ListNode reverseBetween(ListNode head, int left, int right) {
+        ListNode dummyNode = new ListNode(-1, head);
+
+        // 先找到pre节点的位置，因为left从1开始，但是索引是从0开始，所以遍历的时候需要left-1
+        ListNode pre = dummyNode;
+        for (int i = 0; i < left - 1; i++) {
+            pre = pre.next;
+        }
+
+        ListNode curNode = pre.next;
+
+        // 使用头插法 1 2 3 4 -> 1 3 2 4 -> 1 4 3 2, cur节点是2，每次都把cur后面的元素翻到pre前
+        
+        for (int i = left; i < right; i++) {
+            ListNode temp = curNode.next; // temp将来是要放到pre的后面的。
+
+            curNode.next = temp.next;   // 当前节点应该链接temp后面的那个
+            temp.next = pre.next;   // 因为temp将来是反转后排头儿的，那temp.next = cur(pre.next)
+            pre.next = temp;    // tempNode就是要被放到pre.next，
+        }
+        return dummyNode.next;
+    }
+}
+```
+
+
 # Week 4
 
 [Week-4](./week4/week-4.md) 
