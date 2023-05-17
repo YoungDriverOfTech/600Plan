@@ -132,11 +132,6 @@ for (int i = 0; i < nums.length; i++) {
  * }
  */
 class Solution {
-    
-    // 1 1 1 1 1
-    //     ↑
-    // 1 1 1 1 1 1
-    //     ↑
     private ListNode findMid(ListNode head) {
         // 1 1 1 1 1
         //     ↑
