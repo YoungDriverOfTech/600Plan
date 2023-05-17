@@ -191,6 +191,39 @@ public class Solution {
 }
 ```
 
+### 链表删除重复节点模板
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    // 因为头节点也可能重复，那么只保留下头节点就可以了。现在明白的头节点不发生变化，那么不用dummyNode就行了
+    public ListNode deleteDuplicates(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+
+        // 去除重复元素，即让node.next = node.next.next;
+        ListNode node = head;
+        while (node != null && node.next != null) {
+            if (node.val == node.next.val) {
+                node.next = node.next.next;
+            } else {
+                node = node.next;
+            }
+        }
+        return head;
+    }
+}
+```
+
 # Week 4
 
 [Week-4](./week4/week-4.md) 
