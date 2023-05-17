@@ -119,7 +119,7 @@ for (int i = 0; i < nums.length; i++) {
 
 [Week-3](./week3/week-3.md) 
 
-### 快慢指针求重点模板
+### 快慢指针求中点模板
 ```java
 /**
  * Definition for singly-linked list.
@@ -150,6 +150,43 @@ class Solution {
             slow = slow.next;
         }
         return slow;
+    }
+}
+```
+
+### 快慢指针求链表是否有环模板
+```java
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    // 快慢指针，快的会追上慢的
+    public boolean hasCycle(ListNode head) {
+        if (head == null || head.next == null) {
+            return false;
+        }
+
+        ListNode fast = head;
+        ListNode slow = head;
+
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+
+            // 判断放在移动指针后面，因为首次进入while的时候，快慢都指向了head，会直接判断成功
+            if (fast == slow) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 ```
