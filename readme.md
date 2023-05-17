@@ -297,6 +297,56 @@ class Solution {
 }
 ```
 
+### k个一组 旋转链表
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode swapPairs(ListNode head) {
+        ListNode dummyNode = new ListNode(-1);
+        dummyNode.next = head;
+
+        ListNode node = dummyNode;
+        int k = 2;
+        // 1 遍历链表
+        while (node.next != null) {
+            ListNode pre = node;
+            ListNode check = node;
+
+            // 2 检查够不够k个元素，不够的话直接返回
+            for (int i = 0; i < k; i++) {
+                if (check.next == null) {
+                    return dummyNode.next;
+                }
+                check = check.next;
+            }
+
+            // 3 链表节点够k个的话，开始反转. 3个节点反转2次，2个反转一次，所以反转次数是k-1
+            ListNode cur = pre.next;
+            for (int i = 0; i < k - 1; i++) {
+                ListNode temp = cur.next;
+
+                cur.next = temp.next;
+                temp.next = pre.next;
+                pre.next = temp;
+            }
+
+            // 反转完成后，cur节点会移动到反转后的最后一个位置，比如1 2 3 反转饭后会变成 3 2 1. cur的指针一直是在1上
+            // 那么为了下一次反转，应该吧node（pre）指针给知道现在的cur上面
+            node = cur;
+        }
+        return dummyNode.next;
+    }
+}
+```
 
 # Week 4
 
