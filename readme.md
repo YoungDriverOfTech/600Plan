@@ -494,7 +494,60 @@ class Solution {
 
 
 ### 二叉树非递归后序遍历  
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    // 双栈。 s2栈存储真正的数据：这个在站内顺序是根右左，那么弹出来的时候就是左右根了
+    // s1栈存储的时候 左 右 -》到s2（s2里面这时候已经有了根）里面就是右左
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        if (root == null) {
+            return result;
+        }
 
+        // 1. 创建两个栈s1，s2，将root压入s1中
+        Deque<TreeNode> s1 = new ArrayDeque<>();
+        Deque<TreeNode> s2 = new ArrayDeque<>();
+        s1.push(root);
+
+        // 2. 当s1不为空，执行以下操作
+        while (!s1.isEmpty()) {
+            // a. 弹出s1中的元素，并将该节点压入s2中
+            TreeNode node = s1.pop();
+            s2.push(node);
+
+            // b. 如果该节点的左子节点不为空，将左子节点压入s1中
+            if (node.left != null) {
+                s1.push(node.left);
+            }
+
+            // c. 如果该节点的右子节点不为空，将右子节点压入s1中
+            if (node.right != null) {
+                s1.push(node.right);
+            }
+        }
+
+        while (!s2.isEmpty()) {
+            result.add(s2.pop().val);
+        }
+        return result;
+    }
+}
+```
 
 # Week 5
 
