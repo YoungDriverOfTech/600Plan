@@ -359,6 +359,8 @@ class Solution {
 - 用栈模拟递归
 - 访问当前节点，右节点先入栈，然后左节点入栈
 - Time:O(n) n为节点个数 Space: O(n)
+
+
 ```java
 /**
  * Definition for a binary tree node.
@@ -403,6 +405,7 @@ class Solution {
     }
 }
 ```
+
 用栈来模拟递归
 
 ```java
@@ -453,7 +456,8 @@ class Solution {
 }
 ```
 
-### 二叉树非递归中序遍历
+### 二叉树非递归中序遍历  
+
 ``java
 /**
  * Definition for a binary tree node.
@@ -487,8 +491,10 @@ class Solution {
     }
 }
 ```
-    
-### 二叉树非递归后序遍历
+
+
+### 二叉树非递归后序遍历  
+
 
 # Week 5
 
