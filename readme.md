@@ -453,6 +453,43 @@ class Solution {
 }
 ```
 
+### 二叉树非递归中序遍历
+``java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        preorderTraversal(root, result);
+        return result;
+    }
+
+    private void preorderTraversal(TreeNode root, List<Integer> result) {
+        if (root == null) {
+            return;
+        }
+        preorderTraversal(root.left, result);
+        result.add(root.val);
+        preorderTraversal(root.right, result);
+    }
+}
+```
+    
+### 二叉树非递归后序遍历
+
 # Week 5
 
 [Week-5](./week5/week-5.md) 
