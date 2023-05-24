@@ -477,17 +477,31 @@ class Solution {
 class Solution {
     public List<Integer> inorderTraversal(TreeNode root) {
         List<Integer> result = new ArrayList<>();
-        preorderTraversal(root, result);
-        return result;
-    }
-
-    private void preorderTraversal(TreeNode root, List<Integer> result) {
         if (root == null) {
-            return;
+            return result;
         }
-        preorderTraversal(root.left, result);
-        result.add(root.val);
-        preorderTraversal(root.right, result);
+
+        Deque<TreeNode> stack = new ArrayDeque<>();
+        TreeNode node = root;
+
+        while(!stack.isEmpty() || node != null) {
+            
+            // 先压入左边那一排
+            while (node != null) {
+                stack.push(node);
+                node = node.left;
+            }
+
+            // 现在弹出的是最左边的叶子节点，找这个节点有没有右节点
+            node = stack.pop();
+
+            // 收集跟节点进入result，因为是左根右，最左边的叶子节点要最先进入结果集
+            result.add(node.val);
+
+            node = node.right;
+        }
+
+        return result;
     }
 }
 ```
