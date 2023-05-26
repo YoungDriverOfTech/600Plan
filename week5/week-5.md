@@ -48,53 +48,53 @@
 
 ```java
 public List<List<Integer>> solveProblem(int[] nums) {
-  // result list
-  List<List<Integer>> result = new ArrayList<>();
-  
-  // check empty
-  if (nums == null || nums.length == 0) {
-    return result;
-  }
-  
-  // single answer
-  List<Integer> list = new ArrayList<>();
-  
-  // sort nums if necessary
-  // Arrays.sort(nums);
-  
-  helper(result, list, nums, ?);
-  
-  return result
+    // result list
+    List<List<Integer>> result = new ArrayList<>();
+
+    // check empty
+    if (nums == null || nums.length == 0) {
+        return result;
+    }
+
+    // single answer
+    List<Integer> list = new ArrayList<>();
+
+    // sort nums if necessary
+    // Arrays.sort(nums);
+
+    helper(result, list, nums, ?);
+
+    return result
 }
 
 private void helper(List<List<Integer>> result, List<Integer> list, int[] nums, int pos, ?){
-  // end recursion condition
-  if (condition xx) {
-    return;
-  }
-  
-  // add single answer into result
-  if (condition xx) {
-    result.add(new ArrayList(list));
-  }
-  
-  // 剪枝
-  if (condition xx) {
-    // doSomething
-    return;
-  }
-  
-  // 递归拆解子问题到下一层
-  for (sub : total-subs) {
+    // end recursion condition
     if (condition xx) {
-      // 剪枝
-      break; // or continue;
+        return;
     }
-    list.add(element);
-    helper(result, list, nums, ?);
-    // 回溯
-    list.remove(element);
-  }
+
+    // add single answer into result
+    if (condition xx) {
+        result.add(new ArrayList(list));
+    }
+
+    // 剪枝
+    if (condition xx) {
+        // doSomething
+        return;
+    }
+
+    // 递归拆解子问题到下一层
+    for (sub : total-subs) {
+        if (condition xx) {
+            // 剪枝
+            break; // or continue;
+        }
+        list.add(element);
+        helper(result, list, nums, ?);
+        // 回溯
+        list.remove(element);
+    }
 }
 ```
 
