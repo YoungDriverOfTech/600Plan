@@ -823,6 +823,42 @@ class Solution {
 }
 ```
 
+### 声称括号
+```java
+class Solution {
+    public List<String> generateParenthesis(int n) {
+        List<String> result = new ArrayList<>();
+
+        // 单一解
+        char[] ch = new char[n * 2];
+        helper(result, ch, n, n, 0);
+        return result;
+    }
+
+    private void helper(List<String> result, char[] ch, int leftRemain, int rightRemain, int index) {
+        // 什么时候退出递归
+        if (ch.length == index) {
+            result.add(new String(ch));
+            return;
+        }
+
+        // 什么时候填入左括号。只要左括号有剩余，就能填进去
+        if (leftRemain > 0) {
+            ch[index] = '(';
+            helper(result, ch, leftRemain - 1, rightRemain, index + 1);
+            // 这里面不能把ch[index] 重制回去，因为下面右边括号的逻辑需要左边括号是已经被填充完的
+            // 不然会出现这样的情况 null null null ) ) )
+        }
+
+        // 什么时候填入右括号。只有右括号剩余数量>左括号剩余数量才行。（等于也不行，等于的话优先填入左括号）
+        if (rightRemain > leftRemain) {
+            ch[index] = ')';
+            helper(result, ch, leftRemain, rightRemain - 1, index + 1);
+        }
+    }
+}
+```
+
 # Week 6
 
 [Week-6](./week6/week-6.md) 
