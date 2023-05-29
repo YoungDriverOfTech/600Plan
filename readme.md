@@ -761,6 +761,67 @@ class Solution {
     }
 }
 ```
+### 复原IP地址
+```java
+class Solution {
+    // 1. 0 《= 行《= 255
+    // 2. 放0的时候，只能放单个0，不能0后面再跟着别的数字
+    // 3. x只能是整数
+    // 4. 只能有4段
+    // 5. s的长度是[4, 12]
+    public List<String> restoreIpAddresses(String s) {
+        List<String> result = new ArrayList<>();
+        // 单一解
+        List<String> list = new ArrayList<>();
+
+        if (s.length() < 4 || s.length() > 12) {
+            return result;
+        }
+
+        helper(result, list, s, 0);
+        return result;
+    }
+
+    private void helper(List<String> result, List<String> list, String s, int pos) {
+        // 递归什么时候退出？
+
+        // 单一解何时加入result & 剪枝
+        if (list.size() == 4) {
+            // s字符串有甚于的字符不行，剪枝
+            if (pos != s.length()) {
+                return;
+            }
+
+            StringBuilder sb = new StringBuilder();
+            String ip = sb.append(list.get(0)).append(".")
+                          .append(list.get(1)).append(".")
+                          .append(list.get(2)).append(".")
+                          .append(list.get(3)).toString();
+            result.add(ip);
+        }
+
+        // 递归到下一层
+        for (int i = pos; i < s.length() && i < pos + 3; i++) { // i < pos + 3 因为截取字符串的时候到不了最后
+            String ipPartNum = s.substring(pos, i + 1); // 0-255, len最多是3
+            if (isValid(ipPartNum)) {
+                list.add(ipPartNum);
+                helper(result, list, s, i + 1);
+                list.remove(list.size() - 1);
+            }
+        }
+    }
+
+    private boolean isValid(String ipPartNum) {
+        // 开头是0的，只有一种可能：0
+        if (ipPartNum.charAt(0) == '0') {
+            return ipPartNum.equals("0");
+        }
+        
+        int num = Integer.valueOf(ipPartNum);
+        return num >= 0 && num <= 255;
+    }
+}
+```
 
 # Week 6
 
