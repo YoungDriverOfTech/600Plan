@@ -823,7 +823,7 @@ class Solution {
 }
 ```
 
-### 声称括号
+### 生成括号
 ```java
 class Solution {
     public List<String> generateParenthesis(int n) {
