@@ -322,9 +322,8 @@ class Solution {
 
 ```java
 class Solution {
-  
-  	// 树：边树=节点数-1
-		// 联通分量必须得是1
+    // 树：边树=节点数-1
+    // 联通分量必须得是1
     public int sulution(int n, int[][] edges) {
         if (n == 0) {
           return false;
@@ -362,7 +361,7 @@ class Solution {
     }
   
   
-  	private void dfs(Map<Integer, List<Integer>> map, boolean[] visited, int node) {
+    private void dfs(Map<Integer, List<Integer>> map, boolean[] visited, int node) {
       visited[node] = true;
       
       for (int adjNode : map.get(node)) {
@@ -371,7 +370,6 @@ class Solution {
         }
       }
     }
-  
 }
 ```
 
