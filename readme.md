@@ -1023,6 +1023,76 @@ class Solution {
 }
 ```
 
+### 二维数组dfs模板
+```java
+class Solution {
+    private int[] dx = {1, 0, -1, 0};
+    private int[] dy = {0, 1, 0, -1};
+
+    public boolean exist(char[][] board, String word) {
+        if (board == null || board.length == 0 || board[0] == null || board[0].length == 0) {
+            return false;
+        }
+
+        int m = board.length;
+        int n = board[0].length;
+        boolean[][] visited = new boolean[m][n];
+
+        // 因为可以从任意位置开始，所以需要遍历。但是可以剪枝：遍历到的字符和word的首字符要相等才行
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (board[i][j] == word.charAt(0) && !visited[i][j]) {
+                    boolean result = dfs(board, visited, i, j, word, 0);
+                    // 如果已经存在一个答案了，直接返回
+                    if (result) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private boolean dfs(char[][] board, boolean[][] visited, int x, int y, String word, int index) {
+        // 剪枝
+        if (board[x][y] != word.charAt(index)) {
+            return false;
+        }
+
+        // 标记
+        visited[x][y] = true;
+
+        // 已经找到全部的字符
+        // 这里只需要到-1就行了，因为最上面的剪枝条件已经判断了最后一个字符的相等
+        if (index == word.length() - 1) {
+            return true;
+        }
+
+        // dfs
+        boolean result = false;
+        for (int i = 0; i < 4; i++) {
+            int newX = x + dx[i];
+            int newY = y + dy[i];
+
+            if (checkRange(board, newX, newY) && !visited[newX][newY]) {
+                result = result || dfs(board, visited, newX, newY, word, index + 1);
+            }
+        }
+
+        // 重置标记，因为回溯
+        visited[x][y] = false;
+        return result;
+    }
+
+    private boolean checkRange(char[][] board, int x, int y) {
+        return x >= 0
+            && x < board.length
+            && y >= 0
+            && y < board[0].length;
+    }
+}
+```
 
 # Week 8
 
