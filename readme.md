@@ -923,7 +923,52 @@ class Solution {
 
 [Week-6](./week6/week-6.md) 
 
+### 邻接表数量
+```java
+class Solution {
+    public int countComponents(int n, int[][] edges) {
+        // count：做了几次DFS
+        int count = 0;
 
+        // step 0: 构建邻接表
+        Map<Integer, List<Integer>> adj = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            adj.put(i, new ArrayList<>());
+        }
+
+        // 因为要构造成无向图，所以节点都需要双连
+        for (int i = 0; i < edges.length; i++) {
+            int u = edges[i][0];
+            int v = edges[i][1];
+            adj.get(u).add(v);
+            adj.get(v).add(u);
+        }
+
+        // step 1: 套模板
+        boolean[] marked = new boolean[n];
+        for (int i = 0; i < n; i++) {
+            // 只有没有被标记过，才能进行dfs
+            if (!marked[i]) {
+                dfs(adj, marked, i);
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private void dfs(Map<Integer, List<Integer>> adj, boolean[] marked, int nodeNum) {
+        // 首先标记节点
+        marked[nodeNum] = true;
+
+        // dfs
+        for (int node : adj.get(nodeNum)) {
+            if (!marked[node]) {
+                dfs(adj, marked, node);
+            }
+        }
+    }
+}
+```
 
 # Week 8
 
