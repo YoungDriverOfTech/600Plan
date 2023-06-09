@@ -1094,6 +1094,72 @@ class Solution {
 }
 ```
 
+### 被围绕区域
+```java
+class Solution {
+
+    // 先求出边界的O的联通分量的节点，全部换成B
+    // 然后遍历矩阵，O换成X，B换成O即可
+
+    private int[] dx = {1, 0, -1, 0};
+    private int[] dy = {0, 1, 0, -1};
+
+    public void solve(char[][] board) {
+        if (board == null || board.length == 0 || board[0] == null || board[0].length == 0) {
+            return;
+        }
+
+        int m = board.length;
+        int n = board[0].length;
+        boolean[][] visited = new boolean[m][n];
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (isBorder(board, i, j) && board[i][j] == 'O' && !visited[i][j]) {
+                    dfs(board, visited, i, j);
+                }
+            }
+        }
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (board[i][j] == 'B') {
+                    board[i][j] = 'O';
+                } else if (board[i][j] == 'O') {
+                    board[i][j] = 'X';
+                }
+            }
+        }
+    }
+
+    private void dfs(char[][] board, boolean[][] visited, int x, int y) {
+        if (board[x][y] == 'X') {
+            return;
+        }
+
+        visited[x][y] = true;
+        board[x][y] = 'B';
+
+        for (int i = 0; i < 4; i++) {
+            int newX = x + dx[i];
+            int newY = y + dy[i];
+
+            if (checkRange(board, newX, newY) && !visited[newX][newY]) {
+                dfs(board, visited, newX, newY);
+            }
+        }
+    }
+
+    private boolean isBorder(char[][] board, int x, int y) {
+        return x == 0 || x == board.length - 1 || y == 0 || y == board[0].length - 1;
+    }
+
+    private boolean checkRange(char[][] board, int x, int y) {
+        return x >= 0 && x < board.length && y >= 0 && y < board[0].length;
+    }
+}
+```
+
 # Week 8
 
 [Week-8](./week8/week-8.md) 
