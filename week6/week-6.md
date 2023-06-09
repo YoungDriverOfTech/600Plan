@@ -263,7 +263,49 @@ class Solution {
     }
 }
 ```
+```java
+class Solution {
+    public int findCircleNum(int[][] isConnected) {
+        if (isConnected == null || isConnected.length == 0) {
+            return 0;
+        }
 
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        int citys = isConnected.length; 
+        for (int i = 0; i < citys; i++) {
+            List<Integer> adjacentCitys = map.getOrDefault(i, new ArrayList<>());
+            int[] conections = isConnected[i];
+
+            for (int j = 0; j < conections.length; j++) {
+                if (isConnected[i][j] == 1) {
+                    adjacentCitys.add(j);
+                }
+            }
+            map.put(i, adjacentCitys);
+        }
+
+        boolean[] visited = new boolean[citys];
+        int count = 0;
+        for (int i = 0; i < citys; i++) {
+            if (!visited[i]) {
+                dfs(map, visited, i);
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private void dfs(Map<Integer, List<Integer>> map, boolean[] visited, int i) {
+        visited[i] = true;
+
+        for (int city : map.get(i)) {
+            if (!visited[city]) {
+                dfs(map, visited, city);
+            }
+        }
+    }
+}
+```
 
 
 ### 以图判树
