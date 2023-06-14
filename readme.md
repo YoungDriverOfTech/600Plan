@@ -1160,6 +1160,107 @@ class Solution {
 }
 ```
 
+### 连通分量
+**计算连通分量的时候，可以使用DFS or BFS。简单来说DFS就是递归，而BFS就是使用队列**
+#### DFS
+```java
+class Solution {
+    public int countComponents(int n, int[][] edges) {
+        // count：做了几次DFS
+        int count = 0;
+
+        // step 0: 构建邻接表
+        Map<Integer, List<Integer>> adj = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            adj.put(i, new ArrayList<>());
+        }
+
+        // 因为要构造成无向图，所以节点都需要双连
+        for (int i = 0; i < edges.length; i++) {
+            int u = edges[i][0];
+            int v = edges[i][1];
+            adj.get(u).add(v);
+            adj.get(v).add(u);
+        }
+
+        // step 1: 套模板
+        boolean[] marked = new boolean[n];
+        for (int i = 0; i < n; i++) {
+            // 只有没有被标记过，才能进行dfs
+            if (!marked[i]) {
+                dfs(adj, marked, i);
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private void dfs(Map<Integer, List<Integer>> adj, boolean[] marked, int nodeNum) {
+        // 首先标记节点
+        marked[nodeNum] = true;
+
+        // dfs
+        for (int node : adj.get(nodeNum)) {
+            if (!marked[node]) {
+                dfs(adj, marked, node);
+            }
+        }
+    }
+}
+```
+
+#### BFS
+```java
+class Solution {
+    public int countComponents(int n, int[][] edges) {
+        // count：做了几次DFS
+        int count = 0;
+
+        // step 0: 构建邻接表
+        Map<Integer, List<Integer>> adj = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            adj.put(i, new ArrayList<>());
+        }
+
+        // 因为要构造成无向图，所以节点都需要双连
+        for (int i = 0; i < edges.length; i++) {
+            int u = edges[i][0];
+            int v = edges[i][1];
+            adj.get(u).add(v);
+            adj.get(v).add(u);
+        }
+
+        // step 1: 套模板
+        boolean[] marked = new boolean[n];
+        for (int i = 0; i < n; i++) {
+            // 只有没有被标记过，才能进行dfs
+            if (!marked[i]) {
+                bfs(adj, marked, i);
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private void bfs(Map<Integer, List<Integer>> adj, boolean[] marked, int nodeNum) {
+      Queue<Integer> queue = new LinkedList<>();
+      queue.offer(nodeNum);
+      marked[nodeNum] = true;
+      
+      while (!queue.isEmpty()) {
+        Integer curNode = queue.poll();
+        
+        for (Integer adjNode : adj.get(curNode)) {
+          if (!marked[aadjNode]) {
+            marked[adjNode] = true;
+            queue.offer(adjNode);
+          }
+        }
+      }
+    }
+}
+```
+
 # Week 8
 
 [Week-8](./week8/week-8.md) 
