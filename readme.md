@@ -1261,6 +1261,83 @@ class Solution {
 }
 ```
 
+### BFS遍历层数
+```java
+class Solution {
+
+    // 利用广度优先遍历，去wordList找出startWord，然后变换每一个字符，找到了就加入队列，然后就是按着这个单词
+    // 画圆，在找下一层的单词，直到找到endword。那么返回层数就可以了
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        // 构造字典
+        Set<String> dict = new HashSet<>(wordList);
+        if (beginWord.equals(endWord)) {
+            return 0;
+        }
+
+        // 构造BFS的队列以及visited标记容器
+        Queue<String> queue = new LinkedList<>();
+        queue.offer(beginWord);
+        Set<String> visited = new HashSet<>();
+      	visited.add(beginWord);
+        int level = 1;  // 为什么要初始化为1，因为首个单词已经进入了队列
+
+        while (!queue.isEmpty()) {
+            level++;
+            int size = queue.size();    // 因为要求的是层数，所以需要用for循环来从queue中去单词
+
+            for (int i = 0; i < size; i++) {
+                // 如果是进入的第一个单词，则不用判断，因为上面最开始的部分已经进行判断了，只需要判断邻接节点
+                // 是不是和end相等即可
+                String curWord = queue.poll();
+
+                // 取到当前单词的邻接单词list（就是以当前单词画圆）
+                List<String> adjWords = getAdjWords(curWord, dict);
+                for (String adjWord : adjWords) {
+                    // 邻接节点只有没有被访问过，才能进行入队
+                    if (!visited.contains(adjWord)) {
+                        if (adjWord.equals(endWord)) {
+                            return level;
+                        }
+
+                        queue.offer(adjWord);
+                        visited.add(adjWord);
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+
+    private List<String> getAdjWords(String curWord, Set<String> dict) {
+        List<String> result = new ArrayList<>();
+
+        // 从a到z依次替换curWord的每个字符，去查看在字典中存在不存在，存在的话加入到结果集
+        for (int i = 0; i < curWord.length(); i++) {
+            int ch = curWord.charAt(i);
+
+            // 如果遍历到的字符和ch相等的话就跳过
+            for (char j = 'a'; j <= 'z'; j++) {
+                if (j == ch) {
+                    continue;
+                }
+
+                String replaceddWord = replacedWord(curWord, i, j);
+                if (dict.contains(replaceddWord)) {
+                    result.add(replaceddWord);
+                }
+            }
+        }
+        return result;
+    }
+
+    private String replacedWord(String curWord, int index, char j) {
+        char[] curWordArr = curWord.toCharArray();
+        curWordArr[index] = j;
+        return new String(curWordArr);
+    }
+}
+```
+
 # Week 8
 
 [Week-8](./week8/week-8.md) 
