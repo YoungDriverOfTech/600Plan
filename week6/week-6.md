@@ -2057,6 +2057,87 @@ class Solution {
     }
 }
 ```
+```java
+
+/**
+构造有向图：是从start指向end，类似于这样,0指向1和2
+	0
+       / \
+      1   2
+而入度表则是：被指向的节点为key，value是用来记录一共有多少个节点是指向本节点的，例如1，2的入度就是0. 因为只有0指向他们
+而0的入度是0，因为没有别的节点指向他，所以0这个节点不会被存放在入度表中 or 存在入度表中的value是0
+*/
+class Solution {
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        // 构建有向图
+        Map<Integer, List<Integer>> table = new HashMap<>();
+        for (int i = 0; i < numCourses; i++) {
+            table.put(i, new ArrayList<>());
+        }
+
+        for (int[] prerequisite : prerequisites) {
+            int start = prerequisite[1];
+            int end = prerequisite[0];
+
+            List<Integer> desList = table.getOrDefault(start, new ArrayList<>());
+            desList.add(end);
+            table.put(start, desList);
+        }
+
+        // 构建课程的入度表
+        Map<Integer, Integer> inDegreeTable = new HashMap<>();
+        for (Map.Entry<Integer, List<Integer>> entry : table.entrySet()) {
+            List<Integer> adjList = entry.getValue();
+            for (int course : adjList) {
+                if (!inDegreeTable.containsKey(course)) {
+                    inDegreeTable.put(course, 1);
+                } else {
+                    int desInDegree = inDegreeTable.get(course);
+                    desInDegree += 1;
+                    inDegreeTable.put(course, desInDegree);
+                }
+            }
+        }
+
+        // 没门课程入度是0的进入队列
+        Queue<Integer> queue = new LinkedList<>();
+        for (int i = 0; i < numCourses; i++) {
+            if (!inDegreeTable.containsKey(i)) {
+                queue.offer(i);
+            }
+        }
+
+        // 队列出队，代表学了一门课程，然后其对应的后置课程的入度-1， 如果后置课程入度为0的则进入队列
+        int[] result = new int[numCourses];
+        int index = 0;
+        while (!queue.isEmpty()) {
+            int course = queue.poll();
+            result[index++] = course;
+
+            List<Integer> adjList = table.get(course);
+            for (int adjNode : adjList) {
+                if (!inDegreeTable.containsKey(adjNode)) {
+                    continue;
+                }
+
+                int desInDegree = inDegreeTable.get(adjNode);
+                desInDegree -= 1;
+                inDegreeTable.put(adjNode, desInDegree);
+
+                if (desInDegree == 0) {
+                    queue.offer(adjNode);
+                    inDegreeTable.remove(adjNode);
+                }
+            }
+        }
+
+        if (index != numCourses) {
+            return new int[0];
+        }
+        return result;
+    }
+}
+```
 
 
 
