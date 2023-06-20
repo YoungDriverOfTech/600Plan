@@ -388,7 +388,7 @@ public class Main {
 
 ***quick select运行过程***
 - 检查递归基本情况
-- 将数组划分为两个（可能为空）子鼠族，是的前一个子数组中的每个元素都小于或者等于nums[index],后一个都大于nums[index]
+- 将数组划分为两个（可能为空）子数组，是的前一个子数组中的每个元素都小于或者等于nums[index],后一个都大于nums[index]
 - 检查nums[index]是否为第k小的元素
     1. 如果是则返回nums[index]
     2. 否则需要确定第k小的元素落在哪一个子数组
