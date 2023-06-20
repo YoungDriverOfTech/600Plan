@@ -475,6 +475,9 @@ public class QuickSelect {
  * }
  */
 class Solution {
+    // 思路：把dummy和head看成两个链表来处理，依次拿出head里面的每个元素和dummy链表的每一个元素从左到右左比较
+    // 只要发现了第一个在dummy链表中的大于head的节点。那么就把head这个节点放到dummy链表中大节点（第一个大于head）的前面，然后连起来链表
+    // 然后继续判断head链表的下一个节点
     public ListNode insertionSortList(ListNode head) {
         if (head == null) {
             return null;
