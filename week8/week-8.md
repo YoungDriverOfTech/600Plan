@@ -489,7 +489,7 @@ class Solution {
                 node = node.next;
             }
 
-            // 找到node.next.val > head.val 那么就把head塞到node的后面
+            // 找到node.next.val > head.val 那么就把node塞到head的后面
             ListNode temp = head.next;
             head.next = node.next;
             node.next = head;
