@@ -393,7 +393,7 @@ public class Main {
     1. 如果是则返回nums[index]
     2. 否则需要确定第k小的元素落在哪一个子数组
         - 如果num > k, 则落入划分低区
-        - 繁殖num < k, 则落入划分高区，而且我们已经知道有num个元素比nums[index]小
+        - 反之num < k, 则落入划分高区，而且我们已经知道有num个元素比nums[index]小
 
 ```java
 public class QuickSelect {
