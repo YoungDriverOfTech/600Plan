@@ -1450,6 +1450,49 @@ public class QuickSort{
 }
 ```
 
+### 链表插入排序
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    // 思路：把dummy和head看成两个链表来处理，依次拿出head里面的每个元素和dummy链表的每一个元素从左到右左比较
+    // 只要发现了第一个在dummy链表中的大于head的节点。那么就把head这个节点放到dummy链表中大节点（第一个大于head）的前面，然后连起来链表
+    // 然后继续判断head链表的下一个节点
+    public ListNode insertionSortList(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+
+        ListNode dummyNode = new ListNode(-1);
+        while (head != null) {
+            ListNode node = dummyNode;
+
+            // 从左往右找到node里面第一个大于head.val的节点，那么把head节点加到这个大节点的前面
+            while (node.next != null && node.next.val < head.val) {
+                node = node.next;
+            }
+
+            // 找到node.next.val > head.val 那么就把node塞到head的后面
+            ListNode temp = head.next;
+            head.next = node.next;
+            node.next = head;
+
+            // 现在已经把head接到node后面了，那么应该就绪便利head后面的节点
+            head = temp;
+        }
+
+        return dummyNode.next;
+    }
+}
+```
 
 # Week 9
 
