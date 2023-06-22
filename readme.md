@@ -1563,6 +1563,86 @@ class Solution {
 
 ```
 
+### 翻转对
+```java
+class Solution {
+    public int reversePairs(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+
+        return mergeSort(nums, 0, nums.length - 1);
+    }
+
+    private int mergeSort(int[] nums, int start, int end) {
+        if (start < end) {
+            int mid = start + (end - start) / 2;
+            int leftCount = mergeSort(nums, start, mid);
+            int rightCount = mergeSort(nums, mid + 1, end);
+
+            // 逆序对的结果就是左边的逆序对+右边+左右merge时候产生的逆序对
+            return leftCount + rightCount + merge(nums, start, mid, end);
+        }
+        
+        // 如果排序到了最后一个数字，那么就不可能存在逆序对，直接返回0
+        return 0;
+    }
+
+    private int merge(int[] nums, int start, int mid, int end) {
+        // 我什么要加1，假如总长度5，那么mid - start = 2，end - mid = 2，还少一个，把多的这个放到左边
+        int leftLength = mid - start + 1;
+        int rightLength = end - mid;
+
+        // new 出帮助的数组
+        int[] left = new int[leftLength];
+        int[] right = new int[rightLength];
+
+        for (int i = 0; i < leftLength; i++) {
+            left[i] = nums[start + i];
+        }
+        for (int j = 0; j < rightLength; j++) {
+            right[j] = nums[mid + 1 + j]; // 因为mid给了左边了
+        }
+
+        // 统计【start，end】之间的反转对个数，注意：左右两个区间一定是有序的，因为已经递归的排序过了
+        // 注意：计算翻转对和排序的逻辑需要分开算。因为if的条件是不一样的。
+        // 翻转对：需要check的是nums[i] > 2 * nums[j] 
+        // 排序：需要check nums[i] <= nums[j]
+        // 如果在排序的时候进行翻转对的判断，因为条件不一样，所以结果一定会有些偏差
+        int i = start;
+        int j = mid + 1;
+        int pairs = 0;
+        while (i <= mid && j <= end) {
+            if (nums[i] > (long) nums[j] * 2) {
+                j++; // 这时不能i++，因为i也许比j+1以后两倍的值还要大
+                pairs += mid - i + 1;
+            } else {
+                i++;
+            }
+        }
+
+        i = 0;
+        j = 0;
+        int index = start;
+        while (i < leftLength && j < rightLength) {
+            if (left[i] <= right[j]) {
+                nums[index++] = left[i++];
+            } else {
+                nums[index++] = right[j++];
+            }
+        }
+
+        while (i < leftLength) {
+            nums[index++] = left[i++];
+        }
+        while (j < rightLength) {
+            nums[index++] = right[j++];
+        }
+        return pairs;
+    }
+}
+```
+
 # Week 9
 
 [Week-9](./week9/week-9.md) 
