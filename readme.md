@@ -1494,6 +1494,75 @@ class Solution {
 }
 ```
 
+### 逆序对
+```java
+class Solution {
+    public int reversePairs(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+
+        return mergeSort(nums, 0, nums.length - 1);
+    }
+
+    private int mergeSort(int[] nums, int start, int end) {
+        if (start < end) {
+            int mid = start + (end - start) / 2;
+            int leftCount = mergeSort(nums, start, mid);
+            int rightCount = mergeSort(nums, mid + 1, end);
+
+            // 逆序对的结果就是左边的逆序对+右边+左右merge时候产生的逆序对
+            return leftCount + rightCount + merge(nums, start, mid, end);
+        }
+        
+        // 如果排序到了最后一个数字，那么就不可能存在逆序对，直接返回0
+        return 0;
+    }
+
+    private int merge(int[] nums, int start, int mid, int end) {
+        // 我什么要加1，假如总长度5，那么mid - start = 2，end - mid = 2，还少一个，把多的这个放到左边
+        int leftLength = mid - start + 1;
+        int rightLength = end - mid;
+
+        // new 出帮助的数组
+        int[] left = new int[leftLength];
+        int[] right = new int[rightLength];
+
+        for (int i = 0; i < leftLength; i++) {
+            left[i] = nums[start + i];
+        }
+        for (int j = 0; j < rightLength; j++) {
+            right[j] = nums[mid + 1 + j]; // 因为mid给了左边了
+        }
+
+        int i = 0;
+        int j = 0;
+        int index = start;
+        int pairs = 0;
+
+        while (i < leftLength && j < rightLength) {
+            if (left[i] <= right[j]) {
+                // 左边小于等于右边 不能存在逆序对
+                nums[index++] = left[i++];
+            } else {
+                nums[index++] = right[j++];
+                // 左边大于右边，那么左边当前元素后面的元素，都会大于right[j]，所以逆序对的个数是leftLength - i
+                pairs += leftLength - i;
+            }
+        }
+
+        while (i < leftLength) {
+            nums[index++] = left[i++];
+        }
+        while (j < rightLength) {
+            nums[index++] = right[j++];
+        }
+        return pairs;
+    }
+}
+
+```
+
 # Week 9
 
 [Week-9](./week9/week-9.md) 
