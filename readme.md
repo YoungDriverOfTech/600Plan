@@ -1680,6 +1680,102 @@ class Solution {
 }
 ```
 
+### LRU
+```java
+class LRUCache {
+    class DoubleLinkedList {
+        int key;
+        int value;
+        DoubleLinkedList prev;
+        DoubleLinkedList next;
+
+        public DoubleLinkedList(int key, int value) {
+            this.key = key;
+            this.value = value;
+        }
+    }
+
+    private Map<Integer, DoubleLinkedList> map;
+    private DoubleLinkedList dummyHead;
+    private DoubleLinkedList dummyTail;
+    private int capacity;
+
+    public LRUCache(int capacity) {
+        map = new HashMap<>();
+        this.capacity = capacity;
+
+        this.dummyHead = new DoubleLinkedList(-1, -1);
+        this.dummyTail = new DoubleLinkedList(-1, -1);
+        dummyHead.next = dummyTail;
+        dummyTail.prev = dummyHead;
+    }
+    
+    // 最少被永用过的放在链表最尾部，最新被用过的放在最前部
+    public int get(int key) {
+        if (!map.containsKey(key)) {
+            return -1;
+        }
+
+        // curNode 要从curNode的位置上拿出来
+        DoubleLinkedList curNode = map.get(key);
+        DoubleLinkedList nextNode = curNode.next;
+        DoubleLinkedList prevNode = curNode.prev;
+        System.out.println(key);
+        prevNode.next = nextNode;
+        nextNode.prev = prevNode;
+        curNode.next = null;
+        curNode.prev = null;
+
+        // 放到链表的第一个位置上面
+        DoubleLinkedList originHead = dummyHead.next;
+        curNode.next = originHead;
+        originHead.prev = curNode;
+
+        // 链接dummyHead和current节点
+        dummyHead.next = curNode;
+        curNode.prev = dummyHead;
+
+        return curNode.value;
+    }
+    
+    public void put(int key, int value) {
+        // 存在的话，不用考虑capacity，直接覆盖值就行
+        if (get(key) != -1) {
+            map.get(key).value = value;
+            return;
+        }
+
+        // 如果不存在，需要判断是不是已经到达capcacity，来进行删除最老元素
+        DoubleLinkedList newNode = new DoubleLinkedList(key, value);
+        if (map.size() == capacity) {
+            // 如果已经到了capacity，需要移除最后一个元素
+            DoubleLinkedList originTail = dummyTail.prev;
+            DoubleLinkedList prevTail = originTail.prev;
+
+            prevTail.next = dummyTail;
+            dummyTail.prev = prevTail;
+            originTail.next = null;
+            originTail.prev = null;
+
+            // map里面也需要进行移除原来的最后一个元素
+            map.remove(originTail.key);
+        }
+
+        // 剩下的不管有没有到capcacity，都需要把新节点放到head，直接放节点到map, 并且链接dummyHead节点
+        map.put(key, newNode);
+
+        // 放到链表的第一个位置上面
+        DoubleLinkedList originHead = dummyHead.next;
+        newNode.next = originHead;
+        originHead.prev = newNode;
+
+        // 链接dummyHead和current节点
+        dummyHead.next = newNode;
+        newNode.prev = dummyHead;
+    }
+}
+```
+
 # Week 9
 
 [Week-9](./week9/week-9.md) 
