@@ -1968,6 +1968,38 @@ public void slidingWindow(int[] nums) {
 }
 ```
 
+### 无重复字符串-滑动窗口模板解法
+```java
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
+
+        Set<Character> set = new HashSet<>();
+        int i = 0;
+        int j = 0;
+        int result = 0;
+
+        for (; i < s.length(); i++) {
+            while (j < s.length()) {
+                char ch = s.charAt(j);
+                if (!set.contains(ch)) {
+                    set.add(ch);
+                    result = Math.max(result, set.size());
+                    j++;
+                } else {
+                    break;
+                }
+            }
+
+            set.remove(s.charAt(i));
+        }
+        return result;
+    }
+}
+```
+
 # Week 10
 
 [Week-10](./week10/week-10.md) 
