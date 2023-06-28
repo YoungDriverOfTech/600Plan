@@ -1817,6 +1817,35 @@ class Solution {
 }
 ```
 
+### 有效三角形个数
+```java
+class Solution {
+    public int triangleNumber(int[] nums) {
+        Arrays.sort(nums);
+
+        int result = 0;
+        for (int i = nums.length - 1; i >= 2; i--) {
+            int start = 0;
+            int end = i - 1;
+
+            while (start < end) {
+                int sum = nums[start] + nums[end];
+                if (sum > nums[i]) {
+                    // 因为已经排序过了，所以start后面的一定都满足条件. 这里为什么不end - start + 1 呢？
+                    // nums = [2,2,3,4] 如果end = 4. start = 2(first). end = 3 -> 因为要选出的是组合数量。因为3和4已经是固定的了，那么就看满足条件的start有几个。现在只有2(first / second)满足。
+                    // 如果+1的话，那把end也给算上了，不符合题意
+                    result += end - start;
+                    end--;
+                } else {
+                    start++;
+                }
+            }
+        }
+        return result;
+    }
+}
+```
+
 # Week 10
 
 [Week-10](./week10/week-10.md) 
