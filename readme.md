@@ -2000,6 +2000,47 @@ class Solution {
 }
 ```
 
+### 至多包含两个不同字符的最长字串长度
+```java
+class Slution {
+    public int lengthOfLongestSusstringTwoDistinct(String s) {
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
+
+        int i = 0;
+        int j = 0;
+        int result = 0;
+
+        // key: 字符  value：字符最后一次出现的位置
+        Map<Character, Integer> map = new HashMap<>();
+
+        for (i = 0; i < s.length(); i++) {
+            while (j < s.length()) {
+
+                char ch = s.charAt(j);
+                if (map.size() <= 2) {
+                    map.put(ch, j);
+                    result = Math.max(result, j - i + 1);
+                    j++;
+                } else {
+                    break;
+                }
+            }
+
+            // 收缩左边界
+            int minIndex = s.length() - 1;
+            for (int index : map.values()) {
+                minIndex = Math.min(minIndex, index);
+            }
+            char charToDelete = s.charAt(minIndex);
+            map.remove(charToDelete);
+            i = minIndex;
+        }
+    }
+}
+```
+
 # Week 10
 
 [Week-10](./week10/week-10.md) 
