@@ -1846,6 +1846,34 @@ class Solution {
 }
 ```
 
+### 接雨水
+**单调栈**
+```java
+class Solution {
+    public int trap(int[] height) {
+        if (height == null || height.length == 0) {
+            return 0;
+        }
+
+        Deque<Integer> stack = new ArrayDeque<>();
+        int result = 0;
+
+        for (int i = 0; i < height.length; i++) {
+            while (!stack.isEmpty() && height[stack.peek()] < height[i]) {
+                int midIndex = stack.pop();
+                if (!stack.isEmpty()) {
+                    int heightGap = Math.min(height[stack.peek()], height[i]) - height[midIndex];
+                    int width = i - stack.peek() - 1;
+                    result += heightGap * width;
+                }
+            }
+            stack.push(i);
+        }
+        return result;
+    }
+}
+```
+
 # Week 10
 
 [Week-10](./week10/week-10.md) 
