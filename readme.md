@@ -2099,3 +2099,51 @@ class Solution {
 # Week 10
 
 [Week-10](./week10/week-10.md) 
+
+### 滚动数组以及优化
+**普通数组**
+```java
+class Solution {
+    public int climbStairs(int n) {
+        if (n == 0) {
+            return 0;
+        }
+
+        // dp[n]: 有多少中不同的方法爬到第n阶
+        int[] dp = new int[n + 1];  // 为了不用倒腾索引的关系，最后直接返回dp[n]
+        dp[0] = 1;
+        dp[1] = 1;
+
+        for (int i = 2; i <= n; i++) {
+            // 状态转移方程：dp[n] = 最后一步爬1个台阶的方案总数（dp[n - 1]） + 最后一步爬2个台阶的方案总数（dp[n - 2]）
+            dp[i] = dp[i - 1] + dp[i - 2];
+        }
+
+        return dp[n];
+    }
+}
+```
+
+**滚动数组油画**
+```java
+class Solution {
+    public int climbStairs(int n) {
+        if (n == 0) {
+            return 0;
+        }
+
+        // dp[n]: 有多少中不同的方法爬到第n阶
+        int[] dp = new int[2];  // 为了不用倒腾索引的关系，最后直接返回dp[n]
+        dp[0] = 1;
+        dp[1] = 1;
+
+        for (int i = 2; i <= n; i++) {
+            // 状态转移方程：dp[n] = 最后一步爬1个台阶的方案总数（dp[n - 1]） + 最后一步爬2个台阶的方案总数（dp[n - 2]）
+            dp[i % 2] = dp[(i - 1) % 2] + dp[(i - 2) % 2];
+        }
+
+        return dp[n % 2];
+    }
+}
+```
+
