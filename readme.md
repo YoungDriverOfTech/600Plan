@@ -2175,3 +2175,51 @@ class Solution {
     }
 }
 ```
+
+### 打家劫舍-首尾房子相邻
+**双重DP**
+```java
+class Solution {
+    // 有题意：第一个和最后一个房子连起来，说明如果打劫了第一个则不能打劫最后一个
+    // 如果从第二个开始打劫，那么可以打劫最后一个。 做两次dp。
+    // 第一个dp是从第一个房子开始：
+    // dp[0] = 0
+    // dp[1] = nums[0]
+    // dp[i] = max(dp[i - 2] + nums[i - 1], dp[i - 1])
+
+    // 第二个dp是从第二个房子开始：
+    // dp[0] = 0
+    // dp[1] = 0
+    // dp[i] = max(dp[i - 2] + nums[i - 1], dp[i - 1])
+    public int rob(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+
+        // 从第一个房子开始打劫, 对于DP来说i是1基的
+        int n = nums.length;
+        int[] dp1 = new int[n + 1];
+        dp1[0] = 0;
+        dp1[1] = nums[0];
+        for (int i = 2; i <= n; i++) {
+            // 如果到了最后一个房子，则跳过
+            if (i == n) {
+                dp1[i] = dp1[i - 1];
+                continue;
+            }
+
+            dp1[i] = Math.max(dp1[i - 2] + nums[i - 1], dp1[i - 1]);
+        }
+
+        // 从第二个房子开始打劫
+        int[] dp2 = new int[n + 1];
+        dp2[0] = 0;
+        dp2[1] = 0;
+        for (int i = 2; i <= n; i++) {
+            dp2[i] = Math.max(dp2[i - 2] + nums[i - 1], dp2[i - 1]);
+        }
+
+        return Math.max(dp1[n], dp2[n]);
+    }
+}
+```
