@@ -2296,3 +2296,28 @@ class Solution {
     }
 }
 ```
+
+### 乘积最大子数组
+```java
+class Solution {
+    public int maxProduct(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+
+        int len = nums.length;
+        int[] maxDp = new int[len];
+        int[] minDp = new int[len];
+        maxDp[0] = minDp[0] = nums[0];
+
+        int result = nums[0];
+        for (int i = 1; i < len; i++) {
+            maxDp[i] = Math.max(Math.max(maxDp[i - 1] * nums[i], nums[i]), minDp[i - 1] * nums[i]);
+            minDp[i] = Math.min(Math.min(maxDp[i - 1] * nums[i], nums[i]), minDp[i - 1] * nums[i]);
+            result = Math.max(Math.max(result, maxDp[i]), minDp[i]);
+        }
+
+        return result;
+    }
+}
+```
