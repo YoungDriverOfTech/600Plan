@@ -2321,3 +2321,52 @@ class Solution {
     }
 }
 ```
+
+### 粉刷k个房子
+```java
+class Solution {
+  public int minCost(int[][] costs) {
+    if (costs == null || costs.length == 0 || costs[0] == null || cost[0].lenth == 0) {
+      return 0;
+    }
+    
+    int n = costs.length;
+    int K = costs[0].length;
+    // State: dp[i][j]: 用颜色j粉刷第i个房子的最小花费
+    // 滚动数组： dp[i][j] = dp[i - 1][j] + costs[i][k]
+    // Solution: min(dp[n - 1][k]), 其中k=0，1，2
+    int[][] dp = new int[2][K];
+    
+    // 因为要求最小的花费，所以每个元素初始化为最大值
+    for (int i = 0; i < n; i++) {
+      int[] colors = new int[K];
+      Arrays.fill(colors, Integer.MAX_VALUE);
+      dp[i] = colors;
+    }
+    
+    // 初始化第0个房子粉刷成不同颜色的花费
+    for (int i = 0; i < K; i++) {
+      dp[0][K] = costs[0][K];
+    }
+    
+    for (int i = 1; i < n; i++) {
+      for (int j = 0; j < K; j++) {
+        // 因为相邻的房子颜色不能一样，所以要控制j
+        for (int k = 0; k < K; k++) {
+          if (j != k) {
+            dp[i % 2][j] = Math.min(dp[i][j], dp[(i - 1) % 2][k] + costs[i][j]);
+          }
+        }
+      }
+    }
+    
+    // Solution 刷完最后一个房子的总花费
+    int result = Integer.MAX_VALUE;
+    for (int i = 0; i < K; i++) {
+      result = Math.min(dp[(n - 1) % 2][i], result);
+    }
+    
+    return result;
+  }
+}
+```
