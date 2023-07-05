@@ -2370,3 +2370,70 @@ class Solution {
   }
 }
 ```
+优化时间复杂度到O(n * k)
+
+记录两个变量 minCost 和 secondMinCost。求出 i - 1 房子图k中颜色的minCost 和 secondMinCost
+在求dp[i] [j]的时候，比较上一个房子的成本和minCost / secondMinCost的大小。 
+- 如果和minCost相等，那么说明当前j颜色被上个房子选择了，那么当前房子的话费选择secondMinCost就是最小的。 
+- 如果和secondMinCost相等，那么说明当前房子花费选择minCost是最小的
+```java
+class Solution {
+  public int minCost(int[][] costs) {
+    if (costs == null || costs.length == 0 || costs[0] == null || cost[0].lenth == 0) {
+      return 0;
+    }
+    
+    int n = costs.length;
+    int K = costs[0].length;
+    // State: dp[i][j]: 用颜色j粉刷第i个房子的最小花费
+    // 滚动数组： dp[i][j] = dp[i - 1][j] + costs[i][k]
+    // Solution: min(dp[n - 1][k]), 其中k=0，1，2
+    int[][] dp = new int[2][K];
+    
+    // 因为要求最小的花费，所以每个元素初始化为最大值
+    for (int i = 0; i < n; i++) {
+      int[] colors = new int[K];
+      Arrays.fill(colors, Integer.MAX_VALUE);
+      dp[i] = colors;
+    }
+    
+    // 初始化第0个房子粉刷成不同颜色的花费
+    for (int i = 0; i < K; i++) {
+      dp[0][K] = costs[0][K];
+    }
+    
+    int minCost = Integer.MAX_VALUE;
+    int secondMinCost = Integer.MAX_VALUE;
+    for (int i = 1; i < n; i++) {
+      // 计算出最小和次小的成本
+      minCost = Integer.MAX_VALUE;
+      secondMinCost = Integer.MAX_VALUE;
+      for (int j = 0; j < K; j++) {
+        if (dp[(i - 1) % 2][j] <= minCost) {
+          secondMinCost = minCost;
+          minCost = dp[(i - 1) % 2][j];
+        } else if (dp[(i - 1) % 2][j] <= secondMinCost) {
+          secondMinCost = dp[(i - 1) % 2][j];
+        }
+      }
+      
+      // 取出dp的最小成本
+      for (int j = 0; j < K; j++) {
+        if (dp[(i - 1) % 2][j] == minCost) {
+          dp[i][j] = secondMinCost + costs[i][j];
+        } else {
+          dp[i][j] = minCost + costs[i][j];
+        }
+      }
+    }
+    
+    // Solution 刷完最后一个房子的总花费
+    int result = Integer.MAX_VALUE;
+    for (int i = 0; i < K; i++) {
+      result = Math.min(dp[(n - 1) % 2][i], result);
+    }
+    
+    return result;
+  }
+}
+```
