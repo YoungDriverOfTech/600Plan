@@ -2512,3 +2512,32 @@ class Solution {
     }
 }
 ```
+
+**有冷冻期的股票买卖**
+```java
+class Solution {
+    // 因为有冷冻期的存在，所以买入的时候需要考虑的不是昨天的利润，而是前两天的利润
+    // 那么在计算买入的时候的注意一下冷冻期即可
+    public int maxProfit(int[] prices) {
+        if (prices == null || prices.length == 0) {
+            return 0;
+        }
+
+        int n = prices.length;
+        int[][] dp = new int[n][2];
+        dp[0][0] = 0;
+        dp[0][1] = -prices[0];
+
+        for (int i = 1; i < prices.length; i++) {
+            dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][1] + prices[i]);
+
+            // i - 2 是要考虑前天的利润
+            // PS： 注意注意注意 这里是(i - 2 < 0 ? 0 : dp[i - 2][0]) 去减 prices[i].
+            dp[i][1] = Math.max(dp[i - 1][1], (i - 2 < 0 ? 0 : dp[i - 2][0]) - prices[i]);
+        }
+
+        // 因为获得最大利润的时候，一定是手上没有股票的时候
+        return dp[n - 1][0];
+    }
+}
+```
