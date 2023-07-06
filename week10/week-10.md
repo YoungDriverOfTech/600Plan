@@ -729,7 +729,7 @@ class Solution {
         // 因为相邻的房子颜色不能一样，所以要控制j
         for (int k = 0; k < 3; k++) {
           if (j != k) {
-            dp[i % 2][j] = Math.min(dp[i][j], dp[(i - 1) % 2][k] + costs[i][j]);
+            dp[i % 2][j] = Math.min(dp[i % 2][j], dp[(i - 1) % 2][k] + costs[i][j]);
           }
         }
       }
@@ -780,7 +780,7 @@ class Solution {
         // 因为相邻的房子颜色不能一样，所以要控制j
         for (int k = 0; k < K; k++) {
           if (j != k) {
-            dp[i % 2][j] = Math.min(dp[i][j], dp[(i - 1) % 2][k] + costs[i][j]);
+            dp[i % 2][j] = Math.min(dp[i % 2][j], dp[(i - 1) % 2][k] + costs[i][j]);
           }
         }
       }
