@@ -801,10 +801,10 @@ class Solution {
 
 优化时间复杂度到O(n * k)
 
-记录两个变量 minCost 和 secondMinCost。在求dp[i] [j]的时候，先求出 i - 1 房子图k中颜色的minCost 和 secondMinCost
-
-然后再比较当前房子粉刷的某种颜色和 i - 1房子的最小和次小的成本。如果最小的成本相同了，那么说明颜色一样，选择次小的成本当作dp[i] [j]的值。否则就选择最小的成本
-
+记录两个变量 minCost 和 secondMinCost。求出 i - 1 房子图k中颜色的minCost 和 secondMinCost
+在求dp[i] [j]的时候，比较上一个房子的成本和minCost / secondMinCost的大小。 
+- 如果和minCost相等，那么说明当前j颜色被上个房子选择了，那么当前房子的话费选择secondMinCost就是最小的。 
+- 如果和secondMinCost相等，那么说明当前房子花费选择minCost是最小的
 ```java
 class Solution {
   public int minCost(int[][] costs) {

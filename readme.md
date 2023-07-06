@@ -2321,3 +2321,223 @@ class Solution {
     }
 }
 ```
+
+### 粉刷k个房子
+```java
+class Solution {
+  public int minCost(int[][] costs) {
+    if (costs == null || costs.length == 0 || costs[0] == null || cost[0].lenth == 0) {
+      return 0;
+    }
+    
+    int n = costs.length;
+    int K = costs[0].length;
+    // State: dp[i][j]: 用颜色j粉刷第i个房子的最小花费
+    // 滚动数组： dp[i][j] = dp[i - 1][j] + costs[i][k]
+    // Solution: min(dp[n - 1][k]), 其中k=0，1，2
+    int[][] dp = new int[2][K];
+    
+    // 因为要求最小的花费，所以每个元素初始化为最大值
+    for (int i = 0; i < n; i++) {
+      int[] colors = new int[K];
+      Arrays.fill(colors, Integer.MAX_VALUE);
+      dp[i] = colors;
+    }
+    
+    // 初始化第0个房子粉刷成不同颜色的花费
+    for (int i = 0; i < K; i++) {
+      dp[0][K] = costs[0][K];
+    }
+    
+    for (int i = 1; i < n; i++) {
+      for (int j = 0; j < K; j++) {
+        // 因为相邻的房子颜色不能一样，所以要控制j
+        for (int k = 0; k < K; k++) {
+          if (j != k) {
+            dp[i % 2][j] = Math.min(dp[i][j], dp[(i - 1) % 2][k] + costs[i][j]);
+          }
+        }
+      }
+    }
+    
+    // Solution 刷完最后一个房子的总花费
+    int result = Integer.MAX_VALUE;
+    for (int i = 0; i < K; i++) {
+      result = Math.min(dp[(n - 1) % 2][i], result);
+    }
+    
+    return result;
+  }
+}
+```
+优化时间复杂度到O(n * k)
+
+记录两个变量 minCost 和 secondMinCost。求出 i - 1 房子图k中颜色的minCost 和 secondMinCost
+在求dp[i] [j]的时候，比较上一个房子的成本和minCost / secondMinCost的大小。 
+- 如果和minCost相等，那么说明当前j颜色被上个房子选择了，那么当前房子的话费选择secondMinCost就是最小的。 
+- 如果和secondMinCost相等，那么说明当前房子花费选择minCost是最小的
+```java
+class Solution {
+  public int minCost(int[][] costs) {
+    if (costs == null || costs.length == 0 || costs[0] == null || cost[0].lenth == 0) {
+      return 0;
+    }
+    
+    int n = costs.length;
+    int K = costs[0].length;
+    // State: dp[i][j]: 用颜色j粉刷第i个房子的最小花费
+    // 滚动数组： dp[i][j] = dp[i - 1][j] + costs[i][k]
+    // Solution: min(dp[n - 1][k]), 其中k=0，1，2
+    int[][] dp = new int[2][K];
+    
+    // 因为要求最小的花费，所以每个元素初始化为最大值
+    for (int i = 0; i < n; i++) {
+      int[] colors = new int[K];
+      Arrays.fill(colors, Integer.MAX_VALUE);
+      dp[i] = colors;
+    }
+    
+    // 初始化第0个房子粉刷成不同颜色的花费
+    for (int i = 0; i < K; i++) {
+      dp[0][K] = costs[0][K];
+    }
+    
+    int minCost = Integer.MAX_VALUE;
+    int secondMinCost = Integer.MAX_VALUE;
+    for (int i = 1; i < n; i++) {
+      // 计算出最小和次小的成本
+      minCost = Integer.MAX_VALUE;
+      secondMinCost = Integer.MAX_VALUE;
+      for (int j = 0; j < K; j++) {
+        if (dp[(i - 1) % 2][j] <= minCost) {
+          secondMinCost = minCost;
+          minCost = dp[(i - 1) % 2][j];
+        } else if (dp[(i - 1) % 2][j] <= secondMinCost) {
+          secondMinCost = dp[(i - 1) % 2][j];
+        }
+      }
+      
+      // 取出dp的最小成本
+      for (int j = 0; j < K; j++) {
+        if (dp[(i - 1) % 2][j] == minCost) {
+          dp[i][j] = secondMinCost + costs[i][j];
+        } else {
+          dp[i][j] = minCost + costs[i][j];
+        }
+      }
+    }
+    
+    // Solution 刷完最后一个房子的总花费
+    int result = Integer.MAX_VALUE;
+    for (int i = 0; i < K; i++) {
+      result = Math.min(dp[(n - 1) % 2][i], result);
+    }
+    
+    return result;
+  }
+}
+```
+
+### 买卖股票
+**买卖股票2-每天都可以买卖，最大持有1支**
+```java
+class Solution {
+    public int maxProfit(int[] prices) {
+        if (prices == null || prices.length == 0) {
+            return 0;
+        }
+
+        // dp[i][0] 没有股票最大利润 = max(dp[i-1][0], dp[i-1][1] + prices[i])
+        // dp[i][1] 有股票最大利润 = max(dp[i-1][1], dp[i-1][0] - prices[i])
+        int len = prices.length;
+        int[][] dp = new int[2][2];
+        dp[0][0] = 0;
+        dp[0][1] = -prices[0];
+
+        for (int i = 1; i < len; i++) {
+            dp[i % 2][0] = Math.max(dp[(i - 1) % 2][0], dp[(i - 1) % 2][1] + prices[i]);
+            dp[i % 2][1] = Math.max(dp[(i - 1) % 2][1], dp[(i - 1) % 2][0] - prices[i]);
+        }
+
+        return dp[(len - 1) % 2][0];
+    }
+}
+```
+**买卖股票2-每天都可以买卖，最大持有1支. 限制交易次数为2**
+```java
+class Solution {
+    // DP动态规划思路： 这次规定了交易的最大次数k，这个k意味着买入+卖出才能构成一次交易. 
+    // 我们在这里定义，只有卖出操作完成时候，才能让交易次数+1
+
+    // dp[i][k][m]: 代表了第i天第k次交易后的最大利润 m=0: 未持股 m=1: 持股
+    // dp[i][k][0] -> dp[i - 1][k][0] 昨天未持股处在第k笔交易，今天也没持股，也处在第k笔交易
+    //             -> dp[i - 1][k - 1][1] + prices[i] 昨天持股处在第k - 1笔交易，今天卖出，所以交易次数+1 = k（因为买+卖=1笔）
+    // dp[i][k][1] -> dp[i - 1][k][1] 昨天持股处在第k笔交易，今天也持股，也处在第k笔交易
+    //             -> dp[i - 1][k][0] - prices[i] 昨天未持股处在第k笔交易，今天买入，也处在第k笔交易（因为买+卖=1笔）
+
+    // 初始条件(交易次数): dp[0][k][0] = 0
+    //                  dp[0][k][1] = -prices[0]
+    // 初始条件(天数):    dp[i]][0][0] = 0
+    //                  dp[i][0][1] = Math.max(dp[i - 1][0][1], dp[i - 1][0][0] + prices[i])  昨天已持有； 昨天未持有，今天买入
+    public int maxProfit(int[] prices) {
+
+        if (prices == null || prices.length == 0) {
+            return 0;
+        }
+
+        // PS: 只有卖出的时候才能算作交易次数
+        int n = prices.length;
+        int[][][] dp = new int[n][2 + 1][2];
+
+        // 初始化交易次数
+        for (int i = 0; i <= 2; i++) {
+            dp[0][i][0] = 0;
+            dp[0][i][1] = -prices[0];
+        }
+
+        // 初始化交易天数
+        for (int i = 1; i < n; i++) {
+            dp[i][0][0] = 0;
+            // 为什么k可以等于0，因为我们定义卖出才算一笔交易才会给k加1
+            dp[i][0][1] = Math.max(dp[i - 1][0][1], dp[i - 1][0][0] - prices[i]);
+        }
+
+        for (int i = 1; i < n; i++) {
+            for (int j = 1; j <= 2; j++) {
+                dp[i][j][0] = Math.max(dp[i - 1][j][0], dp[i - 1][j - 1][1] + prices[i]);
+                dp[i][j][1] = Math.max(dp[i - 1][j][1], dp[i - 1][j][0] - prices[i]);
+            }
+        }
+        return dp[n - 1][2][0];
+    }
+}
+```
+
+**有冷冻期的股票买卖**
+```java
+class Solution {
+    // 因为有冷冻期的存在，所以买入的时候需要考虑的不是昨天的利润，而是前两天的利润
+    // 那么在计算买入的时候的注意一下冷冻期即可
+    public int maxProfit(int[] prices) {
+        if (prices == null || prices.length == 0) {
+            return 0;
+        }
+
+        int n = prices.length;
+        int[][] dp = new int[n][2];
+        dp[0][0] = 0;
+        dp[0][1] = -prices[0];
+
+        for (int i = 1; i < prices.length; i++) {
+            dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][1] + prices[i]);
+
+            // i - 2 是要考虑前天的利润
+            // PS： 注意注意注意 这里是(i - 2 < 0 ? 0 : dp[i - 2][0]) 去减 prices[i].
+            dp[i][1] = Math.max(dp[i - 1][1], (i - 2 < 0 ? 0 : dp[i - 2][0]) - prices[i]);
+        }
+
+        // 因为获得最大利润的时候，一定是手上没有股票的时候
+        return dp[n - 1][0];
+    }
+}
+```
