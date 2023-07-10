@@ -2577,3 +2577,54 @@ class Solution {
     }
 }
 ```
+
+### 三角形最小路径和
+```java
+class Solution {
+    /**
+    dp[i][j]表示i，j个元素的最小路径和。
+    正常：dp[i][j] = min(dp[i - 1][j], dp[i - 1][j - 1]) + values[i][j]
+    例外1：最后一行，最后一个元素：dp[i][j] = dp[i - 1][j - 1] + values[i][j]
+    例外2：最后一行，第一个元素：dp[i][j] = dp[i - 1][j] + values[i][j]
+        2
+        3 4
+        6 5 7
+        4 1 8 3
+    因为坐标(1. 1)只有一个元素，所以初始化的时候，只用初始化（1, 1）就行了
+     */
+
+    public int minimumTotal(List<List<Integer>> triangle) {
+        if (triangle == null || triangle.size() == 0 || triangle.get(0) == null || triangle.get(0).size() == 0) {
+            return 0;
+        }
+
+        int m = triangle.size();
+        int n = triangle.get(m - 1).size();
+        int[][] dp = new int[m][n];
+        dp[0][0] = triangle.get(0).get(0);
+
+        for (int i = 1; i < m; i++) {
+            int cols = triangle.get(i).size();
+            for (int j = 0; j < cols; j++) {
+                // 例外1
+                if (j == 0) {
+                    dp[i][j] = dp[i - 1][j] + triangle.get(i).get(j);
+                }else if (j == cols - 1) {
+                    // 例外2
+                    dp[i][j] = dp[i - 1][j - 1] + triangle.get(i).get(j);
+                } else {
+                    // 正常
+                    dp[i][j] = Math.min(dp[i - 1][j], dp[i - 1][j - 1]) + triangle.get(i).get(j);
+                }
+            }
+        }
+
+        // 便利最后一行，取得最小值
+        int result = Integer.MAX_VALUE;
+        for (int j = 0; j < n; j++) {
+            result = Math.min(result, dp[m - 1][j]);
+        }
+        return result;
+    }
+}
+```
