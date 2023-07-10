@@ -2541,3 +2541,39 @@ class Solution {
     }
 }
 ```
+
+### 双序列动态规划
+题目特点：输入序列由两个单序列组成  
+解题要点：  
+    - 用i，j两个变量分别代表第一个串和第二个串的位置  
+    - dp[i] [j]地标第一串[0, .., i], 第二串[0, .. , j]时，原问题的解  
+    - 推导dp[i] [j]仅与dp[i - 1] [j]， dp[i] [j - 1]，dp[i - 1] [j - 1]有关  
+```java
+class Solution {
+    public int longestCommonSubsequence(String text1, String text2) {
+        if (text1 == null || text2 == null) {
+            return 0;
+        }
+
+        int m = text1.length();
+        int n = text2.length();
+
+        // dp数组长度加1，为了不用做初始化
+        int[][] dp = new int[m + 1][n + 1];
+        
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                // 这里i，j的-1代表的是dp的索引（base 1），转换到字符串上（base 0）
+                if (text1.charAt(i - 1) == text2.charAt(j - 1)) {
+                    // 因为这里 text1.charAt(i - 1) == text2.charAt(j - 1) 最新的字符已经相等了，那么只需要看text1，text2各减去
+                    // 一个字符的最大值即可
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                } else {
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+        return dp[m][n];
+    }
+}
+```
