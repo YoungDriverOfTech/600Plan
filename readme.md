@@ -2628,3 +2628,80 @@ class Solution {
     }
 }
 ```
+
+### 地下城游戏
+```java
+class Solution {
+    // dp[i][j] 表示移动到[i, j]位置需要的最低血量。
+    // 只有需要的血量 + 【i, j】格子提供的血量（可能为负值） >= 1 才能继续往下面/右边的格子走
+    // dp[i][j](需要的最低血量) + dungeon[i][j] >= 1   PS：这里要用+号，因为格子里面的数组是带有符号的
+
+    // 我们从尾到头进行状态转移，这样的话计算每个格子里面需要的最低血量是在当前格子的右边和下边
+    // dp[i][j](如果想要往右/下走需要的血量) = max(min(dp[i + 1][j], dp[i][j + 1]) - dungeon[i][j], 1)
+    public int calculateMinimumHP(int[][] dungeon) {
+        if (dungeon == null || dungeon.length == 0) {
+            return 0;
+        }
+
+        // 定义dp的时候行列多一个单位，因为我们从最后一个元素开始状态转移的时候，需要用到超出边界的一行和一列
+        int m = dungeon.length;
+        int n = dungeon[0].length;
+        int[][] dp = new int[m + 1][n + 1];
+
+        // 初始化：因为我们求的是min(dp[i + 1][j], dp[i][j + 1])，所以把每行每列都填充最大值
+        // 只需要最后一个元素的右边和下面格子填充1就行了（表明到了最后一个格子的时候，至少需要1点的hp）
+        for (int i = 0; i <= m; i++) {
+            int[] arr = new int[n + 1];
+            Arrays.fill(arr, Integer.MAX_VALUE);
+            dp[i] = arr;
+        }
+        dp[m - 1][n] = dp[m][n - 1] = 1;
+
+        for (int i = m - 1; i >= 0; i--) {
+            for (int j = n - 1; j >= 0; j--) {
+                // 勇士走出迷宫需要的最低HP + 当前迷宫格子提供的HP（可能是负值）= 进入下个格子后，勇士的HP
+                // 变换一下公式： 勇士走出迷宫需要的最低HP = 进入下个格子后，勇士的HP - 当前迷宫格子提供的HP（可能是负值）
+                int minHp = Math.min(dp[i + 1][j], dp[i][j + 1]) - dungeon[i][j];
+
+                // 求出勇士在【i，j】格子所需要的最低HP如果是负值，那么说明这个格子给提供的血量一定是个正值，且勇士喝完这个格子的HP药水后，能把
+                // 负的HP变成正的。 但是因为题目要求每个格子至少是1🩸才行，所以要把需要的hp和1做比较，取较大值
+                dp[i][j] = Math.max(minHp, 1);
+            }
+        }
+        return dp[0][0];
+    }
+}
+```
+
+### 最大正方形
+```java
+class Solution {
+    public int maximalSquare(char[][] matrix) {
+        if (matrix == null || matrix.length == 0 || matrix[0] == null || matrix[0].length == 0) {
+            return 0;
+        }
+
+        // dp[i][j]: 以为【i，j】为右下角的正方形的最小边长
+        int m = matrix.length;
+        int n = matrix[0].length;
+        int[][] dp = new int[m][n];
+
+        // dp[i][j] = min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]) + 1
+        int side = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (matrix[i][j] == '1') {
+                    if (i == 0 || j == 0) {
+                        dp[i][j] = 1;
+                    } else {
+                        // 最后的+1，别忘记。 因为要加上当前格子的边长
+                        dp[i][j] = Math.min(dp[i - 1][j], Math.min(dp[i][j - 1], dp[i - 1][j - 1])) + 1;
+                    }
+                    side = Math.max(side, dp[i][j]);
+                }
+            }
+        }
+        return side * side;
+    }
+}
+```
