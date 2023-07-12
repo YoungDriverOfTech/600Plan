@@ -1570,7 +1570,7 @@ https://space.bilibili.com/477641493/video
 
 - 问题：有n钟物品，物品i的体积为V[i],价值为W[i]，每种物品有无限个，求解再背包体积限制V下可获取的价值最大
 - 状态：dp[i] [j]代表前i个物品，占用j空间所能获取的最大价值
-- 转移方程：dp[i] [j] = max(dp[i - 1] [j], dp[i] [j - V[i]] + W[i])
+- 转移方程：dp[i] [j] = max(dp[i] [j], dp[i - 1] [j - V[i]] + W[i])
 - 求解：max(dp[i] [j])
 
 
