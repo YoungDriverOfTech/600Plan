@@ -1637,38 +1637,41 @@ class Solution {
 
 ```java
 class Solution {
-
-    
     public int coinChange(int[] coins, int amount) {
-        // 特殊处理的时候，不能amount <= 0。因为如果不取硬币的话，可以满足条件
         if (coins == null || coins.length == 0 || amount < 0) {
             return -1;
         }
 
-        // dp[i][j]: 取前i枚硬币所组成的和等于j的硬币总数
         int n = coins.length;
-        int[][] dp = new int[n + 1][amount + 1];    // n + 1是因为取硬币的时候语义化，i=1就是取第一枚
 
-        // 初始化
-        for (int[] array : dp) {
-            // 因为求最小的硬币数量，会用到min函数，所以初始化的时候初始化大一些的数值
-            // 取第0枚硬币（实际上没取）永远组不成和>=1  ->  硬币的数量就算是最大也没关系，因为本身就不成立
-            Arrays.fill(array, 20000);
+        // dp[i][j] 在前i枚硬币中组成j金额的最小硬币数字
+        int[][] dp = new int[n + 1][amount + 1];
+
+        // 初始化：如果前i枚硬币组不成金额j -> 无论来多少枚硬币都无法组成j，那dp[i][j] = MAX
+        //        如果前i枚硬币组成金额0  -> 不选择硬币即可，那dp[i][j] = 0
+        for (int i = 0; i < dp.length; i++) {
+            int[] arr = new int[amount + 1];
+            Arrays.fill(arr, 20000);
+            dp[i] = arr;
         }
-
-        // 取硬币以后，永远组不成和为0，所以硬币数量是0
-        for (int i = 0; i <= n; i++) {
+        for (int i = 0; i < dp.length; i++) {
             dp[i][0] = 0;
         }
 
         for (int i = 1; i <= n; i++) {
+
+            // j代表当前的目标金额
             for (int j = 1; j <= amount; j++) {
-                // 同一枚硬币能去多少次，就看看总和j和这枚硬币的面值是多少
+                // k代表当前硬币i，取几枚。 k <= j / coins[i - 1] 代表k能取到的最大数量
                 for (int k = 0; k <= j / coins[i - 1]; k++) {
+                    
+                    // j是当前目标金额，如果当前这枚i硬币取了k枚，那么上一枚硬币的数量就是 dp[i - 1][j - k * coins[i - 1]] 
+                    // 现在已经知道上一枚硬币数量，在加上这次取的k枚i硬币，就能知道这次dp[i][j]的硬币数量
                     dp[i][j] = Math.min(dp[i][j], dp[i - 1][j - k * coins[i - 1]] + k);
                 }
             }
         }
+
         return dp[n][amount] == 20000 ? -1 : dp[n][amount];
     }
 }
