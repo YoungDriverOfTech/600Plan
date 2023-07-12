@@ -1680,6 +1680,17 @@ class Solution {
 一维数组空间优化
 
 ```java
+/*
+dp[i] 表示凑成金额i所需要的最小硬币数
+
+coins[1, 2, 5]
+
+       dp[i-5]          dp[i-2]    dp[i-1]   dp[i]
+dp  0    1       2   3      4         5        6
+那么要求出dp[i], 就要遍历数组coins，dp[i-本次硬币的面值] + 1. 这个加1就是加上本次的硬币
+dp[i] = Math.min(dp[i], dp[i - coin] + 1)
+*/
+
 public class CoinChange {
 
     // https://leetcode-cn.com/problems/coin-change/solution/ling-qian-dui-huan-by-chen-wei-f-b6we/
