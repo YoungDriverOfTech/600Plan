@@ -1581,6 +1581,9 @@ https://space.bilibili.com/477641493/video
 
 [416. 分割等和子集](https://leetcode.cn/problems/partition-equal-subset-sum/)
 
+解题思路： 等和子集 -> 和一定是偶数才行  
+dp[i][j]: 表示在【0，i】这个区间里面有一些数字的和正好等于j -> 01背包问题。把每个nums[i]拿出来想家，看看和是不是等于target（全体和的一半）
+
 ```java
 class Solution {
     public boolean canPartition(int[] nums) {
