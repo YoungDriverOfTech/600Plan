@@ -1571,8 +1571,8 @@ https://space.bilibili.com/477641493/video
 > （1) dp[i] [j] = max(dp[i - 1] [j], dp[i - 1] [j - W[i]] + V[i], dp[i - 1] [j - 2 * W[i]] + 2 * V[i], ..., dp[i - 1] [j - k * W[i]] + k * V[i])    
 > 而对于dp[i] [j - W[i]] 我们可以展开如下（把j = j - W[i]代入j）：    
 > （2）dp[i] [j - W[i]] = max(dp[i - 1] [j - W[i]], dp[i - 1] [j - 2 * W[i]] + V[i], dp[i - 1] [j - 3 * W[i]] + 2 * V[i], ..., dp[i - 1] [j - k * W[i]] + (k - 1) * V[i])  
-> (2)与(1)中的后k项正好相差了一个V[i], 将(2)左半部分代入1可得到：  
-> (3) dp[i] [j] = max(dp[i - 1] [j], dp[i] [j - W[i] + V[i]] 0 <= W[i] <= j  
+> 式子(2)与式子(1)中的后k项正好相差了一个V[i], 将(2)左半部分代入1可得到：  
+> （3） dp[i] [j] = max(dp[i - 1] [j], dp[i] [j - W[i] + V[i]] 0 <= W[i] <= j  
 
 
 
