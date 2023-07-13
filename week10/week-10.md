@@ -1748,7 +1748,9 @@ class Solution {
                     dp[i][j] = dp[i - 1][j];
                 } else {
                     // 背包能放下：那么根据dp定义，求的是凑成j金额的数量，那么就是选i和不选i的和
-                    dp[i][j] = dp[i - 1][j] + dp[i - 1][j - coin];
+                    // dp[i - 1][j] 不选第i枚硬币 dp[i - 1]
+                    // dp[i][j - coin] 要选第i枚硬币 dp[i]
+                    dp[i][j] = dp[i - 1][j] + dp[i][j - coin];
                 }
             }
         }
