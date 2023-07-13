@@ -1793,6 +1793,14 @@ class Solution {
 [377. 组合总和 Ⅳ](https://leetcode.cn/problems/combination-sum-iv/)
 
 ```java
+/*
+nums: 1, 2, 3
+
+    dp[i-3]  dp[i-2]  dp[i-1]  dp[i]      
+dp: 1,       2,       3,       4
+
+dp[i]和为i的组合数量
+*/
 class Solution {
     public int combinationSum4(int[] nums, int target) {
         if (nums == null || nums.length == 0 || target < 0) {
