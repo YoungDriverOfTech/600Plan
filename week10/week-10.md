@@ -1793,6 +1793,38 @@ class Solution {
 [377. 组合总和 Ⅳ](https://leetcode.cn/problems/combination-sum-iv/)
 
 ```java
+class Solution {
+    public int combinationSum4(int[] nums, int target) {
+        // dp[i][j] 前i个数子中的和等于j的数量
+        int n = nums.length;
+        int[][] dp = new int[n + 1][target + 1];
+
+        // 初始化
+        // dp[i][0]前i个数字的和为0的组合数。如果都不选就可以和为0，那初始化为1
+        // dp[0][j]前0个数字的和为j的组合数。因为没有数字可用，所以没办法和为j，初始化为0
+        for (int i = 0; i <= n; i++) {
+            dp[i][0] = 1;
+        }
+
+        /* 请注意，顺序不同的序列被视作不同的组合。
+         https://leetcode.cn/problems/combination-sum-iv/solution/gong-shui-san-xie-yu-wan-quan-bei-bao-we-x0kn/
+        */
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= target; j++) {
+                for (int num : nums) {
+                    if (j >= num) {
+                        dp[i][j] += dp[i][j - num];
+                    }
+                }
+            }
+        }
+
+        return dp[n][target];
+    }
+}
+```
+
+```java
 /*
 nums: 1, 2, 3
 
