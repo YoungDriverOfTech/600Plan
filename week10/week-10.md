@@ -1757,6 +1757,13 @@ class Solution {
 }
 ```
 ```java
+/*
+    coins: [1, 2, 5]
+            j-5         j-2 j-1 j 
+    dp: 1   2   3   4   5   6   7
+
+    要求出dp[j], 那就是要求出Sum（dp[j - coint[i]])
+*/
 class Solution {
     public int change(int amount, int[] coins) {
         if (amount < 0 || coins == null || coins.length == 0) {
