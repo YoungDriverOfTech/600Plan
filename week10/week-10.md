@@ -1724,6 +1724,41 @@ public class CoinChange {
 ```java
 class Solution {
     public int change(int amount, int[] coins) {
+        if (coins == null || coins.length == 0 || amount < 0) {
+            return 0;
+        }
+        
+        // dp[i][j] 前i中硬币凑成金额j的组合数
+        int n = coins.length;
+        int[][] dp = new int[n + 1][amount + 1];
+        
+        // 初始化只有这个dp[0][0]就足够了。前0钟硬币凑成金额0，就是没有硬币直接就是金额0
+        // dp[i][0]: 前i中硬币凑成金额0，可以不选硬币，初始化为0
+        // dp[0][j]: 前0中硬币凑成金额j，因为前0种硬币始终是0，初始化成0就行
+        for (int i = 0; i <= n; i++) {
+            dp[i][0] = 1;
+        }
+        dp[0][0] = 1;
+
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= amount; j++) {
+                int coin = coins[i - 1];
+                // 硬币面值比金额大, 背包放不下
+                if (coin > j) {
+                    dp[i][j] = dp[i - 1][j];
+                } else {
+                    // 背包能放下：那么根据dp定义，求的是凑成j金额的数量，那么就是选i和不选i的和
+                    dp[i][j] = dp[i - 1][j] + dp[i - 1][j - coin];
+                }
+            }
+        }
+        return dp[n][amount];
+    }
+}
+```
+```java
+class Solution {
+    public int change(int amount, int[] coins) {
         if (amount < 0 || coins == null || coins.length == 0) {
             return 0;
         }
