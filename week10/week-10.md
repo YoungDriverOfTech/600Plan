@@ -1806,8 +1806,12 @@ class Solution {
             dp[i][0] = 1;
         }
 
-        /* 请注意，顺序不同的序列被视作不同的组合。
-         https://leetcode.cn/problems/combination-sum-iv/solution/gong-shui-san-xie-yu-wan-quan-bei-bao-we-x0kn/
+        /* 请注意，顺序不同的序列被视作不同的组合。假定有[1, 2, 3]，那么凑成6的话就有6种方案，因为顺序不同也被视作不同的方案
+            那么对于dp[i][j]来说，组合中的最后一个数字可以选择nums中任意的数值，因此dp[i][j]应该为以下方案的总和：
+            1. 最后一个数字选择nums[0]，方案数为dp[i][j - nums[0]]
+            2. 最后一个数字选择nums[1]，方案数为dp[i][j - nums[1]]
+            3. 最后一个数字选择nums[2]，方案数为dp[i][j - nums[2]]
+            ...
         */
         for (int i = 1; i <= n; i++) {
             for (int j = 1; j <= target; j++) {
