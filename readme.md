@@ -1081,7 +1081,7 @@ class Solution {
         }
 
         // 重置标记，因为回溯
-        visited[x][y] = false;
+        visited[x][y] = true;
         return result;
     }
 
