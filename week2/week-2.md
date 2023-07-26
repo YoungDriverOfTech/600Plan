@@ -1263,6 +1263,8 @@ class Solution {
                 }
             } else {
                 // [start, mid]没有旋转,查找的时候优先[start, mid - 1]
+		// PS：这个else里面隐含了一个条件，就是nums[start] == nums[mid]，如果这个else写成上面的if，别忘记加上=号这个条件，因为计算mid的时候
+		// mid的值有可能和start相等
                 if (nums[start] <= target && target < nums[mid]) {
                     end = mid - 1;
                 } else {
