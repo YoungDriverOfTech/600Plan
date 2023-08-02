@@ -688,11 +688,6 @@ class Solution {
         // 这种写法不同与上面的，一定要把root节点的值在这块加入，如果不加入的话，下面的if可能回直接return
         // 这样跟节点的值就会被漏掉
         list.add(String.valueOf(root.val));
-        
-        // 什么以后退出递归
-        if (root == null) {
-            return;
-        }
 
         // 什么时候吧单一解加入到result
         if (root.left == null && root.right == null) {
