@@ -1087,7 +1087,9 @@ class Solution {
                 if (map.get(sChar) != tChar) {
                     return false;
                 }
-            } else if (map.containsValue(tChar)) { // 不同的字符映射到了同一个字符 X
+            } else if (map.containsValue(tChar)) {
+                // 不同的s字符映射到了同一个t字符 X
+                // s = "badc"  t = "baba"
                 return false;
             } else {
                 map.put(sChar, tChar);
