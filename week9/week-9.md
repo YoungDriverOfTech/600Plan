@@ -512,6 +512,35 @@ class Solution {
     }
 }
 ```
+```java
+class Solution {
+    public int minSubArrayLen(int target, int[] nums) {
+        int sum = 0;
+        int i = 0;
+        int j = 0;
+        int result = Integer.MAX_VALUE;
+
+        while (i < nums.length) {
+            while (j < nums.length) {
+                if (sum < target) {
+                    sum += nums[j];
+                    j++;
+                } else {
+                    break;
+                }
+            }
+            if (sum >= target) {
+                result = Math.min(result, j - i);
+            }
+
+            sum -= nums[i];
+            i++;
+        }
+
+        return result == Integer.MAX_VALUE ? 0 : result;
+    }
+}
+```
 
 
 
