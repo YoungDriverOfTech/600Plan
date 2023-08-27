@@ -747,7 +747,7 @@ class Solution {
     }
     
     // Solution 刷完最后一个房子的总花费
-    return Math.min(Math.min(dp[(n - 1) % 2][0], dp[(n - 1) % 2][2]), dp[(n - 1) % 2][2]);
+    return Math.min(Math.min(dp[(n - 1) % 2][0], dp[(n - 1) % 2][1]), dp[(n - 1) % 2][2]);
   }
 }
 ```
