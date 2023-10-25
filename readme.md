@@ -10,6 +10,7 @@ int[] prefixSum = new int[num.length + 1];
 for (int i = 0; i < num.length; i++) {
     prefixSum[i + 1] = prefixSum[i] + num[i];
 }
+<img width="169" alt="image" src="https://github.com/YoungDriverOfTech/600Plan/assets/55799836/288b701c-292d-4380-aa38-73ca52ccb990">
 
 // 获取某一个元素
 nums[i] = prefixSum[i + 1] - prefixSum[i]
