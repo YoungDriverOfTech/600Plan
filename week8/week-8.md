@@ -682,7 +682,7 @@ class Solution {
 
     private int pritition(int[] nums, int start, int end) {
         int pivotIndex = end;
-        int traversalIndex= start;
+        int traversalIndex = start;
 
         for (int i = start; i < end; i++) {
             if (nums[i] <= nums[pivotIndex]) {
