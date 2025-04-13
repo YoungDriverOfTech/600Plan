@@ -91,7 +91,6 @@ class Solution {
 # 二分查找
 ## 模板
 一开是先写成3条件的，然后根据收缩的方向，把==的case和其他的条件合并。就完全没有bug了
-
 ```diff
 +   while (left < right) { // 小于
 +       int mid = left + (right - left) / 2;
@@ -99,6 +98,23 @@ class Solution {
 +           left = mid + 1;
         } else {
 +           right = mid;
+        }
+    }
+```
+
+如果一定是出现了下面的情况
+```diff
+-   while (left < right) { // 小于
+-       int mid = left + (right - left + 1) / 2;
++       if (arr[mid] <= target) {
++           left = mid;
+
+             // 如果在（left < right）的情况下，出现了 left = mid;
+-            // 一定要把mid的计算方法换成 mid = left + (right - left + 1) / 2
+             // 这样的计算方法可以保证，在nums元素有偶数个的时候，我们取道的mid是第二个
+             // 这样可以避免循环。 
+        } else {
++           right = mid - 1;
         }
     }
 ```
