@@ -659,43 +659,37 @@ class Solution {
  * }
  */
 class Solution {
-    // 因为反转链表，所以链表结构改变，头节点有可能被反转->dummyNode
     public ListNode reverseKGroup(ListNode head, int k) {
-        // 思路： 1 遍历链表  2 判断够不够k个  3 反转k个。不够的话直接返回
+        int len = 0;
+        ListNode cur = head;
 
-        ListNode dummyNode = new ListNode(-1);
-        dummyNode.next = head;
+        while (cur != null) {
+            len++;
+            cur = cur.next;
+        }
 
-        ListNode node = dummyNode;
+        ListNode dummy = new ListNode(0, head);
+        ListNode pre = dummy;
+        cur = dummy.next;
 
-        // 1 遍历链表
-        while (node.next != null) {
-            ListNode pre = node;
-            ListNode check = node;
-
-            // 2 检查够不够k个元素，不够的话直接返回
-            for (int i = 0; i < k; i++) {
-                if (check.next == null) {
-                    return dummyNode.next;
-                }
-                check = check.next;
-            }
-
-            // 3 链表节点够k个的话，开始反转. 3个节点反转2次，2个反转一次，所以反转次数是k-1
-            ListNode cur = pre.next;
-            for (int i = 0; i < k - 1; i++) {
+        while (len >= k) {
+            for (int i = 1; i < k; i++) {
                 ListNode temp = cur.next;
-
+                
                 cur.next = temp.next;
                 temp.next = pre.next;
                 pre.next = temp;
             }
-
-            // 反转完成后，cur节点会移动到反转后的最后一个位置，比如1 2 3 反转饭后会变成 3 2 1. cur的指针一直是在1上
-            // 那么为了下一次反转，应该吧node（pre）指针给知道现在的cur上面
-            node = cur;
+            
+            // 每反转一次，就进行长度-1
+            len -= k;
+            
+            // cur经过反转后是下一次反转的pre节点了
+            pre = cur;
+            cur = pre.next;
         }
-        return dummyNode.next;
+
+        return dummy.next;
     }
 }
 ```
