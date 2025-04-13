@@ -1,3 +1,6 @@
+# Week 0
+[Week-0](./week0/week-0.md)
+
 # Week 1
 [Basic Math Knowledge](./week1/basicMath.md)   
 [Time Complexity](./week1/timeComplexity.md)   
