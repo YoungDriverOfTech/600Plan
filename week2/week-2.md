@@ -704,61 +704,6 @@ public class Solution extends VersionControl {
 ```java
 class Solution {
     public int[] searchRange(int[] nums, int target) {
-        int[] result = new int[2];
-        result[0] = -1;
-        result[1] = -1;
-
-        if (nums == null || nums.length == 0) {
-            return result;
-        }
-
-        int start = 0;
-        int end = nums.length - 1;
-
-        // 因为有重复的元素，所以找的时候分两次来找，第一次找开头的位置，让mid和target相等时，让end=mid，这样找完的时候end就会在第一个出现目标值的索引上面
-        while (start + 1 < end) {
-            int mid = start + (end - start) / 2;
-            if (target <= nums[mid]) {
-                end = mid;
-            } else {
-                start = mid;
-            }
-        }
-        if (nums[start] == target) {
-            result[0] = start;
-        } else if (nums[end] == target) {
-            result[0] = end;
-        } else {
-            return result;
-        }
-
-        // 这次找结尾的元素
-        start = 0;
-        end = nums.length - 1;
-
-        while (start + 1 < end) {
-            int mid = start + (end - start) / 2;
-            if (target >= nums[mid]) {
-                start = mid;
-            } else {
-                end = mid;
-            }
-        }
-
-        if (nums[end] == target) {
-            result[1] = end;
-        } else if (nums[start] == target) {
-            result[1] = start;
-        }
-
-        return result;
-    }
-}
-```
-
-```java
-class Solution {
-    public int[] searchRange(int[] nums, int target) {
         int len = nums.length;
         if (len == 0) {
             return new int[] {-1, -1};
