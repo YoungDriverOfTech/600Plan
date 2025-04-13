@@ -88,9 +88,12 @@ class Solution {
 }
 ```
 
-# 二分查找模板
+# 二分查找
+## 模板
+一开是先写成3条件的，然后根据收缩的方向，把==的case和其他的条件合并。就完全没有bug了
+
 ```diff
-+   while (left < right) {
++   while (left < right) { // 小于
 +       int mid = left + (right - left) / 2;
 +       if (arr[mid] < target) {
 +           left = mid + 1;
