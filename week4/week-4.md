@@ -530,7 +530,62 @@ class Solution {
 }
 ```
 
+支持重复元素的版本
+```java
+class Solution {
 
+    private int[] preorder;
+    private int[] inorder;
+    private Map<Integer, List<Integer>> map;
+
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        if (preorder == null || preorder.length == 0 || inorder == null || inorder.length == 0) {
+            return null;
+        }
+
+        this.preorder = preorder;
+        this.inorder = inorder;
+
+        // 记录值 -> 所有索引
+        map = new HashMap<>();
+        for (int i = 0; i < inorder.length; i++) {
+            map.computeIfAbsent(inorder[i], k -> new ArrayList<>()).add(i);
+        }
+
+        return helper(0, preorder.length - 1, 0, inorder.length - 1);
+    }
+
+    private TreeNode helper(int pStart, int pEnd, int iStart, int iEnd) {
+        if (pStart > pEnd || iStart > iEnd) {
+            return null;
+        }
+
+        TreeNode root = new TreeNode(preorder[pStart]);
+        int val = root.val;
+
+        // 找到当前值在 inorder 中 iStart ~ iEnd 范围内的索引
+        int rootPos = findPosition(val, iStart, iEnd);
+
+        int leftNodeCount = rootPos - iStart;
+        root.left = helper(pStart + 1, pStart + leftNodeCount, iStart, rootPos - 1);
+        root.right = helper(pStart + leftNodeCount + 1, pEnd, rootPos + 1, iEnd);
+
+        return root;
+    }
+
+    // 从 map 中查找 val 的索引，取第一个在 iStart ~ iEnd 范围内的
+    private int findPosition(int val, int iStart, int iEnd) {
+        List<Integer> positions = map.get(val);
+        for (int pos : positions) {
+            if (pos >= iStart && pos <= iEnd) {
+                return pos;
+            }
+        }
+        throw new RuntimeException("Value not found in inorder range");
+    }
+}
+
+```
 
 ### 后序/中序构造树
 
