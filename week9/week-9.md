@@ -347,80 +347,31 @@ class Solution {
 }
 ```
 
-解法2
-
-```java
-class Solution {
-    public int lengthOfLongestSubstring(String s) {
-        int[] arr = new int[256];
-        int i = 0;
-        int j = 0;
-        int result = 0;
-
-        for (i = 0; i < s.length(); i++) {
-            while (j < s.length()) {
-                char ch = s.charAt(j);
-                if (arr[ch] == 0) {
-                    arr[ch] = 1;
-                    result = Math.max(result, j - i + 1);
-                    j++;
-                } else {
-                    break;
-                }
-            }
-
-            arr[s.charAt(i)] = 0;
-        }
-        return result;
-    }
-}
-```
-
-
-
 ### 至多包含两个不同字符的最长子串
 
 ![tupian](./images/159.jpeg)
 
 ```java
-class Slution {
-    public int lengthOfLongestSusstringTwoDistinct(String s) {
-        if (s == null || s.length() == 0) {
-            return 0;
+class Solution {
+  public int lengthOfLongestSubstringTwoDistinct(String s) {
+    Map<Character, Integer> cnt = new HashMap<>();
+    int n = s.length();
+    int ans = 0;
+    for (int i = 0, j = 0; i < n; ++i) {
+      char c = s.charAt(i);
+      cnt.put(c, cnt.getOrDefault(c, 0) + 1);
+      while (cnt.size() > 2) {
+        char t = s.charAt(j++);
+        cnt.put(t, cnt.get(t) - 1);
+        if (cnt.get(t) == 0) {
+          cnt.remove(t);
         }
-
-        int i = 0;
-        int j = 0;
-        int result = 0;
-
-        // key: 字符  value：字符最后一次出现的位置
-        Map<Character, Integer> map = new HashMap<>();
-
-        for (i = 0; i < s.length(); i++) {
-            while (j < s.length()) {
-
-                char ch = s.charAt(j);
-                if (map.size() <= 2) {
-                    map.put(ch, j);
-                    result = Math.max(result, j - i + 1);
-                    j++;
-                } else {
-                    break;
-                }
-            }
-
-            // 收缩左边界到最小的字符最后一次出现的位置
-            int minIndex = s.length() - 1;
-            for (int index : map.values()) {
-                minIndex = Math.min(minIndex, index);
-            }
-            char charToDelete = s.charAt(minIndex);
-            map.remove(charToDelete);
-            i = minIndex;
-        }
+      }
+      ans = Math.max(ans, i - j + 1);
     }
+    return ans;
+  }
 }
-
 ```
 
 
