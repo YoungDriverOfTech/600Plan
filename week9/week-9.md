@@ -439,61 +439,28 @@ class Solution {
 
 ```java
 class Solution {
-    public int minSubArrayLen(int target, int[] nums) {
-        if (nums == null || nums.length == 0) {
-            return 0;
-        }
+  public int minSubArrayLen(int target, int[] nums) {
+    int result = Integer.MAX_VALUE;
+    int left = 0;
+    int right = 0;
+    int sum = 0;
 
-        int sum = 0;
-        int result = Integer.MAX_VALUE;
+    while (right < nums.length) {
+      sum += nums[right];
 
-        for (int i = 0, j = 0; i < nums.length; i++) {
-            while (j < nums.length && sum < target) {
-                sum += nums[j];
-                j++;
-            }
+      while (sum >= target) {
+        result = Math.min(result, right - left + 1);
+        sum -= nums[left];
+        left++;
+      }
 
-            if (sum >= target) {
-                result = Math.min(result, j - i);
-            }
-            sum -= nums[i];
-        }
-
-        return result == Integer.MAX_VALUE ? 0 : result;
+      right++;
     }
+
+    return result == Integer.MAX_VALUE ? 0 : result;
+  }
 }
 ```
-```java
-class Solution {
-    public int minSubArrayLen(int target, int[] nums) {
-        int sum = 0;
-        int i = 0;
-        int j = 0;
-        int result = Integer.MAX_VALUE;
-
-        while (i < nums.length) {
-            while (j < nums.length) {
-                if (sum < target) {
-                    sum += nums[j];
-                    j++;
-                } else {
-                    break;
-                }
-            }
-            if (sum >= target) {
-                result = Math.min(result, j - i);
-            }
-
-            sum -= nums[i];
-            i++;
-        }
-
-        return result == Integer.MAX_VALUE ? 0 : result;
-    }
-}
-```
-
-
 
 ### 找出字符串中第一个匹配项的下标
 
