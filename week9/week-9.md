@@ -382,57 +382,53 @@ class Solution {
 
 ```java
 class Solution {
-    public String minWindow(String s, String t) {
-        if (s == null || s.length() == 0 || t == null || t.length() == 0) {
-            return "";
-        }
+  public String minWindow(String s, String t) {
+    int m = s.length();
+    int n = t.length();
 
-        // 统计t中字符的数量
-        int[] hash = new int[128];
-        for (int i = 0; i < t.length(); i++) {
-            hash[t.charAt(i)] += 1;
-        }
+    char[] sArr = s.toCharArray();
+    char[] tArr = t.toCharArray();
 
-        // 双指针
-        int i = 0;
-        int j = 0;
-        int minLength = Integer.MAX_VALUE;
-        String result = "";
-
-        for (i = 0; i < s.length(); i++) {
-            while (j < s.length()) {
-                if (!findAll(hash)) {
-                    // 这里先对hash进行-1操作，那么j++了以后，j+完之后的字符要等到下一轮循环才能被判断，所以加入要找abc在abcd中
-                    // 那么找到abc的时候，j指针现在应该指向的是d
-                    hash[s.charAt(j)]--;
-                    j++;
-                } else {
-                    break;
-                }
-            }
-
-            // 由于j现在多移动了一个位置，所以可以直接j - i求出来子字符串的长度
-            if (findAll(hash) && j - i < minLength) {
-                minLength = j - i;
-                result = s.substring(i, j);
-            }
-
-            // 移动左边界的值
-            hash[s.charAt(i)]++;
-        }
-        return result;
+    // Count string t
+    // 只要字符串 t 中的字符都属于标准 ASCII 表内，就不会越界。
+    int[] hash = new int[128];
+    for (int i = 0; i < tArr.length; i++) {
+      hash[tArr[i]]++;
     }
 
-    private boolean findAll(int[] hash) {
-        for (int i = 0; i < hash.length; i++) {
-            if (hash[i] > 0) {
-                return false;
-            }
+    int left = 0;
+    int right = 0;
+    int minLen = Integer.MAX_VALUE;
+    String result = "";
+
+    while (right < m) {
+      char ch = sArr[right];
+      hash[ch]--;
+
+      while (containsAll(hash)) {
+        if ((right - left + 1) < minLen) {
+          minLen = right - left + 1;
+          result = s.substring(left, right + 1);
         }
-        return true;
+        hash[sArr[left]]++; // 这里不是直接hash[left], 要操作的是s中的字符
+        left++;
+      }
+      right++;
     }
+
+    return result;
+  }
+
+  private boolean containsAll(int[] hash) {
+    for (int i = 0; i < hash.length; i++) {
+      if (hash[i] > 0) {
+        return false;
+      }
+    }
+
+    return true;
+  }
 }
-
 ```
 
 
