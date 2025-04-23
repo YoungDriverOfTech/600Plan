@@ -318,28 +318,32 @@ public void slidingWindow(int[] nums) {
 
 ```java
 class Solution {
-    public int lengthOfLongestSubstring(String s) {
-        Set<Character> set = new HashSet<>();
-        int i = 0;
-        int j = 0;
-        int result = 0;
-
-        for (i = 0; i < s.length(); i++) {
-            while (j < s.length()) {
-                char ch = s.charAt(j);
-                if (!set.contains(ch)) {
-                    set.add(ch);
-                    result = Math.max(result, j - i + 1);
-                    j++;
-                } else {
-                    break;
-                }
-            }
-
-            set.remove(s.charAt(i));
-        }
-        return result;
+  public int lengthOfLongestSubstring(String s) {
+    if (s.length() == 0) {
+      return 0;
     }
+
+    int result = 0;
+    char[] chars = s.toCharArray();
+    int left = 0;
+    int right = 0;
+    Set<Character> visited = new HashSet();
+
+    while (right < chars.length) {
+      char ch = chars[right];
+
+      while (visited.contains(ch)) {
+        visited.remove(chars[left]);
+        left++;
+      }
+
+      visited.add(ch);
+      result = Math.max(result, right - left + 1);
+      right++;
+    }
+
+    return result;
+  }
 }
 ```
 
